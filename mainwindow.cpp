@@ -29,7 +29,6 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     statusbar_right = new QLabel;
     statusbar_right->setFont(QFont("Courier"));
     statusbar_right->setStyleSheet("color:white");
-    statusbar_left->setFont(QFont("Courier"));
     statusbar_left->setStyleSheet("color:white");
     ui->statusbar->addWidget(statusbar_left, 1);
     ui->statusbar->addWidget(statusbar_right, 0);
@@ -112,6 +111,7 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     }
 
     statusbar_right->setText(pix_color + " " + pix_location);
+
 }
 
 bool MainWindow::_keyPressEvent(QKeyEvent *event)
@@ -260,10 +260,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
     }
     else
     {
-        //back_to_normal();
         on_action_switch_to_normal_mode_triggered();
         qDebug() << "NORMAL_MODE";
     }
 }
-
-

@@ -148,9 +148,13 @@
    </property>
   </action>
   <action name="action_switch_to_normal_mode">
+   <property name="checkable">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/icons/mouse_pointer [#6].png</normaloff>:/icons/mouse_pointer [#6].png</iconset>
+     <normaloff>:/icons/mouse_pointer [#6].png</normaloff>
+     <normalon>:/icons/mouse_pointer_g [#6].png</normalon>:/icons/mouse_pointer [#6].png</iconset>
    </property>
    <property name="text">
     <string>Normal Mode</string>

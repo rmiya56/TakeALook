@@ -1,7 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scene.h"
-//#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -80,14 +79,14 @@ void MainWindow::setupToolBar()
 
 void MainWindow::setupStatusBar()
 {
-    statusbar_left = new QLabel;
-    statusbar_right = new QLabel;
-    statusbar_right->setFont(QFont("Courier"));
-    statusbar_right->setStyleSheet("color:white");
-    statusbar_left->setFont(QFont("Courier"));
-    statusbar_left->setStyleSheet("color:white");
-    ui->statusbar->addWidget(statusbar_left, 1);
-    ui->statusbar->addWidget(statusbar_right, 0);
+    statusbarLeft = new QLabel;
+    statusbarRight = new QLabel;
+    statusbarRight->setFont(QFont("Courier"));
+    statusbarRight->setStyleSheet("color:white");
+    statusbarLeft->setFont(QFont("Courier"));
+    statusbarLeft->setStyleSheet("color:white");
+    ui->statusbar->addWidget(statusbarLeft, 1);
+    ui->statusbar->addWidget(statusbarRight, 0);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -111,14 +110,14 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::displayImage(QImage qimage, QString file_path)
 {
-    original_pixmap.convertFromImage(qimage);
-    scene.pixmap_item = new QGraphicsPixmapItem(original_pixmap);
+    originalPixmap.convertFromImage(qimage);
+    scene.pixmap_item = new QGraphicsPixmapItem(originalPixmap);
     scene.clear();
     scene.addItem(scene.pixmap_item);
     fit_to_rect(scene.pixmapRect());
 
     QString image_property = QString("[%1x%2]").arg(QString::number(imgHandler.currentImage().width()), QString::number(imgHandler.currentImage().height()));
-    statusbar_left->setText(file_path + " " + image_property);
+    statusbarLeft->setText(file_path + " " + image_property);
 }
 
 void MainWindow::_mouseMoveEvent(QMouseEvent *event)
@@ -147,7 +146,7 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
         else if (prop.channels == 1)    pix_color = QString("(%1)").arg(r);
     }
 
-    statusbar_right->setText(pix_color + " " + pix_location);
+    statusbarRight->setText(pix_color + " " + pix_location);
 }
 
 bool MainWindow::_keyPressEvent(QKeyEvent *event)
@@ -251,7 +250,7 @@ void MainWindow::on_action_pointer_mode_triggered()
     ui->graphicsView->mouse_control = true;
     scene.area_selection_is_active = false;
     setCursor(Qt::ArrowCursor);
-    is_normal_mode = true;
+    is_pointer_mode = true;
     actionPointerMode->setIcon(QIcon(":/icons/green/mouse_pointer [#6].png"));
     actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
 }
@@ -261,7 +260,7 @@ void MainWindow::on_action_area_selection_mode_triggered()
     ui->graphicsView->mouse_control = false;
     scene.area_selection_is_active = true;
     setCursor(Qt::CrossCursor);
-    is_normal_mode = false;
+    is_pointer_mode = false;
     actionPointerMode->setIcon(QIcon(":/icons/white/mouse_pointer [#6].png"));
     actionAreaSelectionMode->setIcon(QIcon(":/icons/green/focus_plus_round [#895].png"));
 }
@@ -295,7 +294,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 
-    if(is_normal_mode)
+    if(is_pointer_mode)
     {
         on_action_area_selection_mode_triggered();
         qDebug() << "AREA_SELECT_MODE";

@@ -94,10 +94,7 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     pix_location = QString("[%1, %2]").arg(x, y);
 
     QImage qImg;
-    if (!scene.pixmap().isNull())
-    {
-        qImg = scene.pixmap().toImage();
-    }
+    if (!scene.pixmap().isNull()) qImg = scene.pixmap().toImage();
 
     QPointF offset = scene.areaRect().topLeft();
     QPoint p2 = (pf - offset).toPoint();

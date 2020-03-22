@@ -15,8 +15,8 @@ public:
     int channels;
     int width;
     int height;
-    int digits_x;
-    int digits_y;
+    int digits_x = 3;
+    int digits_y = 3;
 
 private:
     QString getType(cv::Mat mat);

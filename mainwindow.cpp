@@ -47,32 +47,32 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupToolBar()
 {
-    actionPointerMode = new QAction(QIcon(":/icons/mouse_pointer [#6].png"), tr("Pointer"), this);
+    actionPointerMode = new QAction(QIcon(":/icons/green/mouse_pointer [#6].png"), tr("Pointer"), this);
     actionPointerMode->setChecked(true);
     connect(actionPointerMode, SIGNAL(triggered()), this, SLOT(on_action_pointer_mode_triggered()));
     ui->toolBar->addAction(actionPointerMode);
 
-    actionAreaSelectionMode = new QAction(QIcon(":/icons/focus_plus_round [#895].png"), tr("Area Select"), this);
+    actionAreaSelectionMode = new QAction(QIcon(":/icons/white/focus_plus_round [#895].png"), tr("Area Select"), this);
     connect(actionAreaSelectionMode, SIGNAL(triggered()), this, SLOT(on_action_area_selection_mode_triggered()));
     ui->toolBar->addAction(actionAreaSelectionMode);
 
-    actionFitToWindow = new QAction(QIcon(":/icons/arrow_all_fill [#383].png"), tr("Fit to Window"), this);
+    actionFitToWindow = new QAction(QIcon(":/icons/white/arrow_all_fill [#383].png"), tr("Fit to Window"), this);
     connect(actionFitToWindow, SIGNAL(triggered()), this, SLOT(on_action_fit_to_window_triggered()));
     ui->toolBar->addAction(actionFitToWindow);
 
-    actionNextImage = new QAction(QIcon(":/icons/arrow_right [#336].png"), tr("Next"), this);
+    actionNextImage = new QAction(QIcon(":/icons/white/arrow_right [#336].png"), tr("Next"), this);
     connect(actionNextImage, SIGNAL(triggered()), this, SLOT(on_action_next_image_triggered()));
     ui->toolBar->addAction(actionNextImage);
 
-    actionPrevImage = new QAction(QIcon(":/icons/arrow_left [#335].png"), tr("Prev"), this);
+    actionPrevImage = new QAction(QIcon(":/icons/white/arrow_left [#335].png"), tr("Prev"), this);
     connect(actionPrevImage, SIGNAL(triggered()), this, SLOT(on_action_fit_prev_image_triggered()));
     ui->toolBar->addAction(actionPrevImage);
 
-    actionOpenImage = new QAction(QIcon(":/icons/folder [#1792].png"), tr("Open Image"), this);
+    actionOpenImage = new QAction(QIcon(":/icons/white/folder [#1792].png"), tr("Open Image"), this);
     connect(actionOpenImage, SIGNAL(triggered()), this, SLOT(on_action_open_image_triggered()));
     ui->toolBar->addAction(actionOpenImage);
 
-    actionSaveImage = new QAction(QIcon(":/icons/save_item [#1411].png"), tr("Save Image"), this);
+    actionSaveImage = new QAction(QIcon(":/icons/white/save_item [#1411].png"), tr("Save Image"), this);
     connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
     ui->toolBar->addAction(actionSaveImage);
 
@@ -252,8 +252,8 @@ void MainWindow::on_action_pointer_mode_triggered()
     scene.area_selection_is_active = false;
     setCursor(Qt::ArrowCursor);
     is_normal_mode = true;
-    //actionPointerMode->setIcon(QIcon(":/icons/focus_plus_round [#895].png"));
-    //actionAreaSelectionMode->setIcon();
+    actionPointerMode->setIcon(QIcon(":/icons/green/mouse_pointer [#6].png"));
+    actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
 }
 
 void MainWindow::on_action_area_selection_mode_triggered()
@@ -262,9 +262,8 @@ void MainWindow::on_action_area_selection_mode_triggered()
     scene.area_selection_is_active = true;
     setCursor(Qt::CrossCursor);
     is_normal_mode = false;
-
-    actionPointerMode->setIcon(QIcon(":/icons/mouse_pointer [#6].png"));
-    //actionAreaSelectionMode->setIcon();
+    actionPointerMode->setIcon(QIcon(":/icons/white/mouse_pointer [#6].png"));
+    actionAreaSelectionMode->setIcon(QIcon(":/icons/green/focus_plus_round [#895].png"));
 }
 
 void MainWindow::on_action_fit_to_window_triggered()

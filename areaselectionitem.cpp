@@ -22,7 +22,8 @@ AreaSelectionItem::AreaSelectionItem(QRectF rect)
 qreal AreaSelectionItem::calcMargin() const
 {
     qreal margin = qMin(area_rect->width(), area_rect->height()) * (margin_percentage/100.0);
-    return qMin(5.0, margin);
+    return margin;
+    //return qMin(5.0, margin);
 }
 
 QRectF AreaSelectionItem::boundingRect() const
@@ -52,7 +53,7 @@ void AreaSelectionItem::updateMargins()
 {
     qreal width = area_rect->width();
     qreal height = area_rect->height();
-    qreal margin = qMin(width, height) * (margin_percentage/100.0);
+    qreal margin = calcMargin();
 
     qreal x0 = area_rect->topLeft().x();
     qreal y0 = area_rect->topLeft().y();

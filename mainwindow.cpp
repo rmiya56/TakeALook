@@ -11,6 +11,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QSettings>
+#include <QtMath>
 
 
 MainWindow::MainWindow(QWidget *parent, const char* filepath)
@@ -87,20 +88,20 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     QString pix_location, pix_color;
     ImageProperties prop = imgHandler.currentProperties(); // reading almost static all the time..
 
-    QPointF pf = view->mapToScene(event->pos());
-    QPoint p = pf.toPoint();
-    QString x = QString::number(p.x()).rightJustified(prop.digits_x, ' ');
-    QString y = QString::number(p.y()).rightJustified(prop.digits_y, ' ');
+    QPointF pos = view->mapToScene(event->pos());
+    QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
+    QString x = QString::number(pix.x()).rightJustified(prop.digits_x, ' ');
+    QString y = QString::number(pix.y()).rightJustified(prop.digits_y, ' ');
     pix_location = QString("[%1, %2]").arg(x, y);
 
     QImage qImg;
     if (!scene.pixmap().isNull()) qImg = scene.pixmap().toImage();
 
-    QPointF offset = scene.areaRect().topLeft();
-    QPoint p2 = (pf - offset).toPoint();
-    if (qImg.valid(p2))
+    QPoint offset = scene.areaRect().topLeft();
+    pix = pix - offset;
+    if (qImg.valid(pix))
     {
-        QColor c = qImg.pixel(p2);
+        QColor c = qImg.pixel(pix);
         QString r = QString::number(c.red()).rightJustified(3, ' ');
         QString g = QString::number(c.green()).rightJustified(3, ' ');
         QString b = QString::number(c.blue()).rightJustified(3, ' ');
@@ -250,6 +251,8 @@ void MainWindow::on_action_save_triggered()
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event)
+
     if(is_normal_mode)
     {
         on_action_switch_to_area_selection_mode_triggered();
@@ -257,7 +260,6 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
     }
     else
     {
-        //back_to_normal();
         on_action_switch_to_normal_mode_triggered();
         qDebug() << "NORMAL_MODE";
     }

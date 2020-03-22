@@ -15,10 +15,10 @@ public:
     QRect pixmapRect();
 
     bool area_selection_is_active = false;
-    QMenu menu_area;
-    QMenu menu_scene;
-    QGraphicsPixmapItem *pixmap_item = nullptr;
-    AreaSelectionItem *area_item = nullptr;
+    QMenu menuArea;
+    QMenu menuScene;
+    QGraphicsPixmapItem *pixmapItem = nullptr;
+    AreaSelectionItem *areaItem = nullptr;
     QAction *actionSelectArea;
 
 protected:
@@ -27,10 +27,10 @@ protected:
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    QPointF mouse_pos;
-    QGraphicsRectItem *temp_rect = nullptr;
-    QPen pen_area;
-    QBrush brush_area;
+    QPointF mousePos;
+    QGraphicsRectItem *tempRect = nullptr;
+    QPen penArea;
+    QBrush brushArea;
     QAction *actionClear;
     QAction *actionCrop;
     QAction *actionZoom;

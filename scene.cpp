@@ -8,45 +8,45 @@ Scene::Scene()
     : QGraphicsScene()
 {
     // pen & brush
-    pen_area.setColor(Qt::green);
-    pen_area.setWidth(2);
-    pen_area.setCosmetic(true);
-    brush_area = QBrush(QColor(0,255,0,32));
+    penArea.setColor(Qt::green);
+    penArea.setWidth(2);
+    penArea.setCosmetic(true);
+    brushArea = QBrush(QColor(0,255,0,32));
 
     // context menu in roi
     actionCrop = new QAction(tr("Crop"));
     connect(actionCrop, SIGNAL(triggered()), this, SLOT(cropAreaRect()));
-    menu_area.addAction(actionCrop);
+    menuArea.addAction(actionCrop);
 
     actionZoom = new QAction(tr("Zoom"));
     connect(actionZoom, SIGNAL(triggered()), this, SLOT(zoomInArea()));
-    menu_area.addAction(actionZoom);
+    menuArea.addAction(actionZoom);
 
     actionClear = new QAction(tr("Clear"));
     connect(actionClear , SIGNAL(triggered()), this, SLOT(clearAreaRect()));
-    menu_area.addAction(actionClear);
+    menuArea.addAction(actionClear);
 }
 
 QPixmap Scene::pixmap()
 {
-    if (pixmap_item)
-        return pixmap_item->pixmap();
+    if (pixmapItem)
+        return pixmapItem->pixmap();
     else
         return QPixmap();
 }
 
 QRect Scene::pixmapRect()
 {
-    if (pixmap_item)
-        return pixmap_item->pixmap().rect();
+    if (pixmapItem)
+        return pixmapItem->pixmap().rect();
     else
         return QRect();
 }
 
 QRect Scene::areaRect()
 {
-   if(area_item)
-       return area_item->toQRect();
+   if(areaItem)
+       return areaItem->toQRect();
    else
        return pixmap().rect();
 }
@@ -60,11 +60,11 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
     if (event->button() == Qt::LeftButton)
     {
-       if(area_item) removeItem(area_item);
-       mouse_pos = event->scenePos();
-       temp_rect = addRect(QRectF(mouse_pos, mouse_pos));
-       temp_rect->setPen(pen_area);
-       temp_rect->setBrush(brush_area);
+       if(areaItem) removeItem(areaItem);
+       mousePos = event->scenePos();
+       tempRect = addRect(QRectF(mousePos, mousePos));
+       tempRect->setPen(penArea);
+       tempRect->setBrush(brushArea);
     }
 }
 
@@ -72,8 +72,8 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
     if (!area_selection_is_active) return;
-    if(temp_rect)
-        temp_rect->setRect(QRectF(mouse_pos, event->scenePos()));
+    if(tempRect)
+        tempRect->setRect(QRectF(mousePos, event->scenePos()));
 }
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -84,25 +84,25 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(event->button() == Qt::LeftButton)
     {
         if (!area_selection_is_active) return;
-        if (temp_rect == nullptr) return;
+        if (tempRect == nullptr) return;
 
-        qreal area_of_temp_rect = temp_rect->rect().width() * temp_rect->rect().height();
+        qreal area_of_tempRect = tempRect->rect().width() * tempRect->rect().height();
 
-        if(area_of_temp_rect > 2)
+        if(area_of_tempRect > 2)
         {
-            area_item = new AreaSelectionItem(temp_rect->rect());
-            addItem(area_item);
+            areaItem = new AreaSelectionItem(tempRect->rect());
+            addItem(areaItem);
             done_selection();
         }
-        removeItem(temp_rect);
-        temp_rect = nullptr;
+        removeItem(tempRect);
+        tempRect = nullptr;
         return;
     }
     else if(event->button() == Qt::RightButton)
     {
         if(event->isAccepted()) return;
-        if (!menu_scene.isEmpty())
-            menu_scene.exec(event->screenPos());
+        if (!menuScene.isEmpty())
+            menuScene.exec(event->screenPos());
     }
 }
 
@@ -117,23 +117,23 @@ void Scene::clearAreaRect()
 
 void Scene::cropAreaRect()
 {
-    QPixmap original = pixmap_item->pixmap();
+    QPixmap original = pixmapItem->pixmap();
     QRect cropRect0; // crop rect in scene coordinate
     QRect cropRect1; // crop rect in pixmap coordinate
-    cropRect0 = area_item->toQRect();
-    cropRect1 = QRect(	int(cropRect0.x()-pixmap_item->x()),
-                        int(cropRect0.y()-pixmap_item->y()),
+    cropRect0 = areaItem->toQRect();
+    cropRect1 = QRect(	int(cropRect0.x()-pixmapItem->x()),
+                        int(cropRect0.y()-pixmapItem->y()),
                         cropRect0.width(),
                         cropRect0.height());
 
     QPixmap cropped = original.copy(cropRect1);
-    pixmap_item->setPixmap(cropped);
-    pixmap_item->setPos(cropRect0.topLeft());
-    removeItem(area_item); // for cropping edge check (somewhat weird)
+    pixmapItem->setPixmap(cropped);
+    pixmapItem->setPos(cropRect0.topLeft());
+    removeItem(areaItem); // for cropping edge check (somewhat weird)
 }
 
 void Scene::zoomInArea()
 {
-    zoom_in_area(area_item->toQRect());
+    zoom_in_area(areaItem->toQRect());
     clearAreaRect();
 }

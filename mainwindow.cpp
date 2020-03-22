@@ -111,9 +111,9 @@ void MainWindow::dropEvent(QDropEvent *event)
 void MainWindow::displayImage(QImage qimage, QString file_path)
 {
     originalPixmap.convertFromImage(qimage);
-    scene.pixmap_item = new QGraphicsPixmapItem(originalPixmap);
+    scene.pixmapItem = new QGraphicsPixmapItem(originalPixmap);
     scene.clear();
-    scene.addItem(scene.pixmap_item);
+    scene.addItem(scene.pixmapItem);
     fit_to_rect(scene.pixmapRect());
 
     QString image_property = QString("[%1x%2]").arg(QString::number(imgHandler.currentImage().width()), QString::number(imgHandler.currentImage().height()));

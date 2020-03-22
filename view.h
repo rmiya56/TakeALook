@@ -19,9 +19,9 @@ protected:
     virtual void mouseReleaseEvent(QMouseEvent *event);
 
 private:
-    QPointF scene_mouse_pos;
+    QPointF sceneMousePos;
     bool left_mouse_pressed = false;
-    const qreal zoom_factor = 1.05;
+    const qreal zoomFactor = 1.05;
     bool isInSelectedArea(QPoint p);
 };
 #endif // VIEW_H

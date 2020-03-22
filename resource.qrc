@@ -8,5 +8,6 @@
         <file>icons/save_item [#1411].png</file>
         <file>icons/mouse_pointer [#6].png</file>
         <file>icons/focus_plus_round [#895].png</file>
+        <file>icons/arrow_repeat [#235].png</file>
     </qresource>
 </RCC>

@@ -63,7 +63,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -78,84 +78,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="action_switch_to_normal_mode"/>
-   <addaction name="action_switch_to_area_selection_mode"/>
-   <addaction name="action_fit_to_window"/>
-   <addaction name="action_open_file"/>
-   <addaction name="action_save"/>
-   <addaction name="action_next_image"/>
-   <addaction name="action_prev_image"/>
   </widget>
-  <action name="action_fit_to_window">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/arrow_all_fill [#383].png</normaloff>
-     <normalon>:/n/icons/arrow_all [#376].png</normalon>:/icons/arrow_all_fill [#383].png</iconset>
-   </property>
-   <property name="text">
-    <string>Fit to Window</string>
-   </property>
-  </action>
-  <action name="action_next_image">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/arrow_right [#336].png</normaloff>:/icons/arrow_right [#336].png</iconset>
-   </property>
-   <property name="text">
-    <string>next_image</string>
-   </property>
-  </action>
-  <action name="action_prev_image">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/arrow_left [#335].png</normaloff>:/icons/arrow_left [#335].png</iconset>
-   </property>
-   <property name="text">
-    <string>prev image</string>
-   </property>
-   <property name="toolTip">
-    <string>Previous Image</string>
-   </property>
-  </action>
-  <action name="action_switch_to_area_selection_mode">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/focus_plus_round [#895].png</normaloff>:/icons/focus_plus_round [#895].png</iconset>
-   </property>
-   <property name="text">
-    <string>Area Selection</string>
-   </property>
-  </action>
-  <action name="action_open_file">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/folder [#1792].png</normaloff>:/icons/folder [#1792].png</iconset>
-   </property>
-   <property name="text">
-    <string>Open File</string>
-   </property>
-  </action>
-  <action name="action_save">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/save_item [#1411].png</normaloff>:/icons/save_item [#1411].png</iconset>
-   </property>
-   <property name="text">
-    <string>Save</string>
-   </property>
-  </action>
-  <action name="action_switch_to_normal_mode">
-   <property name="icon">
-    <iconset resource="resource.qrc">
-     <normaloff>:/icons/mouse_pointer [#6].png</normaloff>:/icons/mouse_pointer [#6].png</iconset>
-   </property>
-   <property name="text">
-    <string>Normal Mode</string>
-   </property>
-  </action>
  </widget>
  <customwidgets>
   <customwidget>
@@ -164,8 +87,6 @@
    <header>view.h</header>
   </customwidget>
  </customwidgets>
- <resources>
-  <include location="resource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

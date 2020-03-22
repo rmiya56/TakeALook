@@ -31,16 +31,27 @@ protected:
     void _mouseMoveEvent(QMouseEvent *event);
     bool _keyPressEvent(QKeyEvent *event);
 
+
+private: // Toolbar Actions
+    QAction *actionPointerMode;
+    QAction *actionAreaSelectionMode;
+    QAction *actionFitToWindow;
+    QAction *actionNextImage;
+    QAction *actionPrevImage;
+    QAction *actionOpenImage;
+    QAction *actionSaveImage;
+
 private slots:
-    //void fit_to_view();
-    void fit_to_rect(QRect rect);
-    void on_action_switch_to_normal_mode_triggered();
-    void on_action_switch_to_area_selection_mode_triggered();
+    void on_action_pointer_mode_triggered();
+    void on_action_area_selection_mode_triggered();
     void on_action_fit_to_window_triggered();
     void on_action_next_image_triggered();
     void on_action_prev_image_triggered();
-    void on_action_open_file_triggered();
-    void on_action_save_triggered();
+    void on_action_open_image_triggered();
+    void on_action_save_image_triggered();
+
+
+    void fit_to_rect(QRect rect);
 
 private:
     Ui::MainWindow *ui;
@@ -51,12 +62,12 @@ private:
     QGraphicsView *view;
     QPixmap original_pixmap;
     bool is_normal_mode = true;
-
     void displayImage(QImage qimage, QString file_path);
     void showNext();
     void showPrev();
     void openFile();
     void saveFile();
 
+    void setupToolBar();
 };
 #endif // MAINWINDOW_H

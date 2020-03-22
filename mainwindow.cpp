@@ -127,8 +127,8 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
 
     QPointF pos = view->mapToScene(event->pos());
     QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
-    QString x = QString::number(pix.x()).rightJustified(prop.digits_x, ' ');
-    QString y = QString::number(pix.y()).rightJustified(prop.digits_y, ' ');
+    QString x = QString::number(pix.x()).rightJustified(prop.digitsX, ' ');
+    QString y = QString::number(pix.y()).rightJustified(prop.digitsY, ' ');
     pix_location = QString("[%1, %2]").arg(x, y);
 
     QImage qImg;

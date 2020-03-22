@@ -12,8 +12,8 @@ ImageProperties::ImageProperties(QString suffix, cv::Mat mat)
     channels = mat.channels();
     width = mat.cols;
     height = mat.rows;
-    digits_x = qCeil(log10(width));
-    digits_y = qCeil(log10(height));
+    digitsX = qCeil(log10(width));
+    digitsY = qCeil(log10(height));
 
     qDebug()	<< ""
                 << "format:" << name

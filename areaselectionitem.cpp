@@ -21,7 +21,7 @@ AreaSelectionItem::AreaSelectionItem(QRectF rect)
 
 qreal AreaSelectionItem::calcMargin() const
 {
-    qreal margin = qMin(area_rect->width(), area_rect->height()) * (margin_percentage/100.0);
+    qreal margin = qMin(areaRect->width(), areaRect->height()) * (marginPercentage/100.0);
     return margin;
     //return qMin(5.0, margin);
 }
@@ -29,38 +29,38 @@ qreal AreaSelectionItem::calcMargin() const
 QRectF AreaSelectionItem::boundingRect() const
 {
     qreal margin = calcMargin();
-    return area_rect->marginsAdded(QMarginsF(margin, margin, margin, margin));
+    return areaRect->marginsAdded(QMarginsF(margin, margin, margin, margin));
 }
 
 void AreaSelectionItem::setRect(QRectF &rectangle)
 {
-    area_rect = &rectangle;
+    areaRect = &rectangle;
     updateMargins();
 }
 
 void AreaSelectionItem::setRect(qreal x, qreal y, qreal width, qreal height)
 {
-    area_rect = new QRectF(x, y, width, height);
+    areaRect = new QRectF(x, y, width, height);
     updateMargins();
 }
 
 QRectF AreaSelectionItem::rect()
 {
-    return *area_rect;
+    return *areaRect;
 }
 
 void AreaSelectionItem::updateMargins()
 {
-    qreal width = area_rect->width();
-    qreal height = area_rect->height();
+    qreal width = areaRect->width();
+    qreal height = areaRect->height();
     qreal margin = calcMargin();
 
-    qreal x0 = area_rect->topLeft().x();
-    qreal y0 = area_rect->topLeft().y();
-    qreal x1 = area_rect->topRight().x();
-    qreal y1 = area_rect->topRight().y();
-    qreal x2 = area_rect->bottomLeft().x();
-    qreal y2 = area_rect->bottomLeft().y();
+    qreal x0 = areaRect->topLeft().x();
+    qreal y0 = areaRect->topLeft().y();
+    qreal x1 = areaRect->topRight().x();
+    qreal y1 = areaRect->topRight().y();
+    qreal x2 = areaRect->bottomLeft().x();
+    qreal y2 = areaRect->bottomLeft().y();
 
     top = new QRectF(QPointF(x0-margin, y0-margin), QPointF(x1+margin, y1+margin));
     bottom = new QRectF(*top);
@@ -75,7 +75,7 @@ void AreaSelectionItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     QPen pen(color);
     pen.setCosmetic(true);
     painter->setPen(pen);
-    painter->drawRect(*area_rect);
+    painter->drawRect(*areaRect);
 
     if (show_margin)
     {
@@ -92,7 +92,7 @@ void AreaSelectionItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
 
 QRect AreaSelectionItem::toQRect()
 {
-    QRectF r = *area_rect;
+    QRectF r = *areaRect;
     int x0 = qCeil(r.x());
     int y0 = qCeil(r.y());
     int x1 = qFloor(r.bottomRight().x());
@@ -153,14 +153,14 @@ void AreaSelectionItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
         return;
     }
 
-    if (drag_resizing["topLeft"])                area_rect->setTopLeft(p);
-    else if (drag_resizing["topRight"])          area_rect->setTopRight(p);
-    else if (drag_resizing["bottomLeft"])        area_rect->setBottomLeft(p);
-    else if (drag_resizing["bottomRight"])       area_rect->setBottomRight(p);
-    else if (drag_resizing["right"])             area_rect->setRight(p.x());
-    else if (drag_resizing["left"])              area_rect->setLeft(p.x());
-    else if (drag_resizing["top"])               area_rect->setTop(p.y());
-    else if (drag_resizing["bottom"])            area_rect->setBottom(p.y());
+    if (drag_resizing["topLeft"])                areaRect->setTopLeft(p);
+    else if (drag_resizing["topRight"])          areaRect->setTopRight(p);
+    else if (drag_resizing["bottomLeft"])        areaRect->setBottomLeft(p);
+    else if (drag_resizing["bottomRight"])       areaRect->setBottomRight(p);
+    else if (drag_resizing["right"])             areaRect->setRight(p.x());
+    else if (drag_resizing["left"])              areaRect->setLeft(p.x());
+    else if (drag_resizing["top"])               areaRect->setTop(p.y());
+    else if (drag_resizing["bottom"])            areaRect->setBottom(p.y());
 
     updateMargins();
     update();

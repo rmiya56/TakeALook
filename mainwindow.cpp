@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scene.h"
-#include <QGraphicsPixmapItem>
+//#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -25,16 +25,7 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     view->setAcceptDrops(false);
     qApp->installEventFilter(this);
 
-
-    statusbar_left = new QLabel;
-    statusbar_right = new QLabel;
-    statusbar_right->setFont(QFont("Courier"));
-    statusbar_right->setStyleSheet("color:white");
-    statusbar_left->setFont(QFont("Courier"));
-    statusbar_left->setStyleSheet("color:white");
-    ui->statusbar->addWidget(statusbar_left, 1);
-    ui->statusbar->addWidget(statusbar_right, 0);
-
+    setupStatusBar();
     setupToolBar();
 
     if (filepath)
@@ -49,9 +40,15 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     connect(&scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 }
 
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
 void MainWindow::setupToolBar()
 {
     actionPointerMode = new QAction(QIcon(":/icons/mouse_pointer [#6].png"), tr("Pointer"), this);
+    actionPointerMode->setChecked(true);
     connect(actionPointerMode, SIGNAL(triggered()), this, SLOT(on_action_pointer_mode_triggered()));
     ui->toolBar->addAction(actionPointerMode);
 
@@ -81,9 +78,16 @@ void MainWindow::setupToolBar()
 
 }
 
-MainWindow::~MainWindow()
+void MainWindow::setupStatusBar()
 {
-    delete ui;
+    statusbar_left = new QLabel;
+    statusbar_right = new QLabel;
+    statusbar_right->setFont(QFont("Courier"));
+    statusbar_right->setStyleSheet("color:white");
+    statusbar_left->setFont(QFont("Courier"));
+    statusbar_left->setStyleSheet("color:white");
+    ui->statusbar->addWidget(statusbar_left, 1);
+    ui->statusbar->addWidget(statusbar_right, 0);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -248,6 +252,8 @@ void MainWindow::on_action_pointer_mode_triggered()
     scene.area_selection_is_active = false;
     setCursor(Qt::ArrowCursor);
     is_normal_mode = true;
+    //actionPointerMode->setIcon(QIcon(":/icons/focus_plus_round [#895].png"));
+    //actionAreaSelectionMode->setIcon();
 }
 
 void MainWindow::on_action_area_selection_mode_triggered()
@@ -256,6 +262,9 @@ void MainWindow::on_action_area_selection_mode_triggered()
     scene.area_selection_is_active = true;
     setCursor(Qt::CrossCursor);
     is_normal_mode = false;
+
+    actionPointerMode->setIcon(QIcon(":/icons/mouse_pointer [#6].png"));
+    //actionAreaSelectionMode->setIcon();
 }
 
 void MainWindow::on_action_fit_to_window_triggered()

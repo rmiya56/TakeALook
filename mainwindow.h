@@ -32,6 +32,23 @@ protected:
     bool _keyPressEvent(QKeyEvent *event);
 
 
+private:
+    Ui::MainWindow *ui;
+    QLabel *statusbar_left;
+    QLabel *statusbar_right;
+    ImageHandler imgHandler;
+    Scene scene;
+    QGraphicsView *view;
+    QPixmap original_pixmap;
+    bool is_normal_mode = true;
+    void displayImage(QImage qimage, QString file_path);
+    void showNext();
+    void showPrev();
+    void openFile();
+    void saveFile();
+    void setupToolBar();
+    void setupStatusBar();
+
 private: // Toolbar Actions
     QAction *actionPointerMode;
     QAction *actionAreaSelectionMode;
@@ -52,22 +69,5 @@ private slots:
 
 
     void fit_to_rect(QRect rect);
-
-private:
-    Ui::MainWindow *ui;
-    QLabel *statusbar_left;
-    QLabel *statusbar_right;
-    ImageHandler imgHandler;
-    Scene scene;
-    QGraphicsView *view;
-    QPixmap original_pixmap;
-    bool is_normal_mode = true;
-    void displayImage(QImage qimage, QString file_path);
-    void showNext();
-    void showPrev();
-    void openFile();
-    void saveFile();
-
-    void setupToolBar();
 };
 #endif // MAINWINDOW_H

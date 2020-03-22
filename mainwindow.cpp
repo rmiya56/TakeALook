@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scene.h"
-#include <QGraphicsPixmapItem>
+//#include <QGraphicsPixmapItem>
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -11,6 +11,7 @@
 #include <QFileDialog>
 #include <QDebug>
 #include <QSettings>
+#include <QtMath>
 
 
 MainWindow::MainWindow(QWidget *parent, const char* filepath)
@@ -24,14 +25,8 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     view->setAcceptDrops(false);
     qApp->installEventFilter(this);
 
-
-    statusbar_left = new QLabel;
-    statusbar_right = new QLabel;
-    statusbar_right->setFont(QFont("Courier"));
-    statusbar_right->setStyleSheet("color:white");
-    statusbar_left->setStyleSheet("color:white");
-    ui->statusbar->addWidget(statusbar_left, 1);
-    ui->statusbar->addWidget(statusbar_right, 0);
+    setupStatusBar();
+    setupToolBar();
 
     if (filepath)
     {
@@ -48,6 +43,51 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setupToolBar()
+{
+    actionPointerMode = new QAction(QIcon(":/icons/mouse_pointer [#6].png"), tr("Pointer"), this);
+    actionPointerMode->setChecked(true);
+    connect(actionPointerMode, SIGNAL(triggered()), this, SLOT(on_action_pointer_mode_triggered()));
+    ui->toolBar->addAction(actionPointerMode);
+
+    actionAreaSelectionMode = new QAction(QIcon(":/icons/focus_plus_round [#895].png"), tr("Area Select"), this);
+    connect(actionAreaSelectionMode, SIGNAL(triggered()), this, SLOT(on_action_area_selection_mode_triggered()));
+    ui->toolBar->addAction(actionAreaSelectionMode);
+
+    actionFitToWindow = new QAction(QIcon(":/icons/arrow_all_fill [#383].png"), tr("Fit to Window"), this);
+    connect(actionFitToWindow, SIGNAL(triggered()), this, SLOT(on_action_fit_to_window_triggered()));
+    ui->toolBar->addAction(actionFitToWindow);
+
+    actionNextImage = new QAction(QIcon(":/icons/arrow_right [#336].png"), tr("Next"), this);
+    connect(actionNextImage, SIGNAL(triggered()), this, SLOT(on_action_next_image_triggered()));
+    ui->toolBar->addAction(actionNextImage);
+
+    actionPrevImage = new QAction(QIcon(":/icons/arrow_left [#335].png"), tr("Prev"), this);
+    connect(actionPrevImage, SIGNAL(triggered()), this, SLOT(on_action_fit_prev_image_triggered()));
+    ui->toolBar->addAction(actionPrevImage);
+
+    actionOpenImage = new QAction(QIcon(":/icons/folder [#1792].png"), tr("Open Image"), this);
+    connect(actionOpenImage, SIGNAL(triggered()), this, SLOT(on_action_open_image_triggered()));
+    ui->toolBar->addAction(actionOpenImage);
+
+    actionSaveImage = new QAction(QIcon(":/icons/save_item [#1411].png"), tr("Save Image"), this);
+    connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
+    ui->toolBar->addAction(actionSaveImage);
+
+}
+
+void MainWindow::setupStatusBar()
+{
+    statusbar_left = new QLabel;
+    statusbar_right = new QLabel;
+    statusbar_right->setFont(QFont("Courier"));
+    statusbar_right->setStyleSheet("color:white");
+    statusbar_left->setFont(QFont("Courier"));
+    statusbar_left->setStyleSheet("color:white");
+    ui->statusbar->addWidget(statusbar_left, 1);
+    ui->statusbar->addWidget(statusbar_right, 0);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -86,23 +126,20 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     QString pix_location, pix_color;
     ImageProperties prop = imgHandler.currentProperties(); // reading almost static all the time..
 
-    QPointF pf = view->mapToScene(event->pos());
-    QPoint p = pf.toPoint();
-    QString x = QString::number(p.x()).rightJustified(prop.digits_x, ' ');
-    QString y = QString::number(p.y()).rightJustified(prop.digits_y, ' ');
+    QPointF pos = view->mapToScene(event->pos());
+    QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
+    QString x = QString::number(pix.x()).rightJustified(prop.digits_x, ' ');
+    QString y = QString::number(pix.y()).rightJustified(prop.digits_y, ' ');
     pix_location = QString("[%1, %2]").arg(x, y);
 
     QImage qImg;
-    if (!scene.pixmap().isNull())
-    {
-        qImg = scene.pixmap().toImage();
-    }
+    if (!scene.pixmap().isNull()) qImg = scene.pixmap().toImage();
 
-    QPointF offset = scene.areaRect().topLeft();
-    QPoint p2 = (pf - offset).toPoint();
-    if (qImg.valid(p2))
+    QPoint offset = scene.areaRect().topLeft();
+    pix = pix - offset;
+    if (qImg.valid(pix))
     {
-        QColor c = qImg.pixel(p2);
+        QColor c = qImg.pixel(pix);
         QString r = QString::number(c.red()).rightJustified(3, ' ');
         QString g = QString::number(c.green()).rightJustified(3, ' ');
         QString b = QString::number(c.blue()).rightJustified(3, ' ');
@@ -111,7 +148,6 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     }
 
     statusbar_right->setText(pix_color + " " + pix_location);
-
 }
 
 bool MainWindow::_keyPressEvent(QKeyEvent *event)
@@ -209,6 +245,28 @@ void MainWindow::fit_to_rect(QRect rect)
     qDebug() << view->viewport()->size();
 }
 
+
+void MainWindow::on_action_pointer_mode_triggered()
+{
+    ui->graphicsView->mouse_control = true;
+    scene.area_selection_is_active = false;
+    setCursor(Qt::ArrowCursor);
+    is_normal_mode = true;
+    //actionPointerMode->setIcon(QIcon(":/icons/focus_plus_round [#895].png"));
+    //actionAreaSelectionMode->setIcon();
+}
+
+void MainWindow::on_action_area_selection_mode_triggered()
+{
+    ui->graphicsView->mouse_control = false;
+    scene.area_selection_is_active = true;
+    setCursor(Qt::CrossCursor);
+    is_normal_mode = false;
+
+    actionPointerMode->setIcon(QIcon(":/icons/mouse_pointer [#6].png"));
+    //actionAreaSelectionMode->setIcon();
+}
+
 void MainWindow::on_action_fit_to_window_triggered()
 {
     fit_to_rect(scene.pixmapRect());
@@ -224,43 +282,30 @@ void MainWindow::on_action_prev_image_triggered()
     showPrev();
 }
 
-void MainWindow::on_action_switch_to_normal_mode_triggered()
-{
-    ui->graphicsView->mouse_control = true;
-    scene.area_selection_is_active = false;
-    setCursor(Qt::ArrowCursor);
-    is_normal_mode = true;
-}
-
-void MainWindow::on_action_switch_to_area_selection_mode_triggered()
-{
-    ui->graphicsView->mouse_control = false;
-    scene.area_selection_is_active = true;
-    setCursor(Qt::CrossCursor);
-    is_normal_mode = false;
-}
-
-void MainWindow::on_action_open_file_triggered()
+void MainWindow::on_action_open_image_triggered()
 {
     openFile();
 }
 
-void MainWindow::on_action_save_triggered()
+void MainWindow::on_action_save_image_triggered()
 {
     saveFile();
 }
 
-
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    Q_UNUSED(event)
+
     if(is_normal_mode)
     {
-        on_action_switch_to_area_selection_mode_triggered();
+        on_action_area_selection_mode_triggered();
         qDebug() << "AREA_SELECT_MODE";
     }
     else
     {
-        on_action_switch_to_normal_mode_triggered();
+        on_action_pointer_mode_triggered();
         qDebug() << "NORMAL_MODE";
     }
 }
+
+

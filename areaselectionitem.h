@@ -2,7 +2,7 @@
 #define ITEM_H
 
 #include <QGraphicsRectItem>
-#include <QPen>
+//#include <QPen>
 
 
 class AreaSelectionItem : public QGraphicsItem
@@ -29,6 +29,10 @@ protected:
     virtual QRectF boundingRect() const override;
 
 private:
+    void updateMargins();
+    qreal calcMargin() const;
+
+
     QRectF *area_rect = nullptr;
     QRectF *top, *left, *right, *bottom;
     QPointF prev;
@@ -42,7 +46,6 @@ private:
 
     int margin_percentage = 5;
     bool show_margin = false;
-    void updateMargins();
 
 };
 

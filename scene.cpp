@@ -87,7 +87,8 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (temp_rect == nullptr) return;
 
         qreal area_of_temp_rect = temp_rect->rect().width() * temp_rect->rect().height();
-        if(area_of_temp_rect > 100)
+
+        if(area_of_temp_rect > 2)
         {
             area_item = new AreaSelectionItem(temp_rect->rect());
             addItem(area_item);

@@ -36,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
         displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
     }
 
-    connect(&scene, SIGNAL(done_selection()), this, SLOT(on_action_switch_to_normal_mode_triggered()));
+    connect(&scene, SIGNAL(done_selection()), this, SLOT(on_action_pointer_mode_triggered()));
     connect(&scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 }
 

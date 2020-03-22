@@ -47,13 +47,17 @@ MainWindow::~MainWindow()
 void MainWindow::setupToolBar()
 {
     actionPointerMode = new QAction(QIcon(":/icons/green/mouse_pointer [#6].png"), tr("Pointer"), this);
-    actionPointerMode->setChecked(true);
-    connect(actionPointerMode, SIGNAL(triggered()), this, SLOT(on_action_pointer_mode_triggered()));
+    actionPointerMode->setCheckable(true);
+    connect(actionPointerMode, SIGNAL(toggled(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     ui->toolBar->addAction(actionPointerMode);
 
     actionAreaSelectionMode = new QAction(QIcon(":/icons/white/focus_plus_round [#895].png"), tr("Area Select"), this);
-    connect(actionAreaSelectionMode, SIGNAL(triggered()), this, SLOT(on_action_area_selection_mode_triggered()));
+    actionAreaSelectionMode->setCheckable(true);
+    connect(actionAreaSelectionMode, SIGNAL(toggled(bool)), this, SLOT(on_action_area_selection_mode_toggled(bool)));
     ui->toolBar->addAction(actionAreaSelectionMode);
+
+    actionPointerMode->setChecked(true);
+    actionAreaSelectionMode->setChecked(false);
 
     actionFitToWindow = new QAction(QIcon(":/icons/white/arrow_all_fill [#383].png"), tr("Fit to Window"), this);
     connect(actionFitToWindow, SIGNAL(triggered()), this, SLOT(on_action_fit_to_window_triggered()));
@@ -74,6 +78,12 @@ void MainWindow::setupToolBar()
     actionSaveImage = new QAction(QIcon(":/icons/white/save_item [#1411].png"), tr("Save Image"), this);
     connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
     ui->toolBar->addAction(actionSaveImage);
+
+    actionBaloonTooltip = new QAction(QIcon(":/icons/white/message [#1576].png"), tr("Baloon Tooltip"), this);
+    actionBaloonTooltip->setCheckable(true);
+    connect(actionBaloonTooltip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloon_tooltip_toggled(bool)));
+    ui->toolBar->addAction(actionBaloonTooltip);
+    actionBaloonTooltip->setChecked(false);
 
 }
 
@@ -245,6 +255,48 @@ void MainWindow::fit_to_rect(QRect rect)
 }
 
 
+void MainWindow::on_action_pointer_mode_toggled(bool toggled)
+{
+    if (toggled)
+    {
+        actionPointerMode->setChecked(true);
+        actionPointerMode->setIcon(QIcon(":/icons/green/mouse_pointer [#6].png"));
+
+        ui->graphicsView->mouse_control = true;
+        scene.area_selection_is_active = false;
+        is_pointer_mode = true;
+
+        on_action_area_selection_mode_toggled(false);
+        setCursor(Qt::ArrowCursor);
+    }
+    else
+    {
+        actionPointerMode->setIcon(QIcon(":/icons/white/mouse_pointer [#6].png"));
+        actionPointerMode->setChecked(false);
+    }
+}
+
+void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
+{
+    if (toggled)
+    {
+        actionAreaSelectionMode->setIcon(QIcon(":/icons/green/focus_plus_round [#895].png"));
+        actionAreaSelectionMode->setChecked(true);
+
+        ui->graphicsView->mouse_control = false;
+        scene.area_selection_is_active = true;
+        is_pointer_mode = false;
+
+        on_action_pointer_mode_toggled(false);
+        setCursor(Qt::CrossCursor);
+    }
+    else
+    {
+        actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
+        actionAreaSelectionMode->setChecked(false);
+    }
+}
+
 void MainWindow::on_action_pointer_mode_triggered()
 {
     ui->graphicsView->mouse_control = true;
@@ -252,7 +304,9 @@ void MainWindow::on_action_pointer_mode_triggered()
     setCursor(Qt::ArrowCursor);
     is_pointer_mode = true;
     actionPointerMode->setIcon(QIcon(":/icons/green/mouse_pointer [#6].png"));
+    actionPointerMode->setChecked(true);
     actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
+    actionAreaSelectionMode->setChecked(false);
 }
 
 void MainWindow::on_action_area_selection_mode_triggered()
@@ -262,7 +316,9 @@ void MainWindow::on_action_area_selection_mode_triggered()
     setCursor(Qt::CrossCursor);
     is_pointer_mode = false;
     actionPointerMode->setIcon(QIcon(":/icons/white/mouse_pointer [#6].png"));
+    actionPointerMode->setChecked(false);
     actionAreaSelectionMode->setIcon(QIcon(":/icons/green/focus_plus_round [#895].png"));
+    actionAreaSelectionMode->setChecked(true);
 }
 
 void MainWindow::on_action_fit_to_window_triggered()
@@ -288,6 +344,12 @@ void MainWindow::on_action_open_image_triggered()
 void MainWindow::on_action_save_image_triggered()
 {
     saveFile();
+}
+
+void MainWindow::on_action_baloon_tooltip_toggled(bool toggled)
+{
+    if (toggled) 	actionBaloonTooltip->setIcon(QIcon(":/icons/green/message [#1576].png"));
+    else 			actionBaloonTooltip->setIcon(QIcon(":/icons/white/message [#1576].png"));
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)

@@ -11,12 +11,12 @@ Simple image viewer to take a look at some characteristics.
 
 support format
 
-|    Fomrmat     |     Notes      |
-|:---------------|:---------------|
-| png            |                |  
-| jpeg           |                |
-| bmp            |                |  
-| tiff           |                |  
+|    Fomrmat     |
+|:---------------|
+| png            |
+| jpeg           |
+| bmp            |
+| tiff           |
 
 
 

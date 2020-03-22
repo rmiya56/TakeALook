@@ -10,5 +10,6 @@
         <file>icons/green/mouse_pointer [#6].png</file>
         <file>icons/green/message [#1576].png</file>
         <file>icons/green/focus_plus_round [#895].png</file>
+        <file>icons/white/message [#1576].png</file>
     </qresource>
 </RCC>

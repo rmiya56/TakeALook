@@ -41,7 +41,7 @@ private:
 
 
 signals:
-    void done_selection();
+    void done_selection(bool);
     void zoom_in_area(QRect rect);
 
 private slots:

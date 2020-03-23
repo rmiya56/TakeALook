@@ -97,7 +97,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         {
             areaItem = new AreaSelectionItem(tempRect->rect());
             addItem(areaItem);
-            done_selection();
+            done_selection(true);
         }
         removeItem(tempRect);
         tempRect = nullptr;

@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
         displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
     }
 
-    connect(&scene, SIGNAL(done_selection()), this, SLOT(on_action_pointer_mode_triggered()));
+    connect(&scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     connect(&scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 }
 
@@ -79,11 +79,11 @@ void MainWindow::setupToolBar()
     connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
     ui->toolBar->addAction(actionSaveImage);
 
-    actionBaloonTooltip = new QAction(QIcon(":/icons/white/message [#1576].png"), tr("Baloon Tooltip"), this);
-    actionBaloonTooltip->setCheckable(true);
-    connect(actionBaloonTooltip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloon_tooltip_toggled(bool)));
-    ui->toolBar->addAction(actionBaloonTooltip);
-    actionBaloonTooltip->setChecked(false);
+    actionBaloonTip = new QAction(QIcon(":/icons/white/message [#1576].png"), tr("Baloon Tooltip"), this);
+    actionBaloonTip->setCheckable(true);
+    connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
+    ui->toolBar->addAction(actionBaloonTip);
+    actionBaloonTip->setChecked(false);
 
 }
 
@@ -146,18 +146,20 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
 
     QPoint offset = scene.areaRect().topLeft();
     pix = pix - offset;
+    QString r, g, b;
     if (qImg.valid(pix))
     {
         QColor c = qImg.pixel(pix);
-        QString r = QString::number(c.red()).rightJustified(3, ' ');
-        QString g = QString::number(c.green()).rightJustified(3, ' ');
-        QString b = QString::number(c.blue()).rightJustified(3, ' ');
+        r = QString::number(c.red()).rightJustified(3, ' ');
+        g = QString::number(c.green()).rightJustified(3, ' ');
+        b = QString::number(c.blue()).rightJustified(3, ' ');
         if (prop.channels == 3)         pix_color = QString("(%1,%2,%3)").arg(r,g,b);
         else if (prop.channels == 1)    pix_color = QString("(%1)").arg(r);
     }
 
     statusbarRight->setText(pix_color + " " + pix_location);
-    if (scene.baloonTip) scene.baloonTip->setPixProperties(pos, 0,0,0);
+
+    if (scene.baloonTip) scene.baloonTip->setPixProperties(pos, r, g, b);
 }
 
 bool MainWindow::_keyPressEvent(QKeyEvent *event)
@@ -265,7 +267,6 @@ void MainWindow::on_action_pointer_mode_toggled(bool toggled)
 
         ui->graphicsView->mouse_control = true;
         scene.area_selection_is_active = false;
-        is_pointer_mode = true;
 
         on_action_area_selection_mode_toggled(false);
         setCursor(Qt::ArrowCursor);
@@ -286,7 +287,6 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
 
         ui->graphicsView->mouse_control = false;
         scene.area_selection_is_active = true;
-        is_pointer_mode = false;
 
         on_action_pointer_mode_toggled(false);
         setCursor(Qt::CrossCursor);
@@ -296,30 +296,6 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
         actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
         actionAreaSelectionMode->setChecked(false);
     }
-}
-
-void MainWindow::on_action_pointer_mode_triggered()
-{
-    ui->graphicsView->mouse_control = true;
-    scene.area_selection_is_active = false;
-    setCursor(Qt::ArrowCursor);
-    is_pointer_mode = true;
-    actionPointerMode->setIcon(QIcon(":/icons/green/mouse_pointer [#6].png"));
-    actionPointerMode->setChecked(true);
-    actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
-    actionAreaSelectionMode->setChecked(false);
-}
-
-void MainWindow::on_action_area_selection_mode_triggered()
-{
-    ui->graphicsView->mouse_control = false;
-    scene.area_selection_is_active = true;
-    setCursor(Qt::CrossCursor);
-    is_pointer_mode = false;
-    actionPointerMode->setIcon(QIcon(":/icons/white/mouse_pointer [#6].png"));
-    actionPointerMode->setChecked(false);
-    actionAreaSelectionMode->setIcon(QIcon(":/icons/green/focus_plus_round [#895].png"));
-    actionAreaSelectionMode->setChecked(true);
 }
 
 void MainWindow::on_action_fit_to_window_triggered()
@@ -347,17 +323,17 @@ void MainWindow::on_action_save_image_triggered()
     saveFile();
 }
 
-void MainWindow::on_action_baloon_tooltip_toggled(bool toggled)
+void MainWindow::on_action_baloontip_toggled(bool toggled)
 {
     if (toggled)
     {
         scene.addItem(scene.baloonTip);
-        actionBaloonTooltip->setIcon(QIcon(":/icons/green/message [#1576].png"));
+        actionBaloonTip->setIcon(QIcon(":/icons/green/message [#1576].png"));
     }
     else
     {
         scene.removeItem(scene.baloonTip);
-        actionBaloonTooltip->setIcon(QIcon(":/icons/white/message [#1576].png"));
+        actionBaloonTip->setIcon(QIcon(":/icons/white/message [#1576].png"));
     }
 }
 
@@ -365,14 +341,14 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 
-    if(is_pointer_mode)
+    if (actionPointerMode->isChecked())
     {
-        on_action_area_selection_mode_triggered();
+        on_action_area_selection_mode_toggled(true);
         qDebug() << "AREA_SELECT_MODE";
     }
     else
     {
-        on_action_pointer_mode_triggered();
+        on_action_pointer_mode_toggled(true);
         qDebug() << "NORMAL_MODE";
     }
 }

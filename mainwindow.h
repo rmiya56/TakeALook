@@ -31,7 +31,6 @@ protected:
     void _mouseMoveEvent(QMouseEvent *event);
     bool _keyPressEvent(QKeyEvent *event);
 
-
 private:
     Ui::MainWindow *ui;
     QGraphicsView *view;
@@ -40,7 +39,6 @@ private:
     QLabel *statusbarRight;
     ImageHandler imgHandler;
     QPixmap originalPixmap;
-    bool is_pointer_mode = true;
     void displayImage(QImage qimage, QString file_path);
     void showNext();
     void showPrev();
@@ -57,20 +55,18 @@ private: // Toolbar Actions
     QAction *actionPrevImage;
     QAction *actionOpenImage;
     QAction *actionSaveImage;
-    QAction *actionBaloonTooltip;
+    QAction *actionBaloonTip;
 
 private slots:
-    void on_action_pointer_mode_triggered();
-    void on_action_area_selection_mode_triggered();
+    void on_action_pointer_mode_toggled(bool toggled);
+    void on_action_area_selection_mode_toggled(bool toggled);
     void on_action_fit_to_window_triggered();
     void on_action_next_image_triggered();
     void on_action_prev_image_triggered();
     void on_action_open_image_triggered();
     void on_action_save_image_triggered();
-    void on_action_baloon_tooltip_toggled(bool toggled);
+    void on_action_baloontip_toggled(bool toggled);
 
     void fit_to_rect(QRect rect);
-    void on_action_pointer_mode_toggled(bool toggled);
-    void on_action_area_selection_mode_toggled(bool toggled);
 };
 #endif // MAINWINDOW_H

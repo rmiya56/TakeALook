@@ -1,5 +1,4 @@
 #include "baloontip.h"
-#include <QFont>
 #include <QPen>
 
 
@@ -10,7 +9,6 @@ BaloonTip::BaloonTip(qreal x, qreal y, qreal width, qreal height)
 
     textItem = new QGraphicsTextItem("", this);
     textItem->setPos(x, y);
-    textItem->setFont(QFont("Monospace"));
 
     effect = new QGraphicsDropShadowEffect();
     effect->setBlurRadius(50);
@@ -22,11 +20,6 @@ BaloonTip::BaloonTip(qreal x, qreal y, qreal width, qreal height)
     setPen(pen);
     setBrush(QBrush(Qt::white, Qt::SolidPattern));
 }
-
-//void BaloonTip::setPos(QPointF pos)
-//{
-//    QGraphicsRectItem::setPos(pos);
-//}
 
 void BaloonTip::setHtml(QString html)
 {

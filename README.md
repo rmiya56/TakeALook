@@ -4,6 +4,7 @@ Take A Look
 Simple image viewer to take a look at some characteristics.
 
 .. image:: https://gist.githubusercontent.com/rmiya56/151f55f41d01761d812efa16a71bfad7/raw/b681017c09b8fdf3dd70dc353a79b2da502db296/tuna.png
+     :alt: Demo Image
 
 ## Summary
  - cross-platform (Win/Mac/Linux)

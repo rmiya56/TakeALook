@@ -24,8 +24,8 @@ support format
 |    Operation   |      Command       | Notes          |
 |:---------------|:-------------------|:---------------|
 | Clipboard Copy | Ctrl + C           |                |
-| Next           | Right (->)         |                |
-| Prev           | Left  (<-)         |                |
+| Next           | Right Key (→)      |                |
+| Prev           | Left Key  (←)      |                |
 | Zoom In        | Mouse Scroll Up    |                |
 | Zoom Out       | Mouse Scroll Down  |                |
 | Save           | Ctrl + S           |                |

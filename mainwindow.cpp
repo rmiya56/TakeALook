@@ -157,6 +157,7 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     }
 
     statusbarRight->setText(pix_color + " " + pix_location);
+    if (scene.baloonTip) scene.baloonTip->setPixProperties(pos, 0,0,0);
 }
 
 bool MainWindow::_keyPressEvent(QKeyEvent *event)
@@ -348,8 +349,16 @@ void MainWindow::on_action_save_image_triggered()
 
 void MainWindow::on_action_baloon_tooltip_toggled(bool toggled)
 {
-    if (toggled) 	actionBaloonTooltip->setIcon(QIcon(":/icons/green/message [#1576].png"));
-    else 			actionBaloonTooltip->setIcon(QIcon(":/icons/white/message [#1576].png"));
+    if (toggled)
+    {
+        scene.addItem(scene.baloonTip);
+        actionBaloonTooltip->setIcon(QIcon(":/icons/green/message [#1576].png"));
+    }
+    else
+    {
+        scene.removeItem(scene.baloonTip);
+        actionBaloonTooltip->setIcon(QIcon(":/icons/white/message [#1576].png"));
+    }
 }
 
 void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)

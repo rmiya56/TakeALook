@@ -4,13 +4,14 @@
 
 
 PixBaloonTip::PixBaloonTip()
-    : BaloonTip(width, height)
+    : BaloonTip(offsetX, offsetY, width, height)
 {
     textItem->setFont(QFont("Monospace"));
 }
 
 void PixBaloonTip::setPixProperties(QPointF pos, qreal r, qreal g, qreal b)
 {
+
     setPos(pos);
 
     QString x = QString::number(qFloor(pos.x()));
@@ -20,7 +21,6 @@ void PixBaloonTip::setPixProperties(QPointF pos, qreal r, qreal g, qreal b)
     QString ch1 = QString::number(r);
     QString ch2 = QString::number(g);
     QString ch3 = QString::number(b);
-
 
     QString html = "<div align='center'><pre><tt>"
                    "<font size='1'>%1</font><br/>"

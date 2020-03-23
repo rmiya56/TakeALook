@@ -11,6 +11,8 @@ public:
     void setPixProperties(QPointF pos, qreal r, qreal g, qreal b);
 
 private:
+    static const int offsetX = 10;
+    static const int offsetY = 20;
     static const int width = 120;
     static const int height = 110;
 };

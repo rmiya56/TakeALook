@@ -20,7 +20,7 @@ public:
     QMenu menuScene;
     QGraphicsPixmapItem *pixmapItem = nullptr;
     AreaSelectionItem *areaItem = nullptr;
-    PixBaloonTip *baloonTip;
+    PixBaloonTip *baloonTip = nullptr;
 
 
     QAction *actionSelectArea;

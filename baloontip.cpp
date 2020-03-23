@@ -3,11 +3,13 @@
 #include <QPen>
 
 
-BaloonTip::BaloonTip(qreal width, qreal height)
-    : QGraphicsRectItem(0, 0, width, height)
+BaloonTip::BaloonTip(qreal x, qreal y, qreal width, qreal height)
+    : QGraphicsRectItem(x, y, width, height)
 {
-    //setRect(0, 0, width, height);
+    setFlag(QGraphicsItem::ItemIgnoresTransformations);
+
     textItem = new QGraphicsTextItem("", this);
+    textItem->setPos(x, y);
     textItem->setFont(QFont("Monospace"));
 
     effect = new QGraphicsDropShadowEffect();
@@ -21,11 +23,10 @@ BaloonTip::BaloonTip(qreal width, qreal height)
     setBrush(QBrush(Qt::white, Qt::SolidPattern));
 }
 
-void BaloonTip::setPos(QPointF pos)
-{
-    pos = QPointF(10, 20);
-    QGraphicsRectItem::setPos(pos);
-}
+//void BaloonTip::setPos(QPointF pos)
+//{
+//    QGraphicsRectItem::setPos(pos);
+//}
 
 void BaloonTip::setHtml(QString html)
 {

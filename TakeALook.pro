@@ -16,25 +16,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    areaselectionitem.cpp \
-    baloontip.cpp \
-    imagehandler.cpp \
-    imageproperties.cpp \
-    main.cpp \
-    mainwindow.cpp \
-    pixbaloontip.cpp \
-    scene.cpp \
-    view.cpp
+    src/areaselectionitem.cpp \
+    src/baloontip.cpp \
+    src/imagehandler.cpp \
+    src/imageproperties.cpp \
+    src/main.cpp \
+    src/mainwindow.cpp \
+    src/pixbaloontip.cpp \
+    src/scene.cpp \
+    src/view.cpp \
 
 HEADERS += \
-    areaselectionitem.h \
-    baloontip.h \
-    imagehandler.h \
-    imageproperties.h \
-    mainwindow.h \
-    pixbaloontip.h \
-    scene.h \
-    view.h
+    src/areaselectionitem.h \
+    src/baloontip.h \
+    src/imagehandler.h \
+    src/imageproperties.h \
+    src/mainwindow.h \
+    src/pixbaloontip.h \
+    src/scene.h \
+    src/view.h \
 
 FORMS += \
     mainwindow.ui

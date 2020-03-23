@@ -17,18 +17,22 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     areaselectionitem.cpp \
+    baloontip.cpp \
     imagehandler.cpp \
     imageproperties.cpp \
     main.cpp \
     mainwindow.cpp \
+    pixbaloontip.cpp \
     scene.cpp \
     view.cpp
 
 HEADERS += \
     areaselectionitem.h \
+    baloontip.h \
     imagehandler.h \
     imageproperties.h \
     mainwindow.h \
+    pixbaloontip.h \
     scene.h \
     view.h
 

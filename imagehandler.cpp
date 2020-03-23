@@ -24,8 +24,16 @@ void ImageHandler::loadImage(QFileInfo file_info)
     qDebug() << rawMat.step;
     properties = ImageProperties(file_info.suffix(), rawMat);
 
+
+
     cv::Mat mat_8U;
+
+    //double minVal, maxVal;
+    //cv::minMaxLoc(rawMat, &minVal, &maxVal, NULL, NULL);
+    //rawMat.convertTo(mat_8U, 1, 255/maxVal, 0);
+
     rawMat.convertTo(mat_8U, CV_8U);
+
 
     QImage qImg;
     QImage::Format format;

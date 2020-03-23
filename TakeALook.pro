@@ -46,6 +46,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 win32:{
 include("c:/opencv/opencv.pri")
+RC_ICONS = icons/myappico.ico
 }
 unix:!macx{
 CONFIG += link_pkgconfig
@@ -59,3 +60,5 @@ LIBS += -L"/usr/local/lib" \
 
 RESOURCES += \
     resource.qrc
+
+DISTFILES +=

@@ -4,9 +4,9 @@
 
 
 BaloonTip::BaloonTip(qreal width, qreal height)
-    : QGraphicsRectItem()
+    : QGraphicsRectItem(0, 0, width, height)
 {
-    setRect(0, 0, width, height);
+    //setRect(0, 0, width, height);
     textItem = new QGraphicsTextItem("", this);
     textItem->setFont(QFont("Monospace"));
 
@@ -23,8 +23,8 @@ BaloonTip::BaloonTip(qreal width, qreal height)
 
 void BaloonTip::setPos(QPointF pos)
 {
-    pos = pos + QPointF(10, 20);
-    //QGraphicsRectItem::setPos(pos);
+    pos = QPointF(10, 20);
+    QGraphicsRectItem::setPos(pos);
 }
 
 void BaloonTip::setHtml(QString html)

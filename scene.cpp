@@ -1,5 +1,6 @@
 #include "scene.h"
 #include "areaselectionitem.h"
+#include "pixbaloontip.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 
@@ -7,6 +8,10 @@
 Scene::Scene()
     : QGraphicsScene()
 {
+
+    baloonTip = new PixBaloonTip();
+    addItem(baloonTip);
+
     // pen & brush
     penArea.setColor(Qt::green);
     penArea.setWidth(2);

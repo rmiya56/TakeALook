@@ -9,7 +9,6 @@ class BaloonTip : public QGraphicsRectItem
 {
 
 public:
-    BaloonTip();
     BaloonTip(qreal width, qreal height);
     void setHtml(QString html);
     void setPlainText(QString text);

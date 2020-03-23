@@ -1,13 +1,15 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/folder [#1792].png</file>
-        <file>icons/file [#1699].png</file>
-        <file>icons/arrow_right [#336].png</file>
-        <file>icons/arrow_left [#335].png</file>
-        <file>icons/arrow_all_fill [#383].png</file>
-        <file>icons/save_item [#1411].png</file>
-        <file>icons/mouse_pointer [#6].png</file>
-        <file>icons/focus_plus_round [#895].png</file>
-        <file>icons/arrow_repeat [#235].png</file>
+        <file>icons/white/save_item [#1411].png</file>
+        <file>icons/white/mouse_pointer [#6].png</file>
+        <file>icons/white/folder [#1792].png</file>
+        <file>icons/white/focus_plus_round [#895].png</file>
+        <file>icons/white/arrow_right [#336].png</file>
+        <file>icons/white/arrow_left [#335].png</file>
+        <file>icons/white/arrow_all_fill [#383].png</file>
+        <file>icons/green/mouse_pointer [#6].png</file>
+        <file>icons/green/message [#1576].png</file>
+        <file>icons/green/focus_plus_round [#895].png</file>
+        <file>icons/white/message [#1576].png</file>
     </qresource>
 </RCC>

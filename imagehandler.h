@@ -22,13 +22,13 @@ public:
     void writeToFile(QRect rect);
 
 private:
-    QImage _image;
-    ImageProperties _properties;
-    QStringList support_formats;
-    QDir current_dir;
+    QImage qImage;
+    ImageProperties properties;
+    QStringList supportFormats;
+    QDir currentDir;
     QFileInfoList entries;
-    int file_index;
-    cv::Mat raw_mat;
+    int fileIndex;
+    cv::Mat rawMat;
 };
 
 #endif // IMAGEHANDLER_H

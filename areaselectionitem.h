@@ -2,7 +2,6 @@
 #define ITEM_H
 
 #include <QGraphicsRectItem>
-//#include <QPen>
 
 
 class AreaSelectionItem : public QGraphicsItem
@@ -13,11 +12,11 @@ public:
 
     enum { Type = UserType + 1 };
     int type() const override { return Type; }
-    QRect toQRect();
 
     void setRect(QRectF &rectangle);
     void setRect(qreal x, qreal y, qreal width, qreal height);
     QRectF rect();
+    QRect toQRect();
 
 
 protected:
@@ -32,8 +31,7 @@ private:
     void updateMargins();
     qreal calcMargin() const;
 
-
-    QRectF *area_rect = nullptr;
+    QRectF *areaRect = nullptr;
     QRectF *top, *left, *right, *bottom;
     QPointF prev;
     QColor color = Qt::green;
@@ -44,7 +42,7 @@ private:
                                         {"bottomLeft", false}, {"bottomRight", false}
                                      };
 
-    int margin_percentage = 5;
+    int marginPercentage = 5;
     bool show_margin = false;
 
 };

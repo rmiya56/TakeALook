@@ -34,13 +34,13 @@ protected:
 
 private:
     Ui::MainWindow *ui;
-    QLabel *statusbar_left;
-    QLabel *statusbar_right;
-    ImageHandler imgHandler;
-    Scene scene;
     QGraphicsView *view;
-    QPixmap original_pixmap;
-    bool is_normal_mode = true;
+    Scene scene;
+    QLabel *statusbarLeft;
+    QLabel *statusbarRight;
+    ImageHandler imgHandler;
+    QPixmap originalPixmap;
+    bool is_pointer_mode = true;
     void displayImage(QImage qimage, QString file_path);
     void showNext();
     void showPrev();
@@ -57,6 +57,7 @@ private: // Toolbar Actions
     QAction *actionPrevImage;
     QAction *actionOpenImage;
     QAction *actionSaveImage;
+    QAction *actionBaloonTooltip;
 
 private slots:
     void on_action_pointer_mode_triggered();
@@ -66,8 +67,10 @@ private slots:
     void on_action_prev_image_triggered();
     void on_action_open_image_triggered();
     void on_action_save_image_triggered();
-
+    void on_action_baloon_tooltip_toggled(bool toggled);
 
     void fit_to_rect(QRect rect);
+    void on_action_pointer_mode_toggled(bool toggled);
+    void on_action_area_selection_mode_toggled(bool toggled);
 };
 #endif // MAINWINDOW_H

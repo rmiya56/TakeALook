@@ -15,8 +15,8 @@ View::View(QWidget *parent)
 void View::wheelEvent(QWheelEvent *event)
 {
     if(event->isAccepted()) return;
-    if(event->angleDelta().y() > 0) scale(zoom_factor, zoom_factor);
-    else scale(1/zoom_factor, 1/zoom_factor);
+    if(event->angleDelta().y() > 0) scale(zoomFactor, zoomFactor);
+    else scale(1/zoomFactor, 1/zoomFactor);
     event->accept();
 }
 
@@ -31,7 +31,7 @@ void View::mousePressEvent(QMouseEvent *event)
    if (event->button() == Qt::LeftButton)
    {
        left_mouse_pressed = true;
-       scene_mouse_pos = event->pos();
+       sceneMousePos = event->pos();
        return;
    }
 }
@@ -44,9 +44,9 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
     if (left_mouse_pressed)
     {
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x()-scene_mouse_pos.x()));
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y()-scene_mouse_pos.y()));
-        scene_mouse_pos = event->pos();
+        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x()-sceneMousePos.x()));
+        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y()-sceneMousePos.y()));
+        sceneMousePos = event->pos();
         event->accept();
         return;
     }
@@ -62,7 +62,7 @@ void View::mouseReleaseEvent(QMouseEvent *event)
     {    // in the selected area
         if(event->button() == Qt::RightButton)
         {
-            static_cast<Scene*>(scene())->menu_area.exec(event->globalPos());
+            static_cast<Scene*>(scene())->menuArea.exec(event->globalPos());
             event->accept();
         }
     }

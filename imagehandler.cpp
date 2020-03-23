@@ -6,62 +6,62 @@
 
 ImageHandler::ImageHandler()
 {
-    support_formats << "*.png";
-    support_formats << "*.jpg";
-    support_formats << "*.tif";
-    support_formats << "*.tiff";
-    support_formats << "*.bmp";
+    supportFormats << "*.png";
+    supportFormats << "*.jpg";
+    supportFormats << "*.tif";
+    supportFormats << "*.tiff";
+    supportFormats << "*.bmp";
 }
 
 void ImageHandler::loadImage(QFileInfo file_info)
 {
-    current_dir = file_info.absoluteDir();
-    entries = current_dir.entryInfoList(support_formats, QDir::Files);
-    file_index = entries.indexOf(file_info);
-    QString filepath = entries[file_index].absoluteFilePath();
-    raw_mat = cv::imread(filepath.toStdString(), cv::IMREAD_ANYCOLOR | cv::IMREAD_ANYDEPTH);
+    currentDir = file_info.absoluteDir();
+    entries = currentDir.entryInfoList(supportFormats, QDir::Files);
+    fileIndex = entries.indexOf(file_info);
+    QString filepath = entries[fileIndex].absoluteFilePath();
+    rawMat = cv::imread(filepath.toStdString(), cv::IMREAD_ANYCOLOR | cv::IMREAD_ANYDEPTH);
 
-    qDebug() << raw_mat.step;
-    _properties = ImageProperties(file_info.suffix(), raw_mat);
+    qDebug() << rawMat.step;
+    properties = ImageProperties(file_info.suffix(), rawMat);
 
     cv::Mat mat_8U;
-    raw_mat.convertTo(mat_8U, CV_8U);
+    rawMat.convertTo(mat_8U, CV_8U);
 
     QImage qImg;
     QImage::Format format;
-    if (raw_mat.channels() == 1) format = QImage::Format_Grayscale8;
-    if (raw_mat.channels() == 3) format = QImage::Format_RGB888;
+    if (rawMat.channels() == 1) format = QImage::Format_Grayscale8;
+    if (rawMat.channels() == 3) format = QImage::Format_RGB888;
 
     qImg = QImage((const unsigned char*)mat_8U.data, mat_8U.cols, mat_8U.rows, mat_8U.step, format);
     qImg.bits(); // deep copy
-    _image = qImg.rgbSwapped();
+    qImage = qImg.rgbSwapped();
 }
 
 void ImageHandler::loadPrev()
 {
-    if(file_index > 0)
-        loadImage(entries[--file_index]);
+    if(fileIndex > 0)
+        loadImage(entries[--fileIndex]);
 }
 
 void ImageHandler::loadNext()
 {
-    if(file_index < entries.length()-1)
-        loadImage(entries[++file_index]);
+    if(fileIndex < entries.length()-1)
+        loadImage(entries[++fileIndex]);
 }
 
 QImage ImageHandler::currentImage()
 {
-    return _image;
+    return qImage;
 }
 
 QString ImageHandler::currentFilePath()
 {
-    return entries[file_index].absoluteFilePath();
+    return entries[fileIndex].absoluteFilePath();
 }
 
 ImageProperties ImageHandler::currentProperties()
 {
-   return _properties;
+   return properties;
 }
 
 void ImageHandler::writeToFile(QRect rect)
@@ -72,10 +72,10 @@ void ImageHandler::writeToFile(QRect rect)
     roi.width = rect.width();
     roi.height =rect.height();
 
-    QFileInfo fileInfo = entries[file_index];
+    QFileInfo fileInfo = entries[fileIndex];
     QString savePath = QString("%1/%2_mod.%3").arg(
                                 fileInfo.absolutePath(), fileInfo.baseName(), fileInfo.suffix() );
 
-    cv::Mat mat = raw_mat(roi);
+    cv::Mat mat = rawMat(roi);
     cv::imwrite(savePath.toStdString(), mat);
 }

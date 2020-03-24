@@ -46,6 +46,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupToolBar()
 {
+
     actionPointerMode = new QAction(QIcon(":/icons/green/mouse_pointer [#6].png"), tr("Pointer"), this);
     actionPointerMode->setCheckable(true);
     connect(actionPointerMode, SIGNAL(toggled(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
@@ -79,7 +80,7 @@ void MainWindow::setupToolBar()
     connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
     ui->toolBar->addAction(actionSaveImage);
 
-    actionBaloonTip = new QAction(QIcon(":/icons/white/message [#1576].png"), tr("Baloon Tooltip"), this);
+    actionBaloonTip = new QAction(QIcon(":/icons/white/message [#1576].png"), tr("BaloonTip"), this);
     actionBaloonTip->setCheckable(true);
     connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
     ui->toolBar->addAction(actionBaloonTip);

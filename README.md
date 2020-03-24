@@ -23,14 +23,15 @@ support format
 
 
 ## Operations
-|    Operation   |      Command       | Notes          |
-|:---------------|:-------------------|:---------------|
-| Clipboard Copy | Ctrl + C           |                |
-| Next           | Right Key (→)      |                |
-| Prev           | Left Key  (←)      |                |
-| Zoom In        | Mouse Scroll Up    |                |
-| Zoom Out       | Mouse Scroll Down  |                |
-| Save           | Ctrl + S           |                |
+|    Operation   |      Command       | Notes                     |
+|:---------------|:-------------------|:--------------------------|
+| Clipboard Copy | Ctrl + C           |                           |
+| Next           | Right Key (→)      |                           |
+| Prev           | Left Key  (←)      |                           |
+| Zoom In        | Mouse Scroll Up    |                           |
+| Zoom Out       | Mouse Scroll Down  |                           |
+| Switch Mode    | Double Click       | Pointer ←→ Area Selection |
+| Save           | Ctrl + S           |                           |
 
 
 

@@ -45,6 +45,18 @@ void ImageHandler::loadImage(QFileInfo file_info)
     qImage = qImg.rgbSwapped();
 }
 
+void ImageHandler::writeToFile(QFileInfo file_info, QRect rect)
+{
+    cv::Rect roi;
+    roi.x = rect.x();
+    roi.y = rect.y();
+    roi.width = rect.width();
+    roi.height =rect.height();
+
+    QString savePath = QString("%1/%2.%3").arg( file_info.absolutePath(), file_info.baseName(), file_info.suffix() );
+    cv::imwrite(savePath.toStdString(), rawMat(roi));
+}
+
 void ImageHandler::loadPrev()
 {
     if(fileIndex > 0)
@@ -70,20 +82,4 @@ QString ImageHandler::currentFilePath()
 ImageProperties ImageHandler::currentProperties()
 {
    return properties;
-}
-
-void ImageHandler::writeToFile(QRect rect)
-{
-    cv::Rect roi;
-    roi.x = rect.x();
-    roi.y = rect.y();
-    roi.width = rect.width();
-    roi.height =rect.height();
-
-    QFileInfo fileInfo = entries[fileIndex];
-    QString savePath = QString("%1/%2_mod.%3").arg(
-                                fileInfo.absolutePath(), fileInfo.baseName(), fileInfo.suffix() );
-
-    cv::Mat mat = rawMat(roi);
-    cv::imwrite(savePath.toStdString(), mat);
 }

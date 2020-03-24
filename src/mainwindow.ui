@@ -84,7 +84,7 @@
   <customwidget>
    <class>View</class>
    <extends>QGraphicsView</extends>
-   <header>view.h</header>
+   <header>src/view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

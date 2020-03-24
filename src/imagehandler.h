@@ -13,13 +13,15 @@ class ImageHandler
 public:
     ImageHandler();
     void loadImage(QFileInfo file_info);
+    void writeToFile(QFileInfo file_info, QRect rect);
+
     void loadPrev();
     void loadNext();
     QImage currentImage();
     QString currentFilePath();
     ImageProperties currentProperties();
 
-    void writeToFile(QRect rect);
+    //void writeToFile(QRect rect);
 
 private:
     QImage qImage;

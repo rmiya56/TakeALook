@@ -221,9 +221,9 @@ void MainWindow::openFile()
     QString dir, filter;
 
     QSettings read("settings.ini", QSettings::IniFormat, this);
-    read.beginGroup("OpenFile");
+    read.beginGroup("ImageFiles");
     if(read.contains("dir")) dir = read.value("dir", "").toString();
-    if(read.contains("filter"))  filter = read.value("filter", tr("All(*.*)")).toString();
+    if(read.contains("open_filter"))  filter = read.value("filter", tr("All(*.*)")).toString();
 
     QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                    dir,
@@ -237,7 +237,7 @@ void MainWindow::openFile()
     displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
 
     QSettings settings("settings.ini", QSettings::IniFormat, this);
-    settings.beginGroup("OpenFile");
+    settings.beginGroup("ImageFiles");
     settings.setValue("dir", file_info.absoluteDir().absolutePath());
     settings.setValue("filter", filter);
     settings.endGroup();
@@ -246,7 +246,28 @@ void MainWindow::openFile()
 
 void MainWindow::saveFile()
 {
-   imgHandler.writeToFile(scene.areaRect());
+    QString dir, filter;
+
+    QSettings read("settings.ini", QSettings::IniFormat, this);
+    read.beginGroup("ImageFiles");
+    if(read.contains("save_filter"))  filter = read.value("filter", tr("All(*.*)")).toString();
+
+    QString fileName = QFileDialog::getSaveFileName(this,
+                                                    tr("Save File"),
+                                                    imgHandler.currentFilePath(),
+                                                    tr("All(*.*);;PNG(*.png);;JPG(*.jpg);;BMP(*.bmp);;TIFF(*.tif*)"),
+                                                    &filter,
+                                                    QFileDialog::DontUseCustomDirectoryIcons);
+
+    if (fileName.isEmpty()) return;
+
+    QFileInfo file_info(fileName);
+    imgHandler.writeToFile(file_info, scene.areaRect());
+
+    QSettings settings("settings.ini", QSettings::IniFormat, this);
+    settings.beginGroup("ImageFiles");
+    settings.setValue("filter", filter);
+    settings.endGroup();
 }
 
 void MainWindow::fit_to_rect(QRect rect)

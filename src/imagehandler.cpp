@@ -1,6 +1,7 @@
 #include "imageproperties.h"
 #include "imagehandler.h"
 #include "opencv2/opencv.hpp"
+#include "cv_util.h"
 #include <QDebug>
 
 
@@ -24,23 +25,14 @@ void ImageHandler::loadImage(QFileInfo file_info)
     qDebug() << rawMat.step;
     properties = ImageProperties(file_info.suffix(), rawMat);
 
-
-
-    cv::Mat mat_8U;
-
-    //double minVal, maxVal;
-    //cv::minMaxLoc(rawMat, &minVal, &maxVal, NULL, NULL);
-    //rawMat.convertTo(mat_8U, 1, 255/maxVal, 0);
-
-    rawMat.convertTo(mat_8U, CV_8U);
-
+    cv::Mat mat8U = convTo8U(rawMat);
 
     QImage qImg;
     QImage::Format format;
     if (rawMat.channels() == 1) format = QImage::Format_Grayscale8;
     if (rawMat.channels() == 3) format = QImage::Format_RGB888;
 
-    qImg = QImage((const unsigned char*)mat_8U.data, mat_8U.cols, mat_8U.rows, mat_8U.step, format);
+    qImg = QImage((const unsigned char*)mat8U.data, mat8U.cols, mat8U.rows, mat8U.step, format);
     qImg.bits(); // deep copy
     qImage = qImg.rgbSwapped();
 }

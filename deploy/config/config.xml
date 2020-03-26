@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Take A Look</Name>
+    <Version>1.0.0</Version>
+    <Title>TakeALook Installer</Title>
+    <Publisher>rmiya56</Publisher>
+    <StartMenuDir>Super App</StartMenuDir>
+    <TargetDir>@HomeDir@/InstallationDirectory</TargetDir>
+</Installer>

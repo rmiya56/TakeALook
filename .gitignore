@@ -1,1 +1,3 @@
 *.user
+*.exe
+deploy/packages/*/data

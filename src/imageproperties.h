@@ -17,6 +17,7 @@ public:
     int height;
     int digitsX = 3;
     int digitsY = 3;
+    int depth;
 
 private:
     QString getType(cv::Mat mat);

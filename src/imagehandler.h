@@ -25,12 +25,12 @@ public:
 
 private:
     QImage qImage;
-    ImageProperties properties;
+    ImageProperties imgProp;
     QStringList supportFormats;
     QDir currentDir;
     QFileInfoList entries;
     int fileIndex;
-    cv::Mat rawMat;
+    cv::Mat matRaw;
 };
 
 #endif // IMAGEHANDLER_H

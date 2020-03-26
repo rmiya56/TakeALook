@@ -14,27 +14,59 @@ ImageProperties::ImageProperties(QString suffix, cv::Mat mat)
     height = mat.rows;
     digitsX = qCeil(log10(width));
     digitsY = qCeil(log10(height));
+
     depth = mat.depth();
+    switch(depth)
+    {
+    case CV_8U: // 0 ~ 255
+        alpha = 1;
+        beta = 0;
+        digitsD = 3;
+        break;
+
+    case CV_8S: // -128 ~ +127
+        alpha = 1;
+        beta = 128;
+        digitsD = 4;
+        break;
+
+    case CV_16U: // 0 ~ 65535
+        alpha = 255.0/65535;
+        beta = 0;
+        digitsD = 5;
+        break;
+
+    case CV_16S: // -32768 ~ 32767
+        alpha = 255.0/32767;
+        beta = 128;
+        digitsD = 6;
+        break;
+
+    case CV_32S: // -2147483648 ~ +2147483647
+        alpha = 255.0/2147483647;
+        beta = 128;
+        digitsD = 11;
+        break;
+
+    case CV_32F:
+    case CV_64F:
+        double minVal, maxVal;
+        cv::minMaxLoc(mat, &minVal, &maxVal, NULL, NULL);
+        alpha = 255.0/maxVal;
+        beta = 0;
+        digitsD = 5;
+        break;
+
+    default:
+        alpha = 1;
+        beta = 0;
+        break;
+    }
+
 
     qDebug()	<< ""
                 << "format:" << name
                 << "type:" <<  type
                 << "channels:" << channels
                 << QString("size:%1x%2").arg(QString::number(width), QString::number(height));
-}
-
-QString ImageProperties::getType(cv::Mat mat)
-{
-    std::string r;
-    uchar depth = mat.type() & CV_MAT_DEPTH_MASK;
-    switch(depth) {
-        case CV_8U:		return "8U";
-        case CV_8S:  	return "8S";
-        case CV_16U: 	return "16U";
-        case CV_16S: 	return "16S";
-        case CV_32S: 	return "32S";
-        case CV_32F:	return "32F";
-        case CV_64F:	return "64F";
-        default: 		return "Unknown";
-    }
 }

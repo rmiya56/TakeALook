@@ -151,9 +151,10 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     if (qImg.valid(pix))
     {
         QColor c = qImg.pixel(pix);
-        r = QString::number(c.red()).rightJustified(3, ' ');
-        g = QString::number(c.green()).rightJustified(3, ' ');
-        b = QString::number(c.blue()).rightJustified(3, ' ');
+
+        r = QString::number((c.red()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
+        g = QString::number((c.green()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
+        b = QString::number((c.blue()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
         if (prop.channels == 3)         pix_color = QString("(%1,%2,%3)").arg(r,g,b);
         else if (prop.channels == 1)    pix_color = QString("(%1)").arg(r);
     }

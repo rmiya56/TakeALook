@@ -18,10 +18,9 @@ public:
     int digitsX = 3;
     int digitsY = 3;
     int depth;
-
-private:
-    QString getType(cv::Mat mat);
-    //int depth(cv::Mat mat);
+    int digitsD = 3;
+    double alpha;
+    double beta;
 
 };
 

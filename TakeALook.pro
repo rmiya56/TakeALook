@@ -18,7 +18,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     src/areaselectionitem.cpp \
     src/baloontip.cpp \
-    src/cv_util.cpp \
     src/imagehandler.cpp \
     src/imageproperties.cpp \
     src/main.cpp \
@@ -30,7 +29,6 @@ SOURCES += \
 HEADERS += \
     src/areaselectionitem.h \
     src/baloontip.h \
-    src/cv_util.h \
     src/imagehandler.h \
     src/imageproperties.h \
     src/mainwindow.h \

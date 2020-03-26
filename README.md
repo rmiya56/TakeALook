@@ -1,7 +1,7 @@
 Take A Look
 ==============
 
-Simple image viewer to take a look at some characteristics.
+Simple image viewer to take a look at properties.
 
 ![screenshot1](https://gist.githubusercontent.com/rmiya56/151f55f41d01761d812efa16a71bfad7/raw/0c38797cb40dbb69a34d53b90bdd178e424cbf4f/screenshot1.png)
 

@@ -14,6 +14,7 @@ public:
     QPixmap pixmap();
     QRect areaRect();
     QRect pixmapRect();
+    void setImage(QImage image);
 
     bool area_selection_is_active = false;
     QMenu menuArea;
@@ -21,7 +22,6 @@ public:
     QGraphicsPixmapItem *pixmapItem = nullptr;
     AreaSelectionItem *areaItem = nullptr;
     PixBaloonTip *baloonTip = nullptr;
-
 
     QAction *actionSelectArea;
 
@@ -45,9 +45,9 @@ signals:
     void zoom_in_area(QRect rect);
 
 private slots:
-    void clearAreaRect();
-    void cropAreaRect();
-    void zoomInArea();
+    void clear_area_rect();
+    void crop_area_rect();
+    void zoom_in_area();
 
 };
 

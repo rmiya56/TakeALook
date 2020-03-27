@@ -121,12 +121,8 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::displayImage(QImage qimage, QString file_path)
 {
-    originalPixmap.convertFromImage(qimage);
-    scene.pixmapItem = new QGraphicsPixmapItem(originalPixmap);
-    scene.clear();
-    scene.addItem(scene.pixmapItem);
+    scene.setImage(qimage);
     fit_to_rect(scene.pixmapRect());
-
     QString image_property = QString("[%1x%2]").arg(QString::number(imgHandler.currentImage().width()), QString::number(imgHandler.currentImage().height()));
     statusbarLeft->setText(file_path + " " + image_property);
 }

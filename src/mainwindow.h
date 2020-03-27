@@ -38,7 +38,6 @@ private:
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
     ImageHandler imgHandler;
-    QPixmap originalPixmap;
     void displayImage(QImage qimage, QString file_path);
     void showNext();
     void showPrev();

@@ -8,17 +8,17 @@ Simple image viewer to take a look at properties.
 
 ## Summary
  - cross-platform (Win/Mac/Linux)
- - check pixel values (status bar & tooltip)
+ - check pixel values (status bar & baloontip)
  - interactive area selection (crop & zoom)
 
 support format
 
 |    Fomrmat     |
 |:---------------|
-| png            |
-| jpeg           |
-| bmp            |
-| tiff           |
+| PNG            |
+| JPEG           |
+| BMP            |
+| TIFF           |
 
 
 
@@ -30,7 +30,7 @@ support format
 | Prev           | Left Key  (←)      |                           |
 | Zoom In        | Mouse Scroll Up    |                           |
 | Zoom Out       | Mouse Scroll Down  |                           |
-| Switch Mode    | Double Click       | Pointer ←→ Area Selection |
+| Switch Mode    | Double Click       | Pointer ⇄ Area Selection  |
 | Save           | Ctrl + S           |                           |
 
 

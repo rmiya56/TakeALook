@@ -20,15 +20,15 @@ Scene::Scene()
 
     // context menu in roi
     actionCrop = new QAction(tr("Crop"));
-    connect(actionCrop, SIGNAL(triggered()), this, SLOT(cropAreaRect()));
+    connect(actionCrop, SIGNAL(triggered()), this, SLOT(crop_area_rect()));
     menuArea.addAction(actionCrop);
 
     actionZoom = new QAction(tr("Zoom"));
-    connect(actionZoom, SIGNAL(triggered()), this, SLOT(zoomInArea()));
+    connect(actionZoom, SIGNAL(triggered()), this, SLOT(zoom_in_area()));
     menuArea.addAction(actionZoom);
 
     actionClear = new QAction(tr("Clear"));
-    connect(actionClear , SIGNAL(triggered()), this, SLOT(clearAreaRect()));
+    connect(actionClear , SIGNAL(triggered()), this, SLOT(clear_area_rect()));
     menuArea.addAction(actionClear);
 }
 
@@ -46,6 +46,15 @@ QRect Scene::pixmapRect()
         return pixmapItem->pixmap().rect();
     else
         return QRect();
+}
+
+void Scene::setImage(QImage image)
+{
+    QPixmap pixmap;
+    pixmap.convertFromImage(image);
+    pixmapItem = new QGraphicsPixmapItem(pixmap);
+    clear();
+    addItem(pixmapItem);
 }
 
 QRect Scene::areaRect()
@@ -111,7 +120,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void Scene::clearAreaRect()
+void Scene::clear_area_rect()
 {
     for (auto &item : items())
     {
@@ -120,7 +129,7 @@ void Scene::clearAreaRect()
     }
 }
 
-void Scene::cropAreaRect()
+void Scene::crop_area_rect()
 {
     QPixmap original = pixmapItem->pixmap();
     QRect cropRect0; // crop rect in scene coordinate
@@ -137,8 +146,8 @@ void Scene::cropAreaRect()
     removeItem(areaItem); // for cropping edge check (somewhat weird)
 }
 
-void Scene::zoomInArea()
+void Scene::zoom_in_area()
 {
     zoom_in_area(areaItem->toQRect());
-    clearAreaRect();
+    clear_area_rect();
 }

@@ -7,6 +7,7 @@
 #include <QLabel>
 #include <overlaypixmap/overlaypixmapitem.h>
 #include "imagehandler.h"
+#include "modeswitchaction.h"
 #include "scene.h"
 
 
@@ -50,8 +51,8 @@ private:
     void setupStatusBar();
 
 private: // Toolbar Actions
-    QAction *actionPointerMode;
-    QAction *actionAreaSelectionMode;
+    ModeSwitchAction *actionPointerMode;
+    ModeSwitchAction *actionAreaSelectionMode;
     QAction *actionFitToWindow;
     QAction *actionNextImage;
     QAction *actionPrevImage;
@@ -59,7 +60,7 @@ private: // Toolbar Actions
     QAction *actionSaveImage;
     QAction *actionBaloonTip;
 
-    QAction *actionCanvasMode;
+    ModeSwitchAction *actionCanvasMode;
 
     void setupOptionToolBar();
 private slots:

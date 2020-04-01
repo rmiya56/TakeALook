@@ -10,7 +10,6 @@ Scene::Scene()
 {
 
     baloonTip = new PixBaloonTip();
-    //addItem(baloonTip);
 
     // pen & brush
     penArea.setColor(Qt::green);

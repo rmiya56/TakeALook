@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scene.h"
+#include "icons.h"
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -14,8 +15,10 @@
 
 
 MainWindow::MainWindow(QWidget *parent, const char* filepath)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindow)
+    : QMainWindow(parent),
+      ui(new Ui::MainWindow),
+      statusbarLeft(new QLabel()),
+      statusbarRight(new QLabel())
 {
     ui->setupUi(this);
     setAcceptDrops(true);
@@ -48,9 +51,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupOptionToolBar()
 {
-    actionCanvasMode = new QAction(QIcon(":/icons/white/pen [#1319].png"), tr("Canvas"), this);
-    actionCanvasMode->setCheckable(true);
-    actionCanvasMode->setChecked(false);
+    actionCanvasMode = new ModeSwitchAction(QIcon(":/icons/white/pen [#1319].png"), QIcon(":/icons/green/pen [#1319].png"), tr("Canvas"), this);
     connect(actionCanvasMode, SIGNAL(toggled(bool)), this, SLOT(on_action_canvas_mode_toggled(bool)));
     ui->optionToolBar->addAction(actionCanvasMode);
 }
@@ -58,13 +59,11 @@ void MainWindow::setupOptionToolBar()
 void MainWindow::setupToolBar()
 {
 
-    actionPointerMode = new QAction(QIcon(":/icons/green/mouse_pointer [#6].png"), tr("Pointer"), this);
-    actionPointerMode->setCheckable(true);
+    actionPointerMode = new ModeSwitchAction(QIcon(":/icons/white/mouse_pointer [#6].png"), QIcon(":/icons/green/mouse_pointer [#6].png"), tr("Pointer"), this);
     connect(actionPointerMode, SIGNAL(toggled(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     ui->toolBar->addAction(actionPointerMode);
 
-    actionAreaSelectionMode = new QAction(QIcon(":/icons/white/focus_plus_round [#895].png"), tr("Area Select"), this);
-    actionAreaSelectionMode->setCheckable(true);
+    actionAreaSelectionMode = new ModeSwitchAction(QIcon(":/icons/white/focus_plus_round [#895].png"), QIcon(":/icons/green/focus_plus_round [#895].png"),tr("Area Select"), this);
     connect(actionAreaSelectionMode, SIGNAL(toggled(bool)), this, SLOT(on_action_area_selection_mode_toggled(bool)));
     ui->toolBar->addAction(actionAreaSelectionMode);
 
@@ -101,8 +100,6 @@ void MainWindow::setupToolBar()
 
 void MainWindow::setupStatusBar()
 {
-    statusbarLeft = new QLabel;
-    statusbarRight = new QLabel;
     statusbarRight->setFont(QFont("Courier"));
     statusbarRight->setStyleSheet("color:white");
     statusbarLeft->setFont(QFont("Courier"));
@@ -293,17 +290,13 @@ void MainWindow::on_action_pointer_mode_toggled(bool toggled)
     if (toggled)
     {
         actionPointerMode->setChecked(true);
-        actionPointerMode->setIcon(QIcon(":/icons/green/mouse_pointer [#6].png"));
-
         ui->graphicsView->mouse_control = true;
         scene.area_selection_is_active = false;
-
         on_action_area_selection_mode_toggled(false);
         setCursor(Qt::ArrowCursor);
     }
     else
     {
-        actionPointerMode->setIcon(QIcon(":/icons/white/mouse_pointer [#6].png"));
         actionPointerMode->setChecked(false);
     }
 }
@@ -312,18 +305,14 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
 {
     if (toggled)
     {
-        actionAreaSelectionMode->setIcon(QIcon(":/icons/green/focus_plus_round [#895].png"));
         actionAreaSelectionMode->setChecked(true);
-
         ui->graphicsView->mouse_control = false;
         scene.area_selection_is_active = true;
-
         on_action_pointer_mode_toggled(false);
         setCursor(Qt::CrossCursor);
     }
     else
     {
-        actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
         actionAreaSelectionMode->setChecked(false);
     }
 }
@@ -332,17 +321,13 @@ void MainWindow::on_action_canvas_mode_toggled(bool toggled)
 {
      if (toggled)
     {
-        actionCanvasMode->setIcon(QIcon(":/icons/green/pen [#1319].png"));
         actionCanvasMode->setChecked(true);
-
         overlayItem = new OverlayPixmapItem(imgHandler.currentImage().size());
         scene.addItem(overlayItem);
     }
     else
     {
-        actionCanvasMode->setIcon(QIcon(":/icons/white/pen [#1319].png"));
         actionCanvasMode->setChecked(false);
-
         scene.removeItem(overlayItem);
     }
 }

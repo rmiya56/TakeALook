@@ -28,6 +28,7 @@ SOURCES += \
     src/imageproperties.cpp \
     src/main.cpp \
     src/mainwindow.cpp \
+    src/modeswitchaction.cpp \
     src/scene.cpp \
     src/view.cpp \
 
@@ -40,9 +41,11 @@ HEADERS += \
     overlaypixmap/jsonfile.h \
     overlaypixmap/overlaypixmapitem.h \
     src/areaselectionitem.h \
+    src/icons.h \
     src/imagehandler.h \
     src/imageproperties.h \
     src/mainwindow.h \
+    src/modeswitchaction.h \
     src/scene.h \
     src/view.h \
 

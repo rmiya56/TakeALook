@@ -35,7 +35,7 @@ private:
     bool dragMoving = false;
     QPointF initPos;
     static const int brushWidth = 10;
-    static const int contourWidth = 2;
+    static constexpr qreal contourWidth = 1.5;
     static const QColor colorContour;
     static const QColor colorOverlay;
     static const int MIN_DISTANCE = 3;

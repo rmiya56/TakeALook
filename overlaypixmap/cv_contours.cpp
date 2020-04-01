@@ -21,7 +21,11 @@ std::vector<std::vector<cv::Point>> approxContours(std::vector<std::vector<cv::P
 
 QVector<QPolygonF> extractContours(QImage gray_image)
 {
-    cv::Mat mat(gray_image.height(), gray_image.width(), CV_8U, gray_image.scanLine(0));
+    cv::Mat mat(gray_image.height(), gray_image.width(),
+                CV_8UC1,
+                const_cast<uchar*>(gray_image.bits()),
+                static_cast<size_t>(gray_image.bytesPerLine()));
+
     cv::Mat inv_mat;
     cv::threshold(mat, inv_mat, 125, 255, cv::THRESH_BINARY_INV);
 

@@ -42,7 +42,9 @@ void OverlayPixmapItem::updateConnectedContours()
     QPixmap overlay = this->pixmap();
     overlay.fill(colorOverlay);
     QPainter painter(&overlay);
-    painter.setPen(QPen(colorContour, contourWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+    QPen pen =  QPen(colorContour, contourWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+    pen.setCosmetic(true);
+    painter.setPen(pen);
     painter.setBrush(Qt::NoBrush);
     for(auto const& p : connectedPolygons) painter.drawPolygon(p);
     this->setPixmap(overlay);
@@ -90,8 +92,13 @@ void OverlayPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (distance < MIN_DISTANCE) return;
 
         drawPolylineOnCanvas();
+
+        canvas.save("canvas.png");
+
         ContourItem *cont_item = new ContourItem(extractContours(canvas)[0], this);
         undoStack->push( new AddPolygonCommand(cont_item, &contItems));
+
+        qDebug() << cont_item->polygon();
 
         updateCanvasImage();
         updateConnectedContours();

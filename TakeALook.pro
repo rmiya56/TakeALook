@@ -16,6 +16,11 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    overlaypixmap/addpolygoncommand.cpp \
+    overlaypixmap/contouritem.cpp \
+    overlaypixmap/cv_contours.cpp \
+    overlaypixmap/jsonfile.cpp \
+    overlaypixmap/overlaypixmapitem.cpp \
     src/areaselectionitem.cpp \
     src/baloontip.cpp \
     src/imagehandler.cpp \
@@ -27,6 +32,11 @@ SOURCES += \
     src/view.cpp \
 
 HEADERS += \
+    overlaypixmap/addpolygoncommand.h \
+    overlaypixmap/contouritem.h \
+    overlaypixmap/cv_contours.h \
+    overlaypixmap/jsonfile.h \
+    overlaypixmap/overlaypixmapitem.h \
     src/areaselectionitem.h \
     src/baloontip.h \
     src/imagehandler.h \

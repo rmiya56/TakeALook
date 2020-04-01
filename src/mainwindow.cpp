@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QSettings>
 #include <QtMath>
+#include <QLineEdit>
 
 
 MainWindow::MainWindow(QWidget *parent, const char* filepath)
@@ -63,7 +64,17 @@ void MainWindow::setupOptionToolBar()
     connect(actionRedo, &QAction::triggered, this, &MainWindow::on_action_redo_triggered);
     ui->optionToolBar->addAction(actionRedo);
 
+    actionSaveAnnotations = new QAction(QIcon(Icons::save), tr("Save Annotations"), this);
+    connect(actionSaveAnnotations, &QAction::triggered, this, &MainWindow::on_action_redo_triggered);
+    ui->optionToolBar->addAction(actionSaveAnnotations);
+
+    QLineEdit *lineEdit = new QLineEdit("1");
+    lineEdit->setAlignment(Qt::AlignRight);
+    lineEdit->setFixedSize(QSize(40,40));
+    lineEdit->setStyleSheet("QLineEdit {background-color: lightgray}");
+    ui->optionToolBar->addWidget(lineEdit);
 }
+
 
 void MainWindow::setupToolBar()
 {
@@ -95,7 +106,7 @@ void MainWindow::setupToolBar()
     connect(actionOpenImage, SIGNAL(triggered()), this, SLOT(on_action_open_image_triggered()));
     ui->toolBar->addAction(actionOpenImage);
 
-    actionSaveImage = new QAction(QIcon(":/icons/white/save_item [#1411].png"), tr("Save Image"), this);
+    actionSaveImage = new QAction(QIcon(Icons::save), tr("Save Image"), this);
     connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
     ui->toolBar->addAction(actionSaveImage);
 
@@ -346,7 +357,7 @@ void MainWindow::on_action_undo_triggered()
 
 void MainWindow::on_action_redo_triggered()
 {
-    overlayItem->undo();
+    overlayItem->redo();
 }
 
 

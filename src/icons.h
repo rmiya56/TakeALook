@@ -11,6 +11,8 @@ public:
     static const QString pointer_toggled;
     static const QString area;
     static const QString area_toggled;
+    static const QString save;
+
     static const QString pen;
     static const QString pen_toggled;
     static const QString redo;

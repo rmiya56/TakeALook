@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <overlaypixmap/overlaypixmapitem.h>
 #include "imagehandler.h"
-#include "modeswitchaction.h"
+#include "toggleaction.h"
 #include "scene.h"
 
 
@@ -51,16 +51,21 @@ private:
     void setupStatusBar();
 
 private: // Toolbar Actions
-    ModeSwitchAction *actionPointerMode;
-    ModeSwitchAction *actionAreaSelectionMode;
+    ToggleAction *actionPointerMode;
+    ToggleAction *actionAreaSelectionMode;
     QAction *actionFitToWindow;
     QAction *actionNextImage;
     QAction *actionPrevImage;
     QAction *actionOpenImage;
     QAction *actionSaveImage;
-    QAction *actionBaloonTip;
+    ToggleAction *actionBaloonTip;
 
-    ModeSwitchAction *actionCanvasMode;
+private: // Option Toolbar Actions
+    ToggleAction *actionCanvasMode;
+    QAction *actionUndo;
+    QAction *actionRedo;
+    QAction *actionSaveAnnotations;
+
 
     void setupOptionToolBar();
 private slots:
@@ -75,6 +80,10 @@ private slots:
 
     void fit_to_rect(QRect rect);
 
+private slots: // option toolbar slots
     void on_action_canvas_mode_toggled(bool toggled);
+    void on_action_undo_triggered();
+    void on_action_redo_triggered();
+
 };
 #endif // MAINWINDOW_H

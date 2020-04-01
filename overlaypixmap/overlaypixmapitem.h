@@ -12,6 +12,8 @@ class OverlayPixmapItem : public QGraphicsPixmapItem
 
 public:
     OverlayPixmapItem(QSize size);
+    void undo();
+    void redo();
 
 
 protected:

@@ -50,6 +50,20 @@ void OverlayPixmapItem::updateConnectedContours()
     this->setPixmap(overlay);
 }
 
+void OverlayPixmapItem::undo()
+{
+    undoStack->undo();
+    updateCanvasImage();
+    updateConnectedContours();
+}
+
+void OverlayPixmapItem::redo()
+{
+    undoStack->redo();
+    updateCanvasImage();
+    updateConnectedContours();
+}
+
 void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     if(event->button() == Qt::LeftButton)
@@ -58,12 +72,6 @@ void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         oneStroke.clear();
         oneStroke << event->scenePos();
         dragMoving = true;
-    }
-    if(event->button() == Qt::RightButton)
-    {
-        undoStack->undo();
-        updateCanvasImage();
-        updateConnectedContours();
     }
     //QGraphicsPixmapItem::mousePressEvent(event);
 }

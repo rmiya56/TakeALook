@@ -13,5 +13,6 @@
         <file>icons/white/message [#1576].png</file>
         <file>icons/white/pen [#1319].png</file>
         <file>icons/green/pen [#1319].png</file>
+        <file>icons/white/arrow_repeat [#235].png</file>
     </qresource>
 </RCC>

@@ -51,19 +51,28 @@ MainWindow::~MainWindow()
 
 void MainWindow::setupOptionToolBar()
 {
-    actionCanvasMode = new ModeSwitchAction(QIcon(":/icons/white/pen [#1319].png"), QIcon(":/icons/green/pen [#1319].png"), tr("Canvas"), this);
-    connect(actionCanvasMode, SIGNAL(toggled(bool)), this, SLOT(on_action_canvas_mode_toggled(bool)));
+    actionCanvasMode = new ToggleAction(QIcon(Icons::pen), QIcon(Icons::pen_toggled), tr("Canvas"), this);
+    connect(actionCanvasMode, &QAction::toggled, this, &MainWindow::on_action_canvas_mode_toggled);
     ui->optionToolBar->addAction(actionCanvasMode);
+
+    actionUndo = new QAction(QIcon(Icons::undo), tr("Undo"), this);
+    connect(actionUndo, &QAction::triggered, this, &MainWindow::on_action_undo_triggered);
+    ui->optionToolBar->addAction(actionUndo);
+
+    actionRedo = new QAction(QIcon(Icons::redo), tr("Redo"), this);
+    connect(actionRedo, &QAction::triggered, this, &MainWindow::on_action_redo_triggered);
+    ui->optionToolBar->addAction(actionRedo);
+
 }
 
 void MainWindow::setupToolBar()
 {
 
-    actionPointerMode = new ModeSwitchAction(QIcon(":/icons/white/mouse_pointer [#6].png"), QIcon(":/icons/green/mouse_pointer [#6].png"), tr("Pointer"), this);
+    actionPointerMode = new ToggleAction(QIcon(Icons::pointer), QIcon(Icons::pointer_toggled), tr("Pointer"), this);
     connect(actionPointerMode, SIGNAL(toggled(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     ui->toolBar->addAction(actionPointerMode);
 
-    actionAreaSelectionMode = new ModeSwitchAction(QIcon(":/icons/white/focus_plus_round [#895].png"), QIcon(":/icons/green/focus_plus_round [#895].png"),tr("Area Select"), this);
+    actionAreaSelectionMode = new ToggleAction(QIcon(Icons::area), QIcon(Icons::area_toggled),tr("Area Select"), this);
     connect(actionAreaSelectionMode, SIGNAL(toggled(bool)), this, SLOT(on_action_area_selection_mode_toggled(bool)));
     ui->toolBar->addAction(actionAreaSelectionMode);
 
@@ -90,11 +99,9 @@ void MainWindow::setupToolBar()
     connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
     ui->toolBar->addAction(actionSaveImage);
 
-    actionBaloonTip = new QAction(QIcon(":/icons/white/message [#1576].png"), tr("BaloonTip"), this);
-    actionBaloonTip->setCheckable(true);
+    actionBaloonTip = new ToggleAction(QIcon(":/icons/white/message [#1576].png"), QIcon(":/icons/green/message [#1576].png"), tr("BaloonTip"), this);
     connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
     ui->toolBar->addAction(actionBaloonTip);
-    actionBaloonTip->setChecked(false);
 
 }
 
@@ -329,8 +336,19 @@ void MainWindow::on_action_canvas_mode_toggled(bool toggled)
     {
         actionCanvasMode->setChecked(false);
         scene.removeItem(overlayItem);
-    }
+     }
 }
+
+void MainWindow::on_action_undo_triggered()
+{
+    overlayItem->undo();
+}
+
+void MainWindow::on_action_redo_triggered()
+{
+    overlayItem->undo();
+}
+
 
 void MainWindow::on_action_fit_to_window_triggered()
 {
@@ -362,12 +380,10 @@ void MainWindow::on_action_baloontip_toggled(bool toggled)
     if (toggled)
     {
         scene.addItem(scene.baloonTip);
-        actionBaloonTip->setIcon(QIcon(":/icons/green/message [#1576].png"));
     }
     else
     {
         scene.removeItem(scene.baloonTip);
-        actionBaloonTip->setIcon(QIcon(":/icons/white/message [#1576].png"));
     }
 }
 
@@ -378,12 +394,10 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
     if (actionPointerMode->isChecked())
     {
         on_action_area_selection_mode_toggled(true);
-        qDebug() << "AREA_SELECT_MODE";
     }
     else
     {
         on_action_pointer_mode_toggled(true);
-        qDebug() << "NORMAL_MODE";
     }
 }
 

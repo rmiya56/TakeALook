@@ -4,8 +4,18 @@
 #include <QIcon>
 
 
-static const QIcon icon_pen(":/icons/white/mouse_pointer [#6].png");
-static const QIcon icon_pen_toggled(":/icons/green/mouse_pointer [#6].png");
+class Icons
+{
+public:
+    static const QString pointer;
+    static const QString pointer_toggled;
+    static const QString area;
+    static const QString area_toggled;
+    static const QString pen;
+    static const QString pen_toggled;
+    static const QString redo;
+    static const QString undo;
+};
 
 
 #endif // ICONS_H

@@ -26,6 +26,8 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
 
     setupStatusBar();
     setupToolBar();
+    setupOptionToolBar();
+
 
     if (filepath)
     {
@@ -42,6 +44,15 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::setupOptionToolBar()
+{
+    actionCanvasMode = new QAction(QIcon(":/icons/white/pen [#1319].png"), tr("Canvas"), this);
+    actionCanvasMode->setCheckable(true);
+    actionCanvasMode->setChecked(false);
+    connect(actionCanvasMode, SIGNAL(toggled(bool)), this, SLOT(on_action_canvas_mode_toggled(bool)));
+    ui->optionToolBar->addAction(actionCanvasMode);
 }
 
 void MainWindow::setupToolBar()
@@ -314,6 +325,25 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
     {
         actionAreaSelectionMode->setIcon(QIcon(":/icons/white/focus_plus_round [#895].png"));
         actionAreaSelectionMode->setChecked(false);
+    }
+}
+
+void MainWindow::on_action_canvas_mode_toggled(bool toggled)
+{
+     if (toggled)
+    {
+        actionCanvasMode->setIcon(QIcon(":/icons/green/pen [#1319].png"));
+        actionCanvasMode->setChecked(true);
+
+        overlayItem = new OverlayPixmapItem(imgHandler.currentImage().size());
+        scene.addItem(overlayItem);
+    }
+    else
+    {
+        actionCanvasMode->setIcon(QIcon(":/icons/white/pen [#1319].png"));
+        actionCanvasMode->setChecked(false);
+
+        scene.removeItem(overlayItem);
     }
 }
 

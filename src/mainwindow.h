@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <QLabel>
+#include <overlaypixmap/overlaypixmapitem.h>
 #include "imagehandler.h"
 #include "scene.h"
 
@@ -38,6 +39,8 @@ private:
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
     ImageHandler imgHandler;
+    OverlayPixmapItem *overlayItem = nullptr;
+
     void displayImage(QImage qimage, QString file_path);
     void showNext();
     void showPrev();
@@ -56,6 +59,9 @@ private: // Toolbar Actions
     QAction *actionSaveImage;
     QAction *actionBaloonTip;
 
+    QAction *actionCanvasMode;
+
+    void setupOptionToolBar();
 private slots:
     void on_action_pointer_mode_toggled(bool toggled);
     void on_action_area_selection_mode_toggled(bool toggled);
@@ -67,5 +73,7 @@ private slots:
     void on_action_baloontip_toggled(bool toggled);
 
     void fit_to_rect(QRect rect);
+
+    void on_action_canvas_mode_toggled(bool toggled);
 };
 #endif // MAINWINDOW_H

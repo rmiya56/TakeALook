@@ -44,6 +44,7 @@ HEADERS += \
     src/imageproperties.h \
     src/mainwindow.h \
     src/scene.h \
+    src/view.h \
 
 
 FORMS += \

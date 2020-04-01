@@ -24,7 +24,7 @@ OverlayPixmapItem::OverlayPixmapItem(QSize size) :
     canvas = QImage(size, QImage::Format_Grayscale8);
     canvas.fill(255);
 
-    loadContours();
+    //loadContours();
 }
 
 void OverlayPixmapItem::updateCanvasImage()

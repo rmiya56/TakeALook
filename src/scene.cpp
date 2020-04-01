@@ -1,6 +1,6 @@
 #include "scene.h"
 #include "areaselectionitem.h"
-#include "pixbaloontip.h"
+#include <baloontip/pixbaloontip.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 

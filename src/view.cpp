@@ -9,7 +9,6 @@ View::View(QWidget *parent)
 {
     setBackgroundBrush(Qt::gray);
     setAlignment(Qt::AlignCenter);
-
 }
 
 void View::wheelEvent(QWheelEvent *event)

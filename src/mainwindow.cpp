@@ -71,7 +71,6 @@ void MainWindow::setupToolBar()
     connect(actionFitToWindow, SIGNAL(triggered()), this, SLOT(on_action_fit_to_window_triggered()));
     ui->toolBar->addAction(actionFitToWindow);
 
-
     actionBaloonTip = new ToggleAction(QIcon(":/icons/white/message [#1576].png"), QIcon(":/icons/green/message [#1576].png"), tr("BaloonTip"), this);
     connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
     ui->toolBar->addAction(actionBaloonTip);
@@ -189,6 +188,7 @@ bool MainWindow::_keyPressEvent(QKeyEvent *event)
 
         case Qt::Key_Delete:
             qDebug() << "delete";
+            delete_triggered();
             break;
 
         default:

@@ -1,5 +1,6 @@
 #include "overlaypixmaptoolbar.h"
 #include <src/icons.h>
+#include <src/mainwindow.h>
 #include <QLineEdit>
 
 
@@ -9,6 +10,8 @@ OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_han
       scene(scene),
       imageHandler(image_handler)
 {
+
+    connect(scene, &Scene::key_delete, this, &OverlayPixmapToolBar::on_action_delete_triggered);
 
     actionCanvasMode = new ToggleAction(QIcon(Icons::pen), QIcon(Icons::pen_toggled), tr("Canvas"), this);
     connect(actionCanvasMode, &QAction::toggled, this, &OverlayPixmapToolBar::on_action_canvas_mode_toggled);

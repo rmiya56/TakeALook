@@ -3,6 +3,7 @@
 #include <baloontip/pixbaloontip.h>
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
+#include <QKeyEvent>
 
 
 Scene::Scene()
@@ -149,4 +150,18 @@ void Scene::zoom_in_area()
 {
     zoom_in_area(areaItem->toQRect());
     clear_area_rect();
+}
+
+
+void Scene::keyPressEvent(QKeyEvent *event)
+{
+    switch(event->key())
+    {
+        case Qt::Key_Delete:
+            key_delete();
+            break;
+
+        default:
+            break;
+    }
 }

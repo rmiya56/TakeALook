@@ -43,11 +43,18 @@ signals:
     void done_selection(bool);
     void zoom_in_area(QRect rect);
 
+    // to overlaycanvas
+    void key_delete();
+
 private slots:
     void clear_area_rect();
     void crop_area_rect();
     void zoom_in_area();
 
+
+    // QGraphicsScene interface
+protected:
+    virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // SCENE_H

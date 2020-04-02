@@ -47,7 +47,12 @@ private:
     void setupFileToolBar();
     void setupStatusBar();
 
-private: // Toolbar Actions
+signals:
+    void delete_triggered();
+
+
+    // Toolbar
+private:
     ToggleAction *actionPointerMode;
     ToggleAction *actionAreaSelectionMode;
     QAction *actionFitToWindow;
@@ -60,7 +65,8 @@ private slots:
     void on_action_baloontip_toggled(bool toggled);
     void fit_to_rect(QRect rect);
 
-private: // Toolbar (File)
+    // Toolbar (File)
+private:
     QAction *actionNextImage;
     QAction *actionPrevImage;
     QAction *actionOpenImage;

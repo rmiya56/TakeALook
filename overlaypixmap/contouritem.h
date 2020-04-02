@@ -9,8 +9,9 @@ class ContourItem : public QGraphicsPolygonItem
 {
 public:
     ContourItem(const QPolygonF &polygon, QGraphicsItem *parent);
-    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 
+protected:
+    virtual void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget) override;
 };
 
 #endif // CONTOURITEM_H

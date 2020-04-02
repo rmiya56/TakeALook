@@ -92,6 +92,14 @@ void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
         oneStroke << event->scenePos();
         dragMoving = true;
     }
+    else if(event->button() == Qt::LeftButton)
+    {
+        for (auto cont_item : contItems)
+        {
+            if(!cont_item->contains(event->scenePos()))
+                cont_item->setSelected(false);
+        }
+    }
     //QGraphicsPixmapItem::mousePressEvent(event);
 }
 

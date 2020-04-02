@@ -36,8 +36,6 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(&scene, &imgHandler);
     this->addToolBar(Qt::RightToolBarArea, optionToolbar);
 
-
-
     if (filepath)
     {
         view->viewport()->resize(size()-QSize(46,23)); // ???

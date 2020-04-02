@@ -5,7 +5,6 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <QLabel>
-#include <overlaypixmap/overlaypixmapitem.h>
 #include "imagehandler.h"
 #include "toggleaction.h"
 #include "scene.h"
@@ -40,7 +39,6 @@ private:
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
     ImageHandler imgHandler;
-    //OverlayPixmapItem *overlayItem = nullptr;
 
     void displayImage(QImage qimage, QString file_path);
     void showNext();
@@ -59,7 +57,6 @@ private: // Toolbar Actions
     QAction *actionOpenImage;
     QAction *actionSaveImage;
     ToggleAction *actionBaloonTip;
-
 
 private slots:
     void on_action_pointer_mode_toggled(bool toggled);

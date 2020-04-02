@@ -2,7 +2,7 @@
 #include <QBrush>
 #include <QPainter>
 #include <QPen>
-
+#include <QDebug>
 
 
 ContourItem::ContourItem(const QPolygonF &polygon, QGraphicsItem *parent)

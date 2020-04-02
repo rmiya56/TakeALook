@@ -18,6 +18,7 @@ public:
     void loadPrev();
     void loadNext();
     QImage currentImage();
+    QFileInfo currentFileInfo();
     QString currentFilePath();
     ImageProperties currentProperties();
 

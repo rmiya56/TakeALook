@@ -64,6 +64,11 @@ QImage ImageHandler::currentImage()
     return qImage;
 }
 
+QFileInfo ImageHandler::currentFileInfo()
+{
+    return entries[fileIndex];
+}
+
 QString ImageHandler::currentFilePath()
 {
     return entries[fileIndex].absoluteFilePath();

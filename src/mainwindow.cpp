@@ -32,7 +32,6 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     setupToolBar();
     setupOptionToolBar();
 
-
     if (filepath)
     {
         view->viewport()->resize(size()-QSize(46,23)); // ???
@@ -56,6 +55,16 @@ void MainWindow::setupOptionToolBar()
     connect(actionCanvasMode, &QAction::toggled, this, &MainWindow::on_action_canvas_mode_toggled);
     ui->optionToolBar->addAction(actionCanvasMode);
 
+    QLineEdit *lineEdit = new QLineEdit("1");
+    lineEdit->setAlignment(Qt::AlignRight);
+    lineEdit->setFixedSize(QSize(30, 30));
+    QFont font;
+    font.setPointSize(14);
+    lineEdit->setFont(font);
+    lineEdit->setStyleSheet("QLineEdit {background-color: lightgray}");
+
+    ui->optionToolBar->addWidget(lineEdit);
+
     actionUndo = new QAction(QIcon(Icons::undo), tr("Undo"), this);
     connect(actionUndo, &QAction::triggered, this, &MainWindow::on_action_undo_triggered);
     ui->optionToolBar->addAction(actionUndo);
@@ -65,14 +74,12 @@ void MainWindow::setupOptionToolBar()
     ui->optionToolBar->addAction(actionRedo);
 
     actionSaveAnnotations = new QAction(QIcon(Icons::save), tr("Save Annotations"), this);
-    connect(actionSaveAnnotations, &QAction::triggered, this, &MainWindow::on_action_redo_triggered);
+    connect(actionSaveAnnotations, &QAction::triggered, this, &MainWindow::on_action_save_annotations_triggered);
     ui->optionToolBar->addAction(actionSaveAnnotations);
 
-    QLineEdit *lineEdit = new QLineEdit("1");
-    lineEdit->setAlignment(Qt::AlignRight);
-    lineEdit->setFixedSize(QSize(40,40));
-    lineEdit->setStyleSheet("QLineEdit {background-color: lightgray}");
-    ui->optionToolBar->addWidget(lineEdit);
+    actionDelete = new QAction(QIcon(Icons::trashbox), tr("Delete"), this);
+    connect(actionDelete, &QAction::triggered, this, &MainWindow::on_action_delete_triggered);
+    ui->optionToolBar->addAction(actionDelete);
 }
 
 
@@ -210,7 +217,7 @@ bool MainWindow::_keyPressEvent(QKeyEvent *event)
             qDebug("keypress %x", event->key());
             break;
      }
-     return true;
+     return false;
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
@@ -360,6 +367,19 @@ void MainWindow::on_action_redo_triggered()
     overlayItem->redo();
 }
 
+void MainWindow::on_action_delete_triggered()
+{
+}
+
+void MainWindow::on_action_save_annotations_triggered()
+{
+    QFileInfo file_info = imgHandler.currentFileInfo();
+    QString save_path = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".json";
+    qDebug() << save_path;
+
+    overlayItem->saveAnnotations(save_path);
+
+}
 
 void MainWindow::on_action_fit_to_window_triggered()
 {

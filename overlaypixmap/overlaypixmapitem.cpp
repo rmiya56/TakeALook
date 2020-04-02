@@ -24,7 +24,6 @@ OverlayPixmapItem::OverlayPixmapItem(QSize size) :
     canvas = QImage(size, QImage::Format_Grayscale8);
     canvas.fill(255);
 
-    //loadContours();
 }
 
 void OverlayPixmapItem::updateCanvasImage()
@@ -62,6 +61,26 @@ void OverlayPixmapItem::redo()
     undoStack->redo();
     updateCanvasImage();
     updateConnectedContours();
+}
+
+void OverlayPixmapItem::saveAnnotations(QString file_path)
+{
+    JsonFile::savePolygons(connectedPolygons, file_path);
+}
+
+void OverlayPixmapItem::readAnnotations(QString file_path)
+{
+    JsonFile json_file;
+    QVector<QPolygonF> polygons = JsonFile::readPolygons(file_path);
+
+    for (auto poly : polygons)
+    {
+        ContourItem *cont_item = new ContourItem(poly, this);
+        contItems.push_back(cont_item);
+    }
+    updateCanvasImage();
+    updateConnectedContours();
+
 }
 
 void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -111,7 +130,6 @@ void OverlayPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         updateCanvasImage();
         updateConnectedContours();
     }
-    JsonFile::save(connectedPolygons);
     //QGraphicsPixmapItem::mouseReleaseEvent(event);
 }
 
@@ -121,18 +139,4 @@ void OverlayPixmapItem::drawPolylineOnCanvas()
     QPainter painter(&canvas);
     painter.setPen(QPen(Qt::black, brushWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawPolyline(oneStroke);
-}
-
-void OverlayPixmapItem::loadContours()
-{
-    JsonFile json_file;
-    QVector<QPolygonF> polygons = json_file.read();
-
-    for (auto poly : polygons)
-    {
-        ContourItem *cont_item = new ContourItem(poly, this);
-        contItems.push_back(cont_item);
-    }
-    updateCanvasImage();
-    updateConnectedContours();
 }

@@ -14,6 +14,8 @@ public:
     OverlayPixmapItem(QSize size);
     void undo();
     void redo();
+    void readAnnotations(QString file_path);
+    void saveAnnotations(QString file_path);
 
 
 protected:
@@ -26,7 +28,6 @@ private:
     void updateCanvasImage();
     void updateConnectedContours();
     void drawPolylineOnCanvas();
-    void loadContours();
 
     QImage canvas;
     QPolygonF oneStroke;

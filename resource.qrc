@@ -14,5 +14,6 @@
         <file>icons/white/pen [#1319].png</file>
         <file>icons/green/pen [#1319].png</file>
         <file>icons/white/arrow_repeat [#235].png</file>
+        <file>icons/white/delete [#1487].png</file>
     </qresource>
 </RCC>

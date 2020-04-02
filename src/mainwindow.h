@@ -65,6 +65,7 @@ private: // Option Toolbar Actions
     QAction *actionUndo;
     QAction *actionRedo;
     QAction *actionSaveAnnotations;
+    QAction *actionDelete;
 
 
     void setupOptionToolBar();
@@ -84,6 +85,8 @@ private slots: // option toolbar slots
     void on_action_canvas_mode_toggled(bool toggled);
     void on_action_undo_triggered();
     void on_action_redo_triggered();
+    void on_action_delete_triggered();
+    void on_action_save_annotations_triggered();
 
 };
 #endif // MAINWINDOW_H

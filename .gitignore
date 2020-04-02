@@ -1,3 +1,4 @@
 *.user
 *.exe
+*.json
 deploy/packages/*/data

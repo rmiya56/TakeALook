@@ -17,6 +17,7 @@ public:
     static const QString pen_toggled;
     static const QString redo;
     static const QString undo;
+    static const QString trashbox;
 };
 
 

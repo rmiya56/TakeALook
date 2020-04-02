@@ -9,8 +9,8 @@ class JsonFile
 {
 public:
     JsonFile();
-    static void save(QVector<QPolygonF> polygons);
-    QVector<QPolygonF> read();
+    static void savePolygons(QVector<QPolygonF> polygons, QString file_path);
+    static QVector<QPolygonF> readPolygons(QString file_path);
 };
 
 #endif // JSONFILE_H

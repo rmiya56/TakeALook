@@ -14,11 +14,12 @@ JsonFile::JsonFile()
 {
 }
 
-void JsonFile::save(QVector<QPolygonF> polygons)
+void JsonFile::savePolygons(QVector<QPolygonF> polygons, QString file_path)
 {
-        QJsonArray shapes;
-        for(auto& poly : polygons) {
 
+        QJsonArray shapes;
+        for(auto& poly : polygons)
+        {
             QJsonObject poly_json;
             poly_json["label"] = "";
             poly_json["type"] = "polygon";
@@ -40,16 +41,16 @@ void JsonFile::save(QVector<QPolygonF> polygons)
         QJsonDocument doc;
         doc.setObject(root);
 
-        QFile file("./hoge.json");
+        QFile file(file_path);
         file.open(QIODevice::WriteOnly | QIODevice::Text);
         QTextStream out(&file);
-        //out << doc.toJson(QJsonDocument::Compact).data();
         out << doc.toJson().data();
 }
 
-QVector<QPolygonF> JsonFile::read()
+QVector<QPolygonF> JsonFile::readPolygons(QString file_path)
 {
-    QFile file("./hoge.json");
+
+    QFile file(file_path);
     file.open(QIODevice::ReadOnly);
     QByteArray data = file.readAll();
     QJsonDocument doc(QJsonDocument::fromJson(data));

@@ -69,6 +69,7 @@ void OverlayPixmapToolBar::on_action_redo_triggered()
 
 void OverlayPixmapToolBar::on_action_delete_triggered()
 {
+    overlayItem->deleteSelectedContours();
 }
 
 void OverlayPixmapToolBar::on_action_save_annotations_triggered()

@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "scene.h"
 #include "icons.h"
+#include "imagehandler.h"
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -21,7 +22,8 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
       statusbarLeft(new QLabel()),
-      statusbarRight(new QLabel())
+      statusbarRight(new QLabel()),
+      imageHandler(new ImageHandler(this))
 {
     ui->setupUi(this);
     setAcceptDrops(true);
@@ -33,15 +35,15 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     setupStatusBar();
     setupToolBar();
 
-    OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(&scene, &imgHandler);
+    OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(&scene, imageHandler);
     this->addToolBar(Qt::RightToolBarArea, optionToolbar);
 
     if (filepath)
     {
         view->viewport()->resize(size()-QSize(46,23)); // ???
         QFileInfo info(filepath);
-        imgHandler.loadImage(info);
-        displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
+        imageHandler->loadFile(info);
+        displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
     }
 
     connect(&scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
@@ -118,22 +120,22 @@ void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 void MainWindow::dropEvent(QDropEvent *event)
 {
     QFileInfo file_info(event->mimeData()->urls().at(0).toLocalFile());
-    imgHandler.loadImage(file_info);
-    displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
+    imageHandler->loadFile(file_info);
+    displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
 void MainWindow::displayImage(QImage qimage, QString file_path)
 {
     scene.setImage(qimage);
     fit_to_rect(scene.pixmapRect());
-    QString image_property = QString("[%1x%2]").arg(QString::number(imgHandler.currentImage().width()), QString::number(imgHandler.currentImage().height()));
+    QString image_property = QString("[%1x%2]").arg(QString::number(imageHandler->currentImage().width()), QString::number(imageHandler->currentImage().height()));
     statusbarLeft->setText(file_path + " " + image_property);
 }
 
 void MainWindow::_mouseMoveEvent(QMouseEvent *event)
 {
     QString pix_location, pix_color;
-    ImageProperties prop = imgHandler.currentProperties(); // reading almost static all the time..
+    ImageProperties prop = imageHandler->currentProperties(); // reading almost static all the time..
 
     QPointF pos = view->mapToScene(event->pos());
     QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
@@ -179,7 +181,7 @@ bool MainWindow::_keyPressEvent(QKeyEvent *event)
             if (event->modifiers() & (Qt::ControlModifier))
             {
                 QClipboard *clipboard = QApplication::clipboard();
-                clipboard->setImage(imgHandler.currentImage());
+                clipboard->setImage(imageHandler->currentImage());
             }
             break;
 
@@ -207,68 +209,14 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
 
 void MainWindow::showNext()
 {
-    imgHandler.loadNext();
-    displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
+    imageHandler->loadNext();
+    displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
 void MainWindow::showPrev()
 {
-    imgHandler.loadPrev();
-    displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
-}
-
-void MainWindow::openFile()
-{
-    QString dir, filter;
-
-    QSettings read("settings.ini", QSettings::IniFormat, this);
-    read.beginGroup("ImageFiles");
-    if(read.contains("dir")) dir = read.value("dir", "").toString();
-    if(read.contains("open_filter"))  filter = read.value("filter", tr("All(*.*)")).toString();
-
-    QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                   dir,
-                                                   tr("All(*.*);;PNG(*.png);;JPG(*.jpg);;BMP(*.bmp);;TIFF(*.tif*)"),
-                                                   &filter,
-                                                   QFileDialog::DontUseCustomDirectoryIcons);
-    if (fileName.isEmpty()) return;
-
-    QFileInfo file_info(fileName);
-    imgHandler.loadImage(file_info);
-    displayImage(imgHandler.currentImage(), imgHandler.currentFilePath());
-
-    QSettings settings("settings.ini", QSettings::IniFormat, this);
-    settings.beginGroup("ImageFiles");
-    settings.setValue("dir", file_info.absoluteDir().absolutePath());
-    settings.setValue("filter", filter);
-    settings.endGroup();
-
-}
-
-void MainWindow::saveFile()
-{
-    QString dir, filter;
-
-    QSettings read("settings.ini", QSettings::IniFormat, this);
-    read.beginGroup("ImageFiles");
-    if(read.contains("save_filter"))  filter = read.value("filter", tr("All(*.*)")).toString();
-
-    QString fileName = QFileDialog::getSaveFileName(this,
-                                                    tr("Save File"),
-                                                    imgHandler.currentFilePath(),
-                                                    tr("All(*.*);;PNG(*.png);;JPG(*.jpg);;BMP(*.bmp);;TIFF(*.tif*)"),
-                                                    &filter,
-                                                    QFileDialog::DontUseCustomDirectoryIcons);
-
-    if (fileName.isEmpty()) return;
-
-    QFileInfo file_info(fileName);
-    imgHandler.writeToFile(file_info, scene.areaRect());
-
-    QSettings settings("settings.ini", QSettings::IniFormat, this);
-    settings.beginGroup("ImageFiles");
-    settings.setValue("filter", filter);
-    settings.endGroup();
+    imageHandler->loadPrev();
+    displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
 void MainWindow::fit_to_rect(QRect rect)
@@ -278,7 +226,6 @@ void MainWindow::fit_to_rect(QRect rect)
     view->fitInView(rect, Qt::KeepAspectRatio);
     qDebug() << view->viewport()->size();
 }
-
 
 void MainWindow::on_action_pointer_mode_toggled(bool toggled)
 {
@@ -329,12 +276,13 @@ void MainWindow::on_action_prev_image_triggered()
 
 void MainWindow::on_action_open_image_triggered()
 {
-    openFile();
+    imageHandler->openFile();
+    displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
 void MainWindow::on_action_save_image_triggered()
 {
-    saveFile();
+    imageHandler->saveFile(scene.areaRect());
 }
 
 void MainWindow::on_action_baloontip_toggled(bool toggled)
@@ -362,5 +310,3 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
         on_action_pointer_mode_toggled(true);
     }
 }
-
-

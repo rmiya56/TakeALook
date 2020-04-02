@@ -11,6 +11,7 @@
 const QColor OverlayPixmapItem::colorContour = QColor(0, 255, 0, 100);
 const QColor OverlayPixmapItem::colorOverlay = QColor(255, 255, 255, 50);
 
+
 OverlayPixmapItem::OverlayPixmapItem(QSize size) :
     QGraphicsPixmapItem(),
     undoStack(new QUndoStack)
@@ -23,7 +24,6 @@ OverlayPixmapItem::OverlayPixmapItem(QSize size) :
 
     canvas = QImage(size, QImage::Format_Grayscale8);
     canvas.fill(255);
-
 }
 
 void OverlayPixmapItem::updateCanvasImage()
@@ -36,6 +36,9 @@ void OverlayPixmapItem::updateCanvasImage()
 
 void OverlayPixmapItem::updateConnectedContours()
 {
+
+    updateCanvasImage();
+
     connectedPolygons = extractContours(canvas);
 
     QPixmap overlay = this->pixmap();
@@ -45,27 +48,38 @@ void OverlayPixmapItem::updateConnectedContours()
     pen.setCosmetic(true);
     painter.setPen(pen);
     painter.setBrush(Qt::NoBrush);
-    for(auto const& p : connectedPolygons) painter.drawPolygon(p);
+    for (auto const& p : connectedPolygons) painter.drawPolygon(p);
     this->setPixmap(overlay);
 }
 
 void OverlayPixmapItem::undo()
 {
     undoStack->undo();
-    updateCanvasImage();
     updateConnectedContours();
 }
 
 void OverlayPixmapItem::redo()
 {
     undoStack->redo();
-    updateCanvasImage();
     updateConnectedContours();
 }
 
 void OverlayPixmapItem::saveAnnotations(QString file_path)
 {
     JsonFile::savePolygons(connectedPolygons, file_path);
+}
+
+void OverlayPixmapItem::deleteSelectedContours()
+{
+    for (auto const& cont_item : contItems )
+    {
+        if (cont_item->isSelected())
+        {
+            cont_item->setSelected(false);
+            contItems.removeOne(cont_item);
+        }
+    }
+    updateConnectedContours();
 }
 
 void OverlayPixmapItem::readAnnotations(QString file_path)
@@ -78,9 +92,7 @@ void OverlayPixmapItem::readAnnotations(QString file_path)
         ContourItem *cont_item = new ContourItem(poly, this);
         contItems.push_back(cont_item);
     }
-    updateCanvasImage();
     updateConnectedContours();
-
 }
 
 void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
@@ -135,7 +147,6 @@ void OverlayPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         qDebug() << cont_item->polygon();
 
-        updateCanvasImage();
         updateConnectedContours();
     }
     //QGraphicsPixmapItem::mouseReleaseEvent(event);
@@ -147,4 +158,11 @@ void OverlayPixmapItem::drawPolylineOnCanvas()
     QPainter painter(&canvas);
     painter.setPen(QPen(Qt::black, brushWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawPolyline(oneStroke);
+}
+
+
+
+void OverlayPixmapItem::keyPressEvent(QKeyEvent *event)
+{
+
 }

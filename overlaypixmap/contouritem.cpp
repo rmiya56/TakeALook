@@ -20,4 +20,7 @@ void ContourItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *optio
         painter->setBrush(QBrush(QColor(0,255,0,100)));
         painter->drawPolygon(polygon());
     }
+
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
 }

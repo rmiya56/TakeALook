@@ -16,6 +16,7 @@ public:
     void redo();
     void readAnnotations(QString file_path);
     void saveAnnotations(QString file_path);
+    void deleteSelectedContours();
 
 
 protected:
@@ -48,6 +49,10 @@ signals:
     void call_undo();
     void call_redo();
 
+
+    // QGraphicsItem interface
+protected:
+    virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // TRACINGPAPERITEM_H

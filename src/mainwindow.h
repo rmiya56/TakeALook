@@ -38,13 +38,11 @@ private:
     Scene scene;
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
-    ImageHandler imgHandler;
+    ImageHandler *imageHandler;
 
     void displayImage(QImage qimage, QString file_path);
     void showNext();
     void showPrev();
-    void openFile();
-    void saveFile();
     void setupToolBar();
     void setupStatusBar();
 

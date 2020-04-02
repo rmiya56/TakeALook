@@ -85,7 +85,7 @@ void OverlayPixmapItem::readAnnotations(QString file_path)
 
 void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton)
+    if(event->button() == Qt::RightButton)
     {
         initPos = event->pos();
         oneStroke.clear();
@@ -97,7 +97,7 @@ void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 
 void OverlayPixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->buttons() == Qt::LeftButton && dragMoving)
+    if(event->buttons() == Qt::RightButton && dragMoving)
     {
         oneStroke << event->scenePos();
         QPixmap pixmap = this->pixmap();
@@ -111,7 +111,7 @@ void OverlayPixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void OverlayPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() == Qt::LeftButton && dragMoving)
+    if(event->button() == Qt::RightButton && dragMoving)
     {
         dragMoving = false;
         QPointF d = event->pos() - initPos;

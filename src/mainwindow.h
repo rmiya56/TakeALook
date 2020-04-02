@@ -40,7 +40,7 @@ private:
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
     ImageHandler imgHandler;
-    OverlayPixmapItem *overlayItem = nullptr;
+    //OverlayPixmapItem *overlayItem = nullptr;
 
     void displayImage(QImage qimage, QString file_path);
     void showNext();
@@ -60,15 +60,7 @@ private: // Toolbar Actions
     QAction *actionSaveImage;
     ToggleAction *actionBaloonTip;
 
-private: // Option Toolbar Actions
-    ToggleAction *actionCanvasMode;
-    QAction *actionUndo;
-    QAction *actionRedo;
-    QAction *actionSaveAnnotations;
-    QAction *actionDelete;
 
-
-    void setupOptionToolBar();
 private slots:
     void on_action_pointer_mode_toggled(bool toggled);
     void on_action_area_selection_mode_toggled(bool toggled);
@@ -80,13 +72,6 @@ private slots:
     void on_action_baloontip_toggled(bool toggled);
 
     void fit_to_rect(QRect rect);
-
-private slots: // option toolbar slots
-    void on_action_canvas_mode_toggled(bool toggled);
-    void on_action_undo_triggered();
-    void on_action_redo_triggered();
-    void on_action_delete_triggered();
-    void on_action_save_annotations_triggered();
 
 };
 #endif // MAINWINDOW_H

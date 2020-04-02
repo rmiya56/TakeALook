@@ -7,7 +7,6 @@ AddPolygonCommand::AddPolygonCommand(ContourItem *cont, QVector<ContourItem *> *
       cont(cont),
       contItems(cont_items)
 {
-
 }
 
 void AddPolygonCommand::undo()

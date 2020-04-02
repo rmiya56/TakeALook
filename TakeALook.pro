@@ -23,6 +23,7 @@ SOURCES += \
     overlaypixmap/cv_contours.cpp \
     overlaypixmap/jsonfile.cpp \
     overlaypixmap/overlaypixmapitem.cpp \
+    overlaypixmap/overlaypixmaptoolbar.cpp \
     src/areaselectionitem.cpp \
     src/icons.cpp \
     src/imagehandler.cpp \
@@ -41,6 +42,7 @@ HEADERS += \
     overlaypixmap/cv_contours.h \
     overlaypixmap/jsonfile.h \
     overlaypixmap/overlaypixmapitem.h \
+    overlaypixmap/overlaypixmaptoolbar.h \
     src/areaselectionitem.h \
     src/icons.h \
     src/imagehandler.h \

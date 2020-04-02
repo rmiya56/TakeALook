@@ -35,7 +35,7 @@ protected:
 private:
     Ui::MainWindow *ui;
     QGraphicsView *view;
-    Scene scene;
+    Scene *scene;
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
     ImageHandler *imageHandler;
@@ -44,29 +44,33 @@ private:
     void showNext();
     void showPrev();
     void setupToolBar();
+    void setupFileToolBar();
     void setupStatusBar();
 
 private: // Toolbar Actions
     ToggleAction *actionPointerMode;
     ToggleAction *actionAreaSelectionMode;
     QAction *actionFitToWindow;
-    QAction *actionNextImage;
-    QAction *actionPrevImage;
-    QAction *actionOpenImage;
-    QAction *actionSaveImage;
     ToggleAction *actionBaloonTip;
 
 private slots:
     void on_action_pointer_mode_toggled(bool toggled);
     void on_action_area_selection_mode_toggled(bool toggled);
     void on_action_fit_to_window_triggered();
+    void on_action_baloontip_toggled(bool toggled);
+    void fit_to_rect(QRect rect);
+
+private: // Toolbar (File)
+    QAction *actionNextImage;
+    QAction *actionPrevImage;
+    QAction *actionOpenImage;
+    QAction *actionSaveImage;
+
+private slots:
     void on_action_next_image_triggered();
     void on_action_prev_image_triggered();
     void on_action_open_image_triggered();
     void on_action_save_image_triggered();
-    void on_action_baloontip_toggled(bool toggled);
-
-    void fit_to_rect(QRect rect);
 
 };
 #endif // MAINWINDOW_H

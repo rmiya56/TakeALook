@@ -2,7 +2,6 @@
 #define TRACINGPAPERITEM_H
 
 #include "contouritem.h"
-
 #include <QGraphicsRectItem>
 #include <QUndoCommand>
 
@@ -44,15 +43,6 @@ private:
     static const QColor colorOverlay;
     static const int MIN_DISTANCE = 3;
 
-
-signals:
-    void call_undo();
-    void call_redo();
-
-
-    // QGraphicsItem interface
-protected:
-    virtual void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // TRACINGPAPERITEM_H

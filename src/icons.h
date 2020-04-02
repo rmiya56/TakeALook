@@ -13,11 +13,16 @@ public:
     static const QString area_toggled;
     static const QString save;
 
+    static const QString next;
+    static const QString prev;
+    static const QString folder;
+
     static const QString pen;
     static const QString pen_toggled;
     static const QString redo;
     static const QString undo;
     static const QString trashbox;
+
 };
 
 

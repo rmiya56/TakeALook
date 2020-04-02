@@ -2,11 +2,10 @@
 #define OVERLAYPIXMAPTOOLBAR_H
 
 #include "overlaypixmapitem.h"
-
-#include <QToolBar>
 #include <src/scene.h>
 #include <src/toggleaction.h>
 #include <src/imagehandler.h>
+#include <QToolBar>
 
 
 class OverlayPixmapToolBar : public QToolBar
@@ -16,8 +15,8 @@ public:
 
 
 private:
-    OverlayPixmapItem *overlayItem = nullptr;
     Scene *scene;
+    OverlayPixmapItem *overlayItem = nullptr;
     ImageHandler *imageHandler;
 
     ToggleAction *actionCanvasMode;

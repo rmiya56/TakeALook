@@ -5,11 +5,10 @@
 
 
 OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_handler)
-    : QToolBar()
+    : QToolBar(),
+      scene(scene),
+      imageHandler(image_handler)
 {
-
-    this->scene = scene;
-    imageHandler = image_handler;
 
     actionCanvasMode = new ToggleAction(QIcon(Icons::pen), QIcon(Icons::pen_toggled), tr("Canvas"), this);
     connect(actionCanvasMode, &QAction::toggled, this, &OverlayPixmapToolBar::on_action_canvas_mode_toggled);

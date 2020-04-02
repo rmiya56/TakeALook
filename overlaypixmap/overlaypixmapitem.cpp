@@ -6,6 +6,7 @@
 #include <QPainter>
 #include <QtMath>
 #include <QDebug>
+#include <QKeyEvent>
 
 
 const QColor OverlayPixmapItem::colorContour = QColor(0, 255, 0, 100);
@@ -16,6 +17,8 @@ OverlayPixmapItem::OverlayPixmapItem(QSize size) :
     QGraphicsPixmapItem(),
     undoStack(new QUndoStack)
 {
+
+    installSceneEventFilter(this);
 
     QImage image(size, QImage::Format_RGBA8888);
     image.fill(colorOverlay);
@@ -158,11 +161,4 @@ void OverlayPixmapItem::drawPolylineOnCanvas()
     QPainter painter(&canvas);
     painter.setPen(QPen(Qt::black, brushWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
     painter.drawPolyline(oneStroke);
-}
-
-
-
-void OverlayPixmapItem::keyPressEvent(QKeyEvent *event)
-{
-
 }

@@ -3,24 +3,22 @@
 #include "scene.h"
 #include "icons.h"
 #include "imagehandler.h"
+#include <overlaypixmap/overlaypixmaptoolbar.h>
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
 #include <QMimeData>
 #include <QLabel>
 #include <QClipboard>
-#include <QFileDialog>
-#include <QDebug>
-#include <QSettings>
 #include <QtMath>
-#include <QLineEdit>
-#include <overlaypixmap/overlaypixmaptoolbar.h>
+#include <QDebug>
 
 
 
 MainWindow::MainWindow(QWidget *parent, const char* filepath)
     : QMainWindow(parent),
       ui(new Ui::MainWindow),
+      scene(new Scene()),
       statusbarLeft(new QLabel()),
       statusbarRight(new QLabel()),
       imageHandler(new ImageHandler(this))
@@ -28,15 +26,15 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     ui->setupUi(this);
     setAcceptDrops(true);
     view = ui->graphicsView;
-    view->setScene(&scene);
-    view->setAcceptDrops(false);
-    qApp->installEventFilter(this);
+    view->setScene(scene);
+    view->setAcceptDrops(false); qApp->installEventFilter(this);
 
     setupStatusBar();
     setupToolBar();
+    setupFileToolBar();
 
-    OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(&scene, imageHandler);
-    this->addToolBar(Qt::RightToolBarArea, optionToolbar);
+    OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(scene, imageHandler);
+    addToolBar(Qt::RightToolBarArea, optionToolbar);
 
     if (filepath)
     {
@@ -46,8 +44,8 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
         displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
     }
 
-    connect(&scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
-    connect(&scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
+    connect(scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
+    connect(scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 }
 
 MainWindow::~MainWindow()
@@ -73,26 +71,30 @@ void MainWindow::setupToolBar()
     connect(actionFitToWindow, SIGNAL(triggered()), this, SLOT(on_action_fit_to_window_triggered()));
     ui->toolBar->addAction(actionFitToWindow);
 
-    actionNextImage = new QAction(QIcon(":/icons/white/arrow_right [#336].png"), tr("Next"), this);
-    connect(actionNextImage, SIGNAL(triggered()), this, SLOT(on_action_next_image_triggered()));
-    ui->toolBar->addAction(actionNextImage);
-
-    actionPrevImage = new QAction(QIcon(":/icons/white/arrow_left [#335].png"), tr("Prev"), this);
-    connect(actionPrevImage, SIGNAL(triggered()), this, SLOT(on_action_fit_prev_image_triggered()));
-    ui->toolBar->addAction(actionPrevImage);
-
-    actionOpenImage = new QAction(QIcon(":/icons/white/folder [#1792].png"), tr("Open Image"), this);
-    connect(actionOpenImage, SIGNAL(triggered()), this, SLOT(on_action_open_image_triggered()));
-    ui->toolBar->addAction(actionOpenImage);
-
-    actionSaveImage = new QAction(QIcon(Icons::save), tr("Save Image"), this);
-    connect(actionSaveImage, SIGNAL(triggered()), this, SLOT(on_action_save_image_triggered()));
-    ui->toolBar->addAction(actionSaveImage);
 
     actionBaloonTip = new ToggleAction(QIcon(":/icons/white/message [#1576].png"), QIcon(":/icons/green/message [#1576].png"), tr("BaloonTip"), this);
     connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
     ui->toolBar->addAction(actionBaloonTip);
 
+}
+
+void MainWindow::setupFileToolBar()
+{
+    actionNextImage = new QAction(QIcon(Icons::next), tr("Next"), this);
+    connect(actionNextImage, &QAction::triggered, this, &MainWindow::on_action_next_image_triggered);
+    ui->toolBar->addAction(actionNextImage);
+
+    actionPrevImage = new QAction(QIcon(Icons::prev), tr("Prev"), this);
+    connect(actionPrevImage, &QAction::triggered, this, &MainWindow::on_action_prev_image_triggered);
+    ui->toolBar->addAction(actionPrevImage);
+
+    actionOpenImage = new QAction(QIcon(Icons::folder), tr("Open Image"), this);
+    connect(actionOpenImage, &QAction::triggered, this, &MainWindow::on_action_open_image_triggered);
+    ui->toolBar->addAction(actionOpenImage);
+
+    actionSaveImage = new QAction(QIcon(Icons::save), tr("Save Image"), this);
+    connect(actionSaveImage, &QAction::triggered, this, &MainWindow::on_action_save_image_triggered);
+    ui->toolBar->addAction(actionSaveImage);
 }
 
 void MainWindow::setupStatusBar()
@@ -108,7 +110,7 @@ void MainWindow::setupStatusBar()
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
-    fit_to_rect(scene.pixmapRect());
+    fit_to_rect(scene->pixmapRect());
 }
 
 void MainWindow::dragEnterEvent(QDragEnterEvent *event)
@@ -126,8 +128,8 @@ void MainWindow::dropEvent(QDropEvent *event)
 
 void MainWindow::displayImage(QImage qimage, QString file_path)
 {
-    scene.setImage(qimage);
-    fit_to_rect(scene.pixmapRect());
+    scene->setImage(qimage);
+    fit_to_rect(scene->pixmapRect());
     QString image_property = QString("[%1x%2]").arg(QString::number(imageHandler->currentImage().width()), QString::number(imageHandler->currentImage().height()));
     statusbarLeft->setText(file_path + " " + image_property);
 }
@@ -144,9 +146,9 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     pix_location = QString("[%1, %2]").arg(x, y);
 
     QImage qImg;
-    if (!scene.pixmap().isNull()) qImg = scene.pixmap().toImage();
+    if (!scene->pixmap().isNull()) qImg = scene->pixmap().toImage();
 
-    QPoint offset = scene.areaRect().topLeft();
+    QPoint offset = scene->areaRect().topLeft();
     pix = pix - offset;
     QString r, g, b;
     if (qImg.valid(pix))
@@ -162,7 +164,7 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
 
     statusbarRight->setText(pix_color + " " + pix_location);
 
-    if (scene.baloonTip) scene.baloonTip->setPixProperties(pos, r, g, b);
+    if (scene->baloonTip) scene->baloonTip->setPixProperties(pos, r, g, b);
 }
 
 bool MainWindow::_keyPressEvent(QKeyEvent *event)
@@ -185,11 +187,29 @@ bool MainWindow::_keyPressEvent(QKeyEvent *event)
             }
             break;
 
+        case Qt::Key_Delete:
+            qDebug() << "delete";
+            break;
+
         default:
             qDebug("keypress %x", event->key());
             break;
      }
      return false;
+}
+
+void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    Q_UNUSED(event)
+
+    if (actionPointerMode->isChecked())
+    {
+        on_action_area_selection_mode_toggled(true);
+    }
+    else
+    {
+        on_action_pointer_mode_toggled(true);
+    }
 }
 
 bool MainWindow::eventFilter(QObject *object, QEvent *event)
@@ -222,7 +242,7 @@ void MainWindow::showPrev()
 void MainWindow::fit_to_rect(QRect rect)
 {
     if (rect.isNull()) return;
-    view->setSceneRect(scene.itemsBoundingRect()); // shrink viewport
+    view->setSceneRect(scene->itemsBoundingRect()); // shrink viewport
     view->fitInView(rect, Qt::KeepAspectRatio);
     qDebug() << view->viewport()->size();
 }
@@ -233,7 +253,7 @@ void MainWindow::on_action_pointer_mode_toggled(bool toggled)
     {
         actionPointerMode->setChecked(true);
         ui->graphicsView->mouse_control = true;
-        scene.area_selection_is_active = false;
+        scene->area_selection_is_active = false;
         on_action_area_selection_mode_toggled(false);
         setCursor(Qt::ArrowCursor);
     }
@@ -249,7 +269,7 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
     {
         actionAreaSelectionMode->setChecked(true);
         ui->graphicsView->mouse_control = false;
-        scene.area_selection_is_active = true;
+        scene->area_selection_is_active = true;
         on_action_pointer_mode_toggled(false);
         setCursor(Qt::CrossCursor);
     }
@@ -259,20 +279,22 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
     }
 }
 
-void MainWindow::on_action_fit_to_window_triggered()
-{
-    fit_to_rect(scene.pixmapRect());
-}
+void MainWindow::on_action_fit_to_window_triggered() { fit_to_rect(scene->pixmapRect()); }
 
-void MainWindow::on_action_next_image_triggered()
+void MainWindow::on_action_baloontip_toggled(bool toggled)
 {
-    showNext();
+    if (toggled)
+    {
+        scene->addItem(scene->baloonTip);
+    }
+    else
+    {
+        scene->removeItem(scene->baloonTip);
+    }
 }
+void MainWindow::on_action_next_image_triggered() { showNext(); }
 
-void MainWindow::on_action_prev_image_triggered()
-{
-    showPrev();
-}
+void MainWindow::on_action_prev_image_triggered() { showPrev(); }
 
 void MainWindow::on_action_open_image_triggered()
 {
@@ -280,33 +302,6 @@ void MainWindow::on_action_open_image_triggered()
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindow::on_action_save_image_triggered()
-{
-    imageHandler->saveFile(scene.areaRect());
-}
+void MainWindow::on_action_save_image_triggered() { imageHandler->saveFile(scene->areaRect()); }
 
-void MainWindow::on_action_baloontip_toggled(bool toggled)
-{
-    if (toggled)
-    {
-        scene.addItem(scene.baloonTip);
-    }
-    else
-    {
-        scene.removeItem(scene.baloonTip);
-    }
-}
 
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event)
-
-    if (actionPointerMode->isChecked())
-    {
-        on_action_area_selection_mode_toggled(true);
-    }
-    else
-    {
-        on_action_pointer_mode_toggled(true);
-    }
-}

@@ -2,6 +2,7 @@
 #include "cv_contours.h"
 #include "jsonfile.h"
 #include "addpolygoncommand.h"
+#include "erasepolygoncommand.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QPainter>
 #include <QtMath>
@@ -75,12 +76,15 @@ void OverlayPixmapItem::saveAnnotations(QString file_path)
 
 void OverlayPixmapItem::deleteSelectedContours()
 {
+    if (contItems.isEmpty()) return;
+
     for (auto const& cont_item : contItems )
     {
         if (cont_item->isSelected())
         {
             cont_item->setSelected(false);
-            contItems.removeOne(cont_item);
+            undoStack->push(new ErasePolygonCommand(cont_item, &contItems));
+            //contItems.removeOne(cont_item);
         }
     }
     updateConnectedContours();

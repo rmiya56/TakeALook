@@ -12,7 +12,6 @@ class AddPolygonCommand : public QUndoCommand
 {
 public:
     AddPolygonCommand(ContourItem *cont, QVector<ContourItem*> *cont_items, QUndoCommand *parent = nullptr);
-
     void undo() override;
     void redo() override;
 

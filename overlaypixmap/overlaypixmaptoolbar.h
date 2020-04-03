@@ -19,6 +19,11 @@ public slots:
 
 
 private:
+
+    void activate();
+    void deactivate();
+
+
     Scene *scene;
     OverlayPixmapItem *overlayItem = nullptr;
     ImageHandler *imageHandler;

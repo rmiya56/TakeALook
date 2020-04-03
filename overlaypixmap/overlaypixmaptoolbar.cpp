@@ -6,14 +6,13 @@
 #include <QDebug>
 
 
+
 OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_handler)
     : QToolBar(),
       scene(scene),
       imageHandler(image_handler),
       penWidthEdit(new QLineEdit("10"))
 {
-
-    connect(scene, &Scene::key_delete, this, &OverlayPixmapToolBar::on_action_delete_triggered);
 
     actionCanvasMode = new ToggleAction(QIcon(Icons::pen), QIcon(Icons::pen_toggled), tr("Canvas"), this);
     connect(actionCanvasMode, &QAction::toggled, this, &OverlayPixmapToolBar::on_action_canvas_mode_toggled);
@@ -26,24 +25,31 @@ OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_han
     penWidthEdit->setFont(font);
     penWidthEdit->setStyleSheet("QLineEdit {background-color: lightgray}");
     addWidget(penWidthEdit);
-    connect(penWidthEdit, &QLineEdit::textChanged, this, &OverlayPixmapToolBar::on_pen_width_changed);
 
     actionUndo = new QAction(QIcon(Icons::undo), tr("Undo"), this);
-    connect(actionUndo, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_undo_triggered);
     addAction(actionUndo);
-
     actionRedo = new QAction(QIcon(Icons::redo), tr("Redo"), this);
-    connect(actionRedo, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_redo_triggered);
     addAction(actionRedo);
-
     actionSaveAnnotations = new QAction(QIcon(Icons::save), tr("Save Annotations"), this);
-    connect(actionSaveAnnotations, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_save_annotations_triggered);
     addAction(actionSaveAnnotations);
-
     actionDelete = new QAction(QIcon(Icons::trashbox), tr("Delete"), this);
-    connect(actionDelete, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_delete_triggered);
     addAction(actionDelete);
 
+}
+
+void OverlayPixmapToolBar::activate()
+{
+    connect(scene, &Scene::key_delete, this, &OverlayPixmapToolBar::on_action_delete_triggered);
+    connect(penWidthEdit, &QLineEdit::textChanged, this, &OverlayPixmapToolBar::on_pen_width_changed);
+    connect(actionUndo, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_undo_triggered);
+    connect(actionRedo, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_redo_triggered);
+    connect(actionSaveAnnotations, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_save_annotations_triggered);
+    connect(actionDelete, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_delete_triggered);
+}
+
+void OverlayPixmapToolBar::deactivate()
+{
+    disconnect(nullptr, nullptr, this, nullptr);
 }
 
 void OverlayPixmapToolBar::image_changed()
@@ -58,6 +64,8 @@ void OverlayPixmapToolBar::on_action_canvas_mode_toggled(bool toggled)
 {
      if (toggled)
     {
+        activate();
+
         actionCanvasMode->setChecked(true);
         overlayItem = new OverlayPixmapItem(imageHandler->currentImage().size());
         QString annotation_path = PathUtilities::replaceSuffix(imageHandler->currentFileInfo(), "json");
@@ -66,6 +74,7 @@ void OverlayPixmapToolBar::on_action_canvas_mode_toggled(bool toggled)
     }
     else
     {
+        deactivate();
         actionCanvasMode->setChecked(false);
         scene->removeItem(overlayItem);
      }

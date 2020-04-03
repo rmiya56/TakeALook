@@ -21,6 +21,7 @@ SOURCES += \
     overlaypixmap/addpolygoncommand.cpp \
     overlaypixmap/contouritem.cpp \
     overlaypixmap/cv_contours.cpp \
+    overlaypixmap/erasepolygoncommand.cpp \
     overlaypixmap/jsonfile.cpp \
     overlaypixmap/overlaypixmapitem.cpp \
     overlaypixmap/overlaypixmaptoolbar.cpp \
@@ -42,6 +43,7 @@ HEADERS += \
     overlaypixmap/addpolygoncommand.h \
     overlaypixmap/contouritem.h \
     overlaypixmap/cv_contours.h \
+    overlaypixmap/erasepolygoncommand.h \
     overlaypixmap/jsonfile.h \
     overlaypixmap/overlaypixmapitem.h \
     overlaypixmap/overlaypixmaptoolbar.h \

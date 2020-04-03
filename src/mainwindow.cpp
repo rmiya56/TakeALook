@@ -250,7 +250,6 @@ void MainWindow::on_action_pointer_mode_toggled(bool toggled)
     if (toggled)
     {
         actionPointerMode->setChecked(true);
-        //ui->graphicsView->mouse_control = true;
         scene->area_selection_is_active = false;
         on_action_area_selection_mode_toggled(false);
         setCursor(Qt::ArrowCursor);
@@ -266,7 +265,6 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
     if (toggled)
     {
         actionAreaSelectionMode->setChecked(true);
-        //ui->graphicsView->mouse_control = false;
         scene->area_selection_is_active = true;
         on_action_pointer_mode_toggled(false);
         setCursor(Qt::CrossCursor);

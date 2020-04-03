@@ -103,7 +103,9 @@ QRect AreaSelectionItem::toQRect()
 void AreaSelectionItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //QGraphicsItem::mousePressEvent(event);
-    qDebug() << "press (item)";
+    //qDebug() << "press (item)";
+
+    if (event->button() != Qt::LeftButton) return;
 
     QPointF p = event->pos();
     if (top->intersected(*left).contains(p))

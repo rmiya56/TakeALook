@@ -14,6 +14,9 @@ class OverlayPixmapToolBar : public QToolBar
 public:
     OverlayPixmapToolBar(Scene *scene, ImageHandler* image_handler);
 
+public slots:
+    void image_changed();
+
 
 private:
     Scene *scene;
@@ -26,7 +29,6 @@ private:
     QAction *actionRedo;
     QAction *actionSaveAnnotations;
     QAction *actionDelete;
-
 
 private slots:
     void on_action_canvas_mode_toggled(bool toggled);

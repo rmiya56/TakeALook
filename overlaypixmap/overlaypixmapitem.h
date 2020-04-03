@@ -41,7 +41,7 @@ private:
     static constexpr qreal contourWidth = 2;
     static const QColor colorContour;
     static const QColor colorOverlay;
-    static const int MIN_DISTANCE = 3;
+    //static const int MIN_DISTANCE = 3;
 
 };
 

@@ -9,6 +9,7 @@
 class Scene : public QGraphicsScene
 {
     Q_OBJECT
+
 public:
     Scene();
     QPixmap pixmap();
@@ -24,6 +25,7 @@ public:
     PixBaloonTip *baloonTip = nullptr;
 
     QAction *actionSelectArea;
+
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event)  override;

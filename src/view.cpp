@@ -27,9 +27,9 @@ void View::mousePressEvent(QMouseEvent *event)
 
    if (isInSelectedArea(event->pos())) return;
 
-   if (event->button() == Qt::LeftButton)
+   if (event->button() == Qt::RightButton)
    {
-       left_mouse_pressed = true;
+       right_mouse_pressed = true;
        sceneMousePos = event->pos();
        return;
    }
@@ -41,7 +41,7 @@ void View::mouseMoveEvent(QMouseEvent *event)
     QGraphicsView::mouseMoveEvent(event);
     if (!mouse_control) return;
 
-    if (left_mouse_pressed)
+    if (right_mouse_pressed)
     {
         horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x()-sceneMousePos.x()));
         verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y()-sceneMousePos.y()));
@@ -67,9 +67,9 @@ void View::mouseReleaseEvent(QMouseEvent *event)
     }
     else
     {    // out of the selected area
-        if(event->button() == Qt::LeftButton)
+        if(event->button() == Qt::RightButton)
         {
-            left_mouse_pressed = false;
+            right_mouse_pressed = false;
         }
     }
 }

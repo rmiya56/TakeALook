@@ -48,7 +48,7 @@ private:
     void setupStatusBar();
 
 signals:
-    void delete_triggered();
+    void image_changed();
 
 
     // Toolbar

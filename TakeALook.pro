@@ -25,7 +25,6 @@ SOURCES += \
     overlaypixmap/overlaypixmapitem.cpp \
     overlaypixmap/overlaypixmaptoolbar.cpp \
     src/areaselectionitem.cpp \
-    src/icons.cpp \
     src/imagehandler.cpp \
     src/imageproperties.cpp \
     src/main.cpp \
@@ -33,6 +32,8 @@ SOURCES += \
     src/scene.cpp \
     src/toggleaction.cpp \
     src/view.cpp \
+    utility/icons.cpp \
+    utility/mouseevent.cpp \
     utility/pathutilities.cpp
 
 HEADERS += \
@@ -45,13 +46,14 @@ HEADERS += \
     overlaypixmap/overlaypixmapitem.h \
     overlaypixmap/overlaypixmaptoolbar.h \
     src/areaselectionitem.h \
-    src/icons.h \
     src/imagehandler.h \
     src/imageproperties.h \
     src/mainwindow.h \
     src/scene.h \
     src/toggleaction.h \
     src/view.h \
+    utility/icons.h \
+    utility/mouseevent.h \
     utility/pathutilities.h
 
 

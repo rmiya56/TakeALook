@@ -1,12 +1,9 @@
 #include "utility/pathutilities.h"
-
 #include <QDir>
-
 
 
 PathUtilities::PathUtilities()
 {
-
 }
 
 QString PathUtilities::replaceSuffix(QFileInfo file_info, QString suffix)

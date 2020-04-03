@@ -20,7 +20,8 @@ protected:
 
 private:
     QPointF sceneMousePos;
-    bool left_mouse_pressed = false;
+    QPointF initMousePos;
+    bool right_mouse_pressed = false;
     const qreal zoomFactor = 1.05;
     bool isInSelectedArea(QPoint p);
 };

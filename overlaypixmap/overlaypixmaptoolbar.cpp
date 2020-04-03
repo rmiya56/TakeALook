@@ -1,8 +1,8 @@
 #include "overlaypixmaptoolbar.h"
-#include <src/icons.h>
 #include <src/mainwindow.h>
-#include <QLineEdit>
+#include <utility/icons.h>
 #include <utility/pathutilities.h>
+#include <QLineEdit>
 
 
 
@@ -46,6 +46,13 @@ OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_han
 
 }
 
+void OverlayPixmapToolBar::image_changed()
+{
+    overlayItem = new OverlayPixmapItem(imageHandler->currentImage().size());
+    QString annotation_path = PathUtilities::replaceSuffix(imageHandler->currentFileInfo(), "json");
+    overlayItem->readAnnotations(annotation_path);
+}
+
 void OverlayPixmapToolBar::on_action_canvas_mode_toggled(bool toggled)
 {
      if (toggled)
@@ -80,9 +87,7 @@ void OverlayPixmapToolBar::on_action_delete_triggered()
 
 void OverlayPixmapToolBar::on_action_save_annotations_triggered()
 {
-    //QFileInfo file_info = imageHandler->currentFileInfo();
     QString save_path =  PathUtilities::replaceSuffix(imageHandler->currentFileInfo(), "json");
-            //file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".json";
     overlayItem->saveAnnotations(save_path);
 }
 

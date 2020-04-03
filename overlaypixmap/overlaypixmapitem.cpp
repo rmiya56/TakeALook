@@ -7,6 +7,7 @@
 #include <QtMath>
 #include <QDebug>
 #include <QKeyEvent>
+#include <utility/mouseevent.h>
 
 
 const QColor OverlayPixmapItem::colorContour = QColor(0, 255, 0, 100);
@@ -94,6 +95,7 @@ void OverlayPixmapItem::readAnnotations(QString file_path)
 {
     JsonFile json_file;
     QVector<QPolygonF> polygons = JsonFile::readPolygons(file_path);
+    if (polygons.isEmpty()) return;
 
     for (auto poly : polygons)
     {
@@ -105,27 +107,23 @@ void OverlayPixmapItem::readAnnotations(QString file_path)
 
 void OverlayPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() == Qt::RightButton)
+    if(event->button() == Qt::LeftButton)
     {
         initPos = event->pos();
         oneStroke.clear();
         oneStroke << event->scenePos();
         dragMoving = true;
-    }
-    else if(event->button() == Qt::LeftButton)
-    {
+
         for (auto cont_item : contItems)
-        {
             if(!cont_item->contains(event->scenePos()))
                 cont_item->setSelected(false);
-        }
     }
     //QGraphicsPixmapItem::mousePressEvent(event);
 }
 
 void OverlayPixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->buttons() == Qt::RightButton && dragMoving)
+    if(event->buttons() == Qt::LeftButton && dragMoving)
     {
         oneStroke << event->scenePos();
         QPixmap pixmap = this->pixmap();
@@ -139,12 +137,13 @@ void OverlayPixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void OverlayPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    if(event->button() == Qt::RightButton && dragMoving)
+    if(event->button() == Qt::LeftButton && dragMoving)
     {
         dragMoving = false;
-        QPointF d = event->pos() - initPos;
-        qreal distance = qSqrt(QPointF::dotProduct(d,d));
-        if (distance < MIN_DISTANCE) return;
+        if (MouseEvent::verifyDragMove(initPos, event->pos())) return;
+        //QPointF d = event->pos() - initPos;
+        //qreal distance = qSqrt(QPointF::dotProduct(d,d));
+        //if (distance < MIN_DISTANCE) return;
 
         drawPolylineOnCanvas();
 

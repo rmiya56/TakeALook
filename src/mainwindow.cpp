@@ -1,8 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "scene.h"
-#include "icons.h"
 #include "imagehandler.h"
+#include <utility/icons.h>
 #include <overlaypixmap/overlaypixmaptoolbar.h>
 #include <QKeyEvent>
 #include <QDragEnterEvent>
@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
 
     OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(scene, imageHandler);
     addToolBar(Qt::RightToolBarArea, optionToolbar);
+    connect(this, &MainWindow::image_changed, optionToolbar, &OverlayPixmapToolBar::image_changed);
 
     if (filepath)
     {
@@ -172,10 +173,12 @@ bool MainWindow::_keyPressEvent(QKeyEvent *event)
     {
         case Qt::Key_Left:
             showPrev();
+            image_changed();
             break;
 
         case Qt::Key_Right:
             showNext();
+            image_changed();
             break;
 
         case Qt::Key_C:
@@ -184,11 +187,6 @@ bool MainWindow::_keyPressEvent(QKeyEvent *event)
                 QClipboard *clipboard = QApplication::clipboard();
                 clipboard->setImage(imageHandler->currentImage());
             }
-            break;
-
-        case Qt::Key_Delete:
-            qDebug() << "delete";
-            delete_triggered();
             break;
 
         default:

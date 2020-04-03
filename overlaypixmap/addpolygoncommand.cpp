@@ -19,6 +19,3 @@ void AddPolygonCommand::redo()
 {
     contItems->push_back(cont);
 }
-
-
-

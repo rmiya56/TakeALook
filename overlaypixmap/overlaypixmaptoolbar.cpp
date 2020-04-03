@@ -3,7 +3,7 @@
 #include <utility/icons.h>
 #include <utility/pathutilities.h>
 #include <QLineEdit>
-
+#include <QDebug>
 
 
 OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_handler)
@@ -51,6 +51,7 @@ void OverlayPixmapToolBar::image_changed()
     overlayItem = new OverlayPixmapItem(imageHandler->currentImage().size());
     QString annotation_path = PathUtilities::replaceSuffix(imageHandler->currentFileInfo(), "json");
     overlayItem->readAnnotations(annotation_path);
+    scene->addItem(overlayItem);
 }
 
 void OverlayPixmapToolBar::on_action_canvas_mode_toggled(bool toggled)

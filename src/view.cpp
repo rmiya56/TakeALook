@@ -1,5 +1,5 @@
 #include "view.h"
-#include "scene.h"
+//#include "scene.h"
 #include <QWheelEvent>
 #include <QDebug>
 #include <QScrollBar>
@@ -25,8 +25,6 @@ void View::mousePressEvent(QMouseEvent *event)
 {
    //qDebug() << "press (view)";
    QGraphicsView::mousePressEvent(event);
-
-   if (isInSelectedArea(event->pos())) return;
 
    if (event->button() == Qt::RightButton)
    {
@@ -61,17 +59,5 @@ void View::mouseReleaseEvent(QMouseEvent *event)
     if(event->button() == Qt::RightButton)
     {
         right_mouse_pressed = false;
-
-        if (isInSelectedArea(event->pos()))
-        {
-            static_cast<Scene*>(scene())->menuArea.exec(event->globalPos());
-            event->accept();
-        }
     }
-}
-
-bool View::isInSelectedArea(QPoint p)
-{
-    QGraphicsItem *item = itemAt(p);
-    return (item && item->type() == QGraphicsItem::UserType + 1);
 }

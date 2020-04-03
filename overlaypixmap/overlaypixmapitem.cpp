@@ -141,16 +141,11 @@ void OverlayPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     {
         dragMoving = false;
         if (!MouseEvent::verifyDragMove(initPos, event->pos())) return;
-        //QPointF d = event->pos() - initPos;
-        //qreal distance = qSqrt(QPointF::dotProduct(d,d));
-        //if (distance < MIN_DISTANCE) return;
 
         drawPolylineOnCanvas();
 
         ContourItem *cont_item = new ContourItem(extractContours(canvas)[0], this);
         undoStack->push( new AddPolygonCommand(cont_item, &contItems));
-
-        qDebug() << cont_item->polygon();
 
         updateConnectedContours();
     }

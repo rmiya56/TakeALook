@@ -114,9 +114,17 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
     else if(event->button() == Qt::RightButton)
     {
-        if(event->isAccepted()) return;
-        if (!menuScene.isEmpty())
+        //if(event->isAccepted()) return;
+
+        QGraphicsItem *item = this->itemAt(event->scenePos(), QTransform());
+        if (item && item->type() == QGraphicsItem::UserType + 1)
+        {
+            menuArea.exec(event->screenPos());
+        }
+        else if (!menuScene.isEmpty())
+        {
             menuScene.exec(event->screenPos());
+        }
     }
 }
 

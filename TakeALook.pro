@@ -33,6 +33,7 @@ SOURCES += \
     src/scene.cpp \
     src/toggleaction.cpp \
     src/view.cpp \
+    utility/pathutilities.cpp
 
 HEADERS += \
     baloontip/baloontip.h \
@@ -51,6 +52,7 @@ HEADERS += \
     src/scene.h \
     src/toggleaction.h \
     src/view.h \
+    utility/pathutilities.h
 
 
 FORMS += \

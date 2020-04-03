@@ -2,6 +2,7 @@
 #include <src/icons.h>
 #include <src/mainwindow.h>
 #include <QLineEdit>
+#include <utility/pathutilities.h>
 
 
 
@@ -51,6 +52,8 @@ void OverlayPixmapToolBar::on_action_canvas_mode_toggled(bool toggled)
     {
         actionCanvasMode->setChecked(true);
         overlayItem = new OverlayPixmapItem(imageHandler->currentImage().size());
+        QString annotation_path = PathUtilities::replaceSuffix(imageHandler->currentFileInfo(), "json");
+        overlayItem->readAnnotations(annotation_path);
         scene->addItem(overlayItem);
     }
     else
@@ -77,8 +80,9 @@ void OverlayPixmapToolBar::on_action_delete_triggered()
 
 void OverlayPixmapToolBar::on_action_save_annotations_triggered()
 {
-    QFileInfo file_info = imageHandler->currentFileInfo();
-    QString save_path = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".json";
+    //QFileInfo file_info = imageHandler->currentFileInfo();
+    QString save_path =  PathUtilities::replaceSuffix(imageHandler->currentFileInfo(), "json");
+            //file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".json";
     overlayItem->saveAnnotations(save_path);
 }
 

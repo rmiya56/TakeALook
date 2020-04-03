@@ -39,11 +39,11 @@ private:
     QAction *actionCrop;
     QAction *actionZoom;
 
-signals:
+signals: // to MainWindow
     void done_selection(bool);
     void zoom_in_area(QRect rect);
 
-    // to overlaycanvas
+signals:  // to Scene
     void key_delete();
 
 private slots:

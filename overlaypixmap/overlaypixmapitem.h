@@ -16,7 +16,7 @@ public:
     void readAnnotations(QString file_path);
     void saveAnnotations(QString file_path);
     void deleteSelectedContours();
-
+    void setPenWidth(qreal width);
 
 protected:
     virtual void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
@@ -37,7 +37,7 @@ private:
 
     bool dragMoving = false;
     QPointF initPos;
-    static const int brushWidth = 10;
+    int brushWidth = 10;
     static constexpr qreal contourWidth = 2;
     static const QColor colorContour;
     static const QColor colorOverlay;

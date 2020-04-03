@@ -5,6 +5,7 @@
 #include <src/scene.h>
 #include <src/toggleaction.h>
 #include <src/imagehandler.h>
+#include <QLineEdit>
 #include <QToolBar>
 
 
@@ -18,6 +19,7 @@ private:
     Scene *scene;
     OverlayPixmapItem *overlayItem = nullptr;
     ImageHandler *imageHandler;
+    QLineEdit *penWidthEdit;
 
     ToggleAction *actionCanvasMode;
     QAction *actionUndo;
@@ -32,6 +34,7 @@ private slots:
     void on_action_redo_triggered();
     void on_action_delete_triggered();
     void on_action_save_annotations_triggered();
+    void on_pen_width_changed(const QString &width);
 
 };
 

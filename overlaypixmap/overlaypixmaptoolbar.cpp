@@ -8,7 +8,8 @@
 OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_handler)
     : QToolBar(),
       scene(scene),
-      imageHandler(image_handler)
+      imageHandler(image_handler),
+      penWidthEdit(new QLineEdit("10"))
 {
 
     connect(scene, &Scene::key_delete, this, &OverlayPixmapToolBar::on_action_delete_triggered);
@@ -17,14 +18,14 @@ OverlayPixmapToolBar::OverlayPixmapToolBar(Scene *scene, ImageHandler* image_han
     connect(actionCanvasMode, &QAction::toggled, this, &OverlayPixmapToolBar::on_action_canvas_mode_toggled);
     addAction(actionCanvasMode);
 
-    QLineEdit *lineEdit = new QLineEdit("1");
-    lineEdit->setAlignment(Qt::AlignRight);
-    lineEdit->setFixedSize(QSize(30, 30));
+    penWidthEdit->setAlignment(Qt::AlignRight);
+    penWidthEdit->setFixedSize(QSize(30, 30));
     QFont font;
     font.setPointSize(14);
-    lineEdit->setFont(font);
-    lineEdit->setStyleSheet("QLineEdit {background-color: lightgray}");
-    addWidget(lineEdit);
+    penWidthEdit->setFont(font);
+    penWidthEdit->setStyleSheet("QLineEdit {background-color: lightgray}");
+    addWidget(penWidthEdit);
+    connect(penWidthEdit, &QLineEdit::textChanged, this, &OverlayPixmapToolBar::on_pen_width_changed);
 
     actionUndo = new QAction(QIcon(Icons::undo), tr("Undo"), this);
     connect(actionUndo, &QAction::triggered, this, &OverlayPixmapToolBar::on_action_undo_triggered);
@@ -79,4 +80,9 @@ void OverlayPixmapToolBar::on_action_save_annotations_triggered()
     QFileInfo file_info = imageHandler->currentFileInfo();
     QString save_path = file_info.absolutePath() + QDir::separator() + file_info.baseName() + ".json";
     overlayItem->saveAnnotations(save_path);
+}
+
+void OverlayPixmapToolBar::on_pen_width_changed(const QString &width)
+{
+    overlayItem->setPenWidth(width.toDouble());
 }

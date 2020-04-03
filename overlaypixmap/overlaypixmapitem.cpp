@@ -85,6 +85,11 @@ void OverlayPixmapItem::deleteSelectedContours()
     updateConnectedContours();
 }
 
+void OverlayPixmapItem::setPenWidth(qreal width)
+{
+    brushWidth = width;
+}
+
 void OverlayPixmapItem::readAnnotations(QString file_path)
 {
     JsonFile json_file;

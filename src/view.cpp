@@ -4,6 +4,8 @@
 #include <QDebug>
 #include <QScrollBar>
 
+
+
 View::View(QWidget *parent)
     : QGraphicsView (parent)
 {
@@ -21,9 +23,8 @@ void View::wheelEvent(QWheelEvent *event)
 
 void View::mousePressEvent(QMouseEvent *event)
 {
-   qDebug() << "press (view)";
+   //qDebug() << "press (view)";
    QGraphicsView::mousePressEvent(event);
-   if (!mouse_control) return;
 
    if (isInSelectedArea(event->pos())) return;
 
@@ -39,12 +40,13 @@ void View::mouseMoveEvent(QMouseEvent *event)
 {
     //qDebug() << "move (view)";
     QGraphicsView::mouseMoveEvent(event);
-    if (!mouse_control) return;
 
     if (right_mouse_pressed)
     {
-        horizontalScrollBar()->setValue(horizontalScrollBar()->value() - (event->x()-sceneMousePos.x()));
-        verticalScrollBar()->setValue(verticalScrollBar()->value() - (event->y()-sceneMousePos.y()));
+        int dx = horizontalScrollBar()->value() - (event->x() - sceneMousePos.x());
+        int dy = verticalScrollBar()->value() - (event->y() - sceneMousePos.y());
+        horizontalScrollBar()->setValue(dx);
+        verticalScrollBar()->setValue(dy);
         sceneMousePos = event->pos();
         event->accept();
         return;
@@ -53,23 +55,17 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
-    qDebug() << "release (view)";
+    //qDebug() << "release (view)";
     QGraphicsView::mouseReleaseEvent(event);
-    if (!mouse_control) return;
 
-    if (isInSelectedArea(event->pos()))
-    {    // in the selected area
-        if(event->button() == Qt::RightButton)
+    if(event->button() == Qt::RightButton)
+    {
+        right_mouse_pressed = false;
+
+        if (isInSelectedArea(event->pos()))
         {
             static_cast<Scene*>(scene())->menuArea.exec(event->globalPos());
             event->accept();
-        }
-    }
-    else
-    {    // out of the selected area
-        if(event->button() == Qt::RightButton)
-        {
-            right_mouse_pressed = false;
         }
     }
 }

@@ -10,7 +10,6 @@ class View : public QGraphicsView
 
 public:
     View(QWidget *parent = nullptr);
-    bool mouse_control = true;
 
 protected:
     void wheelEvent(QWheelEvent *event);
@@ -22,7 +21,7 @@ private:
     QPointF sceneMousePos;
     QPointF initMousePos;
     bool right_mouse_pressed = false;
-    const qreal zoomFactor = 1.05;
+    static constexpr qreal zoomFactor = 1.05;
     bool isInSelectedArea(QPoint p);
 };
 #endif // VIEW_H

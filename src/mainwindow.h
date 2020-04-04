@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef TAKEALOOKMAINWINDOW_H
+#define TAKEALOOKMAINWINDOW_H
 
 #include <QMainWindow>
 #include <QGraphicsScene>
@@ -11,17 +11,17 @@
 
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindow; }
+namespace Ui { class TakeALookMainWindow; }
 QT_END_NAMESPACE
 
-class MainWindow : public QMainWindow
+class TakeALookMainWindow : public QMainWindow
 
 {
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr, const char* filepath="");
-    ~MainWindow();
+    TakeALookMainWindow(QWidget *parent = nullptr, const char* filepath="");
+    ~TakeALookMainWindow();
 
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
@@ -32,8 +32,8 @@ protected:
     void _mouseMoveEvent(QMouseEvent *event);
     bool _keyPressEvent(QKeyEvent *event);
 
-private:
-    Ui::MainWindow *ui;
+protected:
+    Ui::TakeALookMainWindow *ui;
     QGraphicsView *view;
     Scene *scene;
     QLabel *statusbarLeft;
@@ -52,13 +52,13 @@ signals:
 
 
     // Toolbar
-private:
+protected:
     ToggleAction *actionPointerMode;
     ToggleAction *actionAreaSelectionMode;
     QAction *actionFitToWindow;
     ToggleAction *actionBaloonTip;
 
-private slots:
+protected slots:
     void on_action_pointer_mode_toggled(bool toggled);
     void on_action_area_selection_mode_toggled(bool toggled);
     void on_action_fit_to_window_triggered();
@@ -66,17 +66,17 @@ private slots:
     void fit_to_rect(QRect rect);
 
     // Toolbar (File)
-private:
+protected:
     QAction *actionNextImage;
     QAction *actionPrevImage;
     QAction *actionOpenImage;
     QAction *actionSaveImage;
 
-private slots:
+protected slots:
     void on_action_next_image_triggered();
     void on_action_prev_image_triggered();
     void on_action_open_image_triggered();
     void on_action_save_image_triggered();
 
 };
-#endif // MAINWINDOW_H
+#endif // TAKEALOOKMAINWINDOW_H

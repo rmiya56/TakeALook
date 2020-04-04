@@ -3,7 +3,6 @@
 #include "scene.h"
 #include "imagehandler.h"
 #include <utility/icons.h>
-#include <overlaypixmap/overlaypixmaptoolbar.h>
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -15,9 +14,9 @@
 
 
 
-MainWindow::MainWindow(QWidget *parent, const char* filepath)
+TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
     : QMainWindow(parent),
-      ui(new Ui::MainWindow),
+      ui(new Ui::TakeALookMainWindow),
       scene(new Scene()),
       statusbarLeft(new QLabel()),
       statusbarRight(new QLabel()),
@@ -33,9 +32,9 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     setupToolBar();
     setupFileToolBar();
 
-    OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(scene, imageHandler);
-    addToolBar(Qt::RightToolBarArea, optionToolbar);
-    connect(this, &MainWindow::image_changed, optionToolbar, &OverlayPixmapToolBar::image_changed);
+    //OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(scene, imageHandler);
+    //addToolBar(Qt::RightToolBarArea, optionToolbar);
+    //connect(this, &MainWindow::image_changed, optionToolbar, &OverlayPixmapToolBar::image_changed);
 
     if (filepath)
     {
@@ -49,12 +48,12 @@ MainWindow::MainWindow(QWidget *parent, const char* filepath)
     connect(scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 }
 
-MainWindow::~MainWindow()
+TakeALookMainWindow::~TakeALookMainWindow()
 {
     delete ui;
 }
 
-void MainWindow::setupToolBar()
+void TakeALookMainWindow::setupToolBar()
 {
 
     actionPointerMode = new ToggleAction(QIcon(Icons::pointer), QIcon(Icons::pointer_toggled), tr("Pointer"), this);
@@ -78,26 +77,26 @@ void MainWindow::setupToolBar()
 
 }
 
-void MainWindow::setupFileToolBar()
+void TakeALookMainWindow::setupFileToolBar()
 {
     actionNextImage = new QAction(QIcon(Icons::next), tr("Next"), this);
-    connect(actionNextImage, &QAction::triggered, this, &MainWindow::on_action_next_image_triggered);
+    connect(actionNextImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_next_image_triggered);
     ui->toolBar->addAction(actionNextImage);
 
     actionPrevImage = new QAction(QIcon(Icons::prev), tr("Prev"), this);
-    connect(actionPrevImage, &QAction::triggered, this, &MainWindow::on_action_prev_image_triggered);
+    connect(actionPrevImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_prev_image_triggered);
     ui->toolBar->addAction(actionPrevImage);
 
     actionOpenImage = new QAction(QIcon(Icons::folder), tr("Open Image"), this);
-    connect(actionOpenImage, &QAction::triggered, this, &MainWindow::on_action_open_image_triggered);
+    connect(actionOpenImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_open_image_triggered);
     ui->toolBar->addAction(actionOpenImage);
 
     actionSaveImage = new QAction(QIcon(Icons::save), tr("Save Image"), this);
-    connect(actionSaveImage, &QAction::triggered, this, &MainWindow::on_action_save_image_triggered);
+    connect(actionSaveImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_save_image_triggered);
     ui->toolBar->addAction(actionSaveImage);
 }
 
-void MainWindow::setupStatusBar()
+void TakeALookMainWindow::setupStatusBar()
 {
     statusbarRight->setFont(QFont("Courier"));
     statusbarRight->setStyleSheet("color:white");
@@ -107,26 +106,26 @@ void MainWindow::setupStatusBar()
     ui->statusbar->addWidget(statusbarRight, 0);
 }
 
-void MainWindow::resizeEvent(QResizeEvent *event)
+void TakeALookMainWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     fit_to_rect(scene->pixmapRect());
 }
 
-void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+void TakeALookMainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     if(event->mimeData()->hasUrls() && event->mimeData()->urls().count()==1)
         event->acceptProposedAction();
 }
 
-void MainWindow::dropEvent(QDropEvent *event)
+void TakeALookMainWindow::dropEvent(QDropEvent *event)
 {
     QFileInfo file_info(event->mimeData()->urls().at(0).toLocalFile());
     imageHandler->loadFile(file_info);
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindow::displayImage(QImage qimage, QString file_path)
+void TakeALookMainWindow::displayImage(QImage qimage, QString file_path)
 {
     scene->setImage(qimage);
     fit_to_rect(scene->pixmapRect());
@@ -134,7 +133,7 @@ void MainWindow::displayImage(QImage qimage, QString file_path)
     statusbarLeft->setText(file_path + " " + image_property);
 }
 
-void MainWindow::_mouseMoveEvent(QMouseEvent *event)
+void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
 {
     QString pix_location, pix_color;
     ImageProperties prop = imageHandler->currentProperties(); // reading almost static all the time..
@@ -167,7 +166,7 @@ void MainWindow::_mouseMoveEvent(QMouseEvent *event)
     if (scene->baloonTip) scene->baloonTip->setPixProperties(pos, r, g, b);
 }
 
-bool MainWindow::_keyPressEvent(QKeyEvent *event)
+bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)
 {
     switch(event->key())
     {
@@ -196,7 +195,7 @@ bool MainWindow::_keyPressEvent(QKeyEvent *event)
      return false;
 }
 
-void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
+void TakeALookMainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
 
@@ -210,7 +209,7 @@ void MainWindow::mouseDoubleClickEvent(QMouseEvent *event)
     }
 }
 
-bool MainWindow::eventFilter(QObject *object, QEvent *event)
+bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
 {
     Q_UNUSED(object)
 
@@ -225,19 +224,19 @@ bool MainWindow::eventFilter(QObject *object, QEvent *event)
     return false;
 }
 
-void MainWindow::showNext()
+void TakeALookMainWindow::showNext()
 {
     imageHandler->loadNext();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindow::showPrev()
+void TakeALookMainWindow::showPrev()
 {
     imageHandler->loadPrev();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindow::fit_to_rect(QRect rect)
+void TakeALookMainWindow::fit_to_rect(QRect rect)
 {
     if (rect.isNull()) return;
     view->setSceneRect(scene->itemsBoundingRect()); // shrink viewport
@@ -245,7 +244,7 @@ void MainWindow::fit_to_rect(QRect rect)
     qDebug() << view->viewport()->size();
 }
 
-void MainWindow::on_action_pointer_mode_toggled(bool toggled)
+void TakeALookMainWindow::on_action_pointer_mode_toggled(bool toggled)
 {
     if (toggled)
     {
@@ -260,7 +259,7 @@ void MainWindow::on_action_pointer_mode_toggled(bool toggled)
     }
 }
 
-void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
+void TakeALookMainWindow::on_action_area_selection_mode_toggled(bool toggled)
 {
     if (toggled)
     {
@@ -275,9 +274,9 @@ void MainWindow::on_action_area_selection_mode_toggled(bool toggled)
     }
 }
 
-void MainWindow::on_action_fit_to_window_triggered() { fit_to_rect(scene->pixmapRect()); }
+void TakeALookMainWindow::on_action_fit_to_window_triggered() { fit_to_rect(scene->pixmapRect()); }
 
-void MainWindow::on_action_baloontip_toggled(bool toggled)
+void TakeALookMainWindow::on_action_baloontip_toggled(bool toggled)
 {
     if (toggled)
     {
@@ -288,16 +287,16 @@ void MainWindow::on_action_baloontip_toggled(bool toggled)
         scene->removeItem(scene->baloonTip);
     }
 }
-void MainWindow::on_action_next_image_triggered() { showNext(); }
+void TakeALookMainWindow::on_action_next_image_triggered() { showNext(); }
 
-void MainWindow::on_action_prev_image_triggered() { showPrev(); }
+void TakeALookMainWindow::on_action_prev_image_triggered() { showPrev(); }
 
-void MainWindow::on_action_open_image_triggered()
+void TakeALookMainWindow::on_action_open_image_triggered()
 {
     imageHandler->openFile();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindow::on_action_save_image_triggered() { imageHandler->saveFile(scene->areaRect()); }
+void TakeALookMainWindow::on_action_save_image_triggered() { imageHandler->saveFile(scene->areaRect()); }
 
 

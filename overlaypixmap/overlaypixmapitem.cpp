@@ -76,15 +76,12 @@ void OverlayPixmapItem::saveAnnotations(QString file_path)
 
 void OverlayPixmapItem::deleteSelectedContours()
 {
-    if (contItems.isEmpty()) return;
-
     for (auto const& cont_item : contItems )
     {
         if (cont_item->isSelected())
         {
             cont_item->setSelected(false);
             undoStack->push(new ErasePolygonCommand(cont_item, &contItems));
-            //contItems.removeOne(cont_item);
         }
     }
     updateConnectedContours();
@@ -149,7 +146,7 @@ void OverlayPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         drawPolylineOnCanvas();
 
         ContourItem *cont_item = new ContourItem(extractContours(canvas)[0], this);
-        undoStack->push( new AddPolygonCommand(cont_item, &contItems));
+        undoStack->push(new AddPolygonCommand(cont_item, &contItems));
 
         updateConnectedContours();
     }

@@ -61,3 +61,9 @@ void View::mouseReleaseEvent(QMouseEvent *event)
         right_mouse_pressed = false;
     }
 }
+
+
+void View::keyPressEvent(QKeyEvent *event)
+{
+    QGraphicsView::keyPressEvent(event);
+}

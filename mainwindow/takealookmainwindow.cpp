@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "imagehandler.h"
 #include "../utility/icons.h"
+#include "../baloontip/pixbaloontip.h"
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -22,6 +23,7 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
       statusbarRight(new QLabel()),
       imageHandler(new ImageHandler(this))
 {
+
     ui->setupUi(this);
     setAcceptDrops(true);
     view = ui->graphicsView;
@@ -31,10 +33,6 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
     setupStatusBar();
     setupToolBar();
     setupFileToolBar();
-
-    //OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(scene, imageHandler);
-    //addToolBar(Qt::RightToolBarArea, optionToolbar);
-    //connect(this, &MainWindow::image_changed, optionToolbar, &OverlayPixmapToolBar::image_changed);
 
     if (filepath)
     {
@@ -74,6 +72,7 @@ void TakeALookMainWindow::setupToolBar()
     actionBaloonTip = new ToggleAction(QIcon(":/icons/white/message [#1576].png"), QIcon(":/icons/green/message [#1576].png"), tr("BaloonTip"), this);
     connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
     ui->toolBar->addAction(actionBaloonTip);
+    baloonTip = new PixBaloonTip();
 
 }
 
@@ -162,8 +161,7 @@ void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
     }
 
     statusbarRight->setText(pix_color + " " + pix_location);
-
-    if (scene->baloonTip) scene->baloonTip->setPixProperties(pos, r, g, b);
+    baloonTip->setPixProperties(pos, r, g, b);
 }
 
 bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)
@@ -280,11 +278,11 @@ void TakeALookMainWindow::on_action_baloontip_toggled(bool toggled)
 {
     if (toggled)
     {
-        scene->addItem(scene->baloonTip);
+        scene->addItem(baloonTip);
     }
     else
     {
-        scene->removeItem(scene->baloonTip);
+        scene->removeItem(baloonTip);
     }
 }
 void TakeALookMainWindow::on_action_next_image_triggered() { showNext(); }

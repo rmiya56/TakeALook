@@ -8,6 +8,7 @@
 #include "imagehandler.h"
 #include "toggleaction.h"
 #include "scene.h"
+#include "../baloontip/pixbaloontip.h"
 
 
 QT_BEGIN_NAMESPACE
@@ -39,6 +40,8 @@ protected:
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
     ImageHandler *imageHandler;
+    PixBaloonTip *baloonTip;
+
 
     void displayImage(QImage qimage, QString file_path);
     void showNext();

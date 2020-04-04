@@ -16,12 +16,14 @@ protected:
     virtual void mousePressEvent(QMouseEvent *event);
     virtual void mouseMoveEvent(QMouseEvent *event);
     virtual void mouseReleaseEvent(QMouseEvent *event);
+    virtual void keyPressEvent(QKeyEvent *event) override;
 
 private:
     QPointF sceneMousePos;
     QPointF initMousePos;
     bool right_mouse_pressed = false;
     static constexpr qreal zoomFactor = 1.05;
+
 
 };
 #endif // VIEW_H

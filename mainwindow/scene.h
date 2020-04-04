@@ -2,9 +2,10 @@
 #define SCENE_H
 
 #include "areaselectionitem.h"
-#include "../baloontip/pixbaloontip.h"
 #include <QGraphicsScene>
 #include <QMenu>
+
+
 
 class Scene : public QGraphicsScene
 {
@@ -22,8 +23,6 @@ public:
     QMenu menuScene;
     QGraphicsPixmapItem *pixmapItem = nullptr;
     AreaSelectionItem *areaItem = nullptr;
-    PixBaloonTip *baloonTip = nullptr;
-
     QAction *actionSelectArea;
 
 

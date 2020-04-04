@@ -1,6 +1,5 @@
 #include "scene.h"
 #include "areaselectionitem.h"
-#include "../baloontip/pixbaloontip.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
@@ -10,8 +9,6 @@
 Scene::Scene()
     : QGraphicsScene()
 {
-
-    baloonTip = new PixBaloonTip();
 
     // pen & brush
     penArea.setColor(Qt::green);
@@ -164,6 +161,7 @@ void Scene::zoom_in_area()
 
 void Scene::keyPressEvent(QKeyEvent *event)
 {
+    QGraphicsScene::keyPressEvent(event);
     switch(event->key())
     {
         case Qt::Key_Delete:

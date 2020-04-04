@@ -40,4 +40,4 @@ support format
 
 ## License
 
-`MIT license <https://github.com/rmiya56/TakeALook/LICENSE>`
+[MIT license](https://github.com/rmiya56/blob/master/TakeALook/LICENSE)

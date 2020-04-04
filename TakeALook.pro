@@ -18,13 +18,6 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     baloontip/baloontip.cpp \
     baloontip/pixbaloontip.cpp \
-    overlaypixmap/addpolygoncommand.cpp \
-    overlaypixmap/contouritem.cpp \
-    overlaypixmap/cv_contours.cpp \
-    overlaypixmap/erasepolygoncommand.cpp \
-    overlaypixmap/jsonfile.cpp \
-    overlaypixmap/overlaypixmapitem.cpp \
-    overlaypixmap/overlaypixmaptoolbar.cpp \
     src/areaselectionitem.cpp \
     src/imagehandler.cpp \
     src/imageproperties.cpp \
@@ -40,13 +33,6 @@ SOURCES += \
 HEADERS += \
     baloontip/baloontip.h \
     baloontip/pixbaloontip.h \
-    overlaypixmap/addpolygoncommand.h \
-    overlaypixmap/contouritem.h \
-    overlaypixmap/cv_contours.h \
-    overlaypixmap/erasepolygoncommand.h \
-    overlaypixmap/jsonfile.h \
-    overlaypixmap/overlaypixmapitem.h \
-    overlaypixmap/overlaypixmaptoolbar.h \
     src/areaselectionitem.h \
     src/imagehandler.h \
     src/imageproperties.h \

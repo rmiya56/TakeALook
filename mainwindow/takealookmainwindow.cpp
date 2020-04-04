@@ -1,4 +1,4 @@
-#include "mainwindow.h"
+#include "takealookmainwindow.h"
 #include "ui_mainwindow.h"
 #include "scene.h"
 #include "imagehandler.h"

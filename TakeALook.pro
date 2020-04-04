@@ -17,35 +17,35 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
-    takealook/mainwindow.cpp \
-    takealook/view.cpp \
-    takealook/scene.cpp \
-    takealook/areaselectionitem.cpp \
-    takealook/imagehandler.cpp \
-    takealook/imageproperties.cpp \
-    takealook/toggleaction.cpp \
-    takealook/baloontip/baloontip.cpp \
-    takealook/baloontip/pixbaloontip.cpp \
-    takealook/utility/icons.cpp \
-    takealook/utility/mouseevent.cpp \
-    takealook/utility/pathutilities.cpp \
+    mainwindow/areaselectionitem.cpp \
+    mainwindow/imagehandler.cpp \
+    mainwindow/imageproperties.cpp \
+    mainwindow/scene.cpp \
+    mainwindow/takealookmainwindow.cpp \
+    mainwindow/toggleaction.cpp \
+    mainwindow/view.cpp \
+    baloontip/baloontip.cpp \
+    baloontip/pixbaloontip.cpp \
+    utility/icons.cpp \
+    utility/mouseevent.cpp \
+    utility/pathutilities.cpp
 
 HEADERS += \
-    takealook/mainwindow.h \
-    takealook/scene.h \
-    takealook/view.h \
-    takealook/areaselectionitem.h \
-    takealook/imagehandler.h \
-    takealook/imageproperties.h \
-    takealook/toggleaction.h \
-    takealook/baloontip/baloontip.h \
-    takealook/baloontip/pixbaloontip.h \
-    takealook/utility/icons.h \
-    takealook/utility/mouseevent.h \
-    takealook/utility/pathutilities.h \
+    mainwindow/areaselectionitem.h \
+    mainwindow/imagehandler.h \
+    mainwindow/imageproperties.h \
+    mainwindow/scene.h \
+    mainwindow/takealookmainwindow.h \
+    mainwindow/toggleaction.h \
+    mainwindow/view.h \
+    baloontip/baloontip.h \
+    baloontip/pixbaloontip.h \
+    utility/icons.h \
+    utility/mouseevent.h \
+    utility/pathutilities.h
 
 FORMS += \
-    takealook/mainwindow.ui
+    mainwindow/takealookmainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

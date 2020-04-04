@@ -1,4 +1,4 @@
-#include "takealook/utility/pathutilities.h"
+#include "../utility/pathutilities.h"
 #include <QDir>
 
 

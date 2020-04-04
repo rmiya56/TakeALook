@@ -17,32 +17,32 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     main.cpp \
+    takealook/mainwindow.cpp \
+    takealook/view.cpp \
+    takealook/scene.cpp \
     takealook/areaselectionitem.cpp \
     takealook/imagehandler.cpp \
     takealook/imageproperties.cpp \
-    takealook/mainwindow.cpp \
-    takealook/scene.cpp \
     takealook/toggleaction.cpp \
-    takealook/view.cpp \
-    baloontip/baloontip.cpp \
-    baloontip/pixbaloontip.cpp \
-    utility/icons.cpp \
-    utility/mouseevent.cpp \
-    utility/pathutilities.cpp
+    takealook/baloontip/baloontip.cpp \
+    takealook/baloontip/pixbaloontip.cpp \
+    takealook/utility/icons.cpp \
+    takealook/utility/mouseevent.cpp \
+    takealook/utility/pathutilities.cpp \
 
 HEADERS += \
+    takealook/mainwindow.h \
+    takealook/scene.h \
+    takealook/view.h \
     takealook/areaselectionitem.h \
     takealook/imagehandler.h \
     takealook/imageproperties.h \
-    takealook/mainwindow.h \
-    takealook/scene.h \
     takealook/toggleaction.h \
-    takealook/view.h \
-    baloontip/baloontip.h \
-    baloontip/pixbaloontip.h \
-    utility/icons.h \
-    utility/mouseevent.h \
-    utility/pathutilities.h
+    takealook/baloontip/baloontip.h \
+    takealook/baloontip/pixbaloontip.h \
+    takealook/utility/icons.h \
+    takealook/utility/mouseevent.h \
+    takealook/utility/pathutilities.h \
 
 FORMS += \
     takealook/mainwindow.ui

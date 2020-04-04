@@ -85,7 +85,7 @@ QToolTip {background: lightgray;}</string>
   <customwidget>
    <class>View</class>
    <extends>QGraphicsView</extends>
-   <header>src/view.h</header>
+   <header>mainwindow/view.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

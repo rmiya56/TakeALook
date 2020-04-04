@@ -2,7 +2,7 @@
 #include "ui_mainwindow.h"
 #include "scene.h"
 #include "imagehandler.h"
-#include <utility/icons.h>
+#include "takealook/utility/icons.h"
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>

@@ -2,7 +2,7 @@
 #define SCENE_H
 
 #include "areaselectionitem.h"
-#include <baloontip/pixbaloontip.h>
+#include "takealook/baloontip/pixbaloontip.h"
 #include <QGraphicsScene>
 #include <QMenu>
 

@@ -16,37 +16,36 @@ DEFINES += QT_DEPRECATED_WARNINGS
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    main.cpp \
+    takealook/areaselectionitem.cpp \
+    takealook/imagehandler.cpp \
+    takealook/imageproperties.cpp \
+    takealook/mainwindow.cpp \
+    takealook/scene.cpp \
+    takealook/toggleaction.cpp \
+    takealook/view.cpp \
     baloontip/baloontip.cpp \
     baloontip/pixbaloontip.cpp \
-    src/areaselectionitem.cpp \
-    src/imagehandler.cpp \
-    src/imageproperties.cpp \
-    src/main.cpp \
-    src/mainwindow.cpp \
-    src/scene.cpp \
-    src/toggleaction.cpp \
-    src/view.cpp \
     utility/icons.cpp \
     utility/mouseevent.cpp \
     utility/pathutilities.cpp
 
 HEADERS += \
+    takealook/areaselectionitem.h \
+    takealook/imagehandler.h \
+    takealook/imageproperties.h \
+    takealook/mainwindow.h \
+    takealook/scene.h \
+    takealook/toggleaction.h \
+    takealook/view.h \
     baloontip/baloontip.h \
     baloontip/pixbaloontip.h \
-    src/areaselectionitem.h \
-    src/imagehandler.h \
-    src/imageproperties.h \
-    src/mainwindow.h \
-    src/scene.h \
-    src/toggleaction.h \
-    src/view.h \
     utility/icons.h \
     utility/mouseevent.h \
     utility/pathutilities.h
 
-
 FORMS += \
-    src/mainwindow.ui
+    takealook/mainwindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -3,6 +3,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
+#include "../utility/mouseevent.h"
 
 
 
@@ -10,13 +11,6 @@ Scene::Scene()
     : QGraphicsScene()
 {
 
-    // pen & brush
-    penArea.setColor(Qt::green);
-    penArea.setWidth(2);
-    penArea.setCosmetic(true);
-    brushArea = QBrush(QColor(0,255,0,32));
-
-    // context menu in roi
     actionCrop = new QAction(tr("Crop"));
     connect(actionCrop, SIGNAL(triggered()), this, SLOT(crop_area_rect()));
     menuArea.addAction(actionCrop);
@@ -73,10 +67,9 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     if (event->button() == Qt::LeftButton)
     {
        if(areaItem) removeItem(areaItem);
-       mousePos = event->scenePos();
-       tempRect = addRect(QRectF(mousePos, mousePos));
-       tempRect->setPen(penArea);
-       tempRect->setBrush(brushArea);
+       initPos = event->scenePos();
+       expandingRect = new ExpandingRectItem(QRectF(initPos, initPos));
+       addItem(expandingRect);
     }
 }
 
@@ -84,8 +77,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
     if (!area_selection_is_active) return;
-    if(tempRect)
-        tempRect->setRect(QRectF(mousePos, event->scenePos()));
+    if(expandingRect) expandingRect->setRect(QRectF(initPos, event->scenePos()));
 }
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -96,24 +88,20 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(event->button() == Qt::LeftButton)
     {
         if (!area_selection_is_active) return;
-        if (tempRect == nullptr) return;
+        if (expandingRect == nullptr) return;
 
-        qreal area_of_tempRect = tempRect->rect().width() * tempRect->rect().height();
-
-        if(area_of_tempRect > 2)
+        if (MouseEvent::isValidDragMove(initPos, event->scenePos()))
         {
-            areaItem = new AreaSelectionItem(tempRect->rect());
+            areaItem = new AreaSelectionItem(expandingRect->rect());
             addItem(areaItem);
             done_selection(true);
         }
-        removeItem(tempRect);
-        tempRect = nullptr;
+        removeItem(expandingRect);
+        expandingRect = nullptr;
         return;
     }
     else if(event->button() == Qt::RightButton)
     {
-        //if(event->isAccepted()) return;
-
         QGraphicsItem *item = this->itemAt(event->scenePos(), QTransform());
         if (item && item->type() == QGraphicsItem::UserType + 1)
         {
@@ -164,10 +152,6 @@ void Scene::keyPressEvent(QKeyEvent *event)
     QGraphicsScene::keyPressEvent(event);
     switch(event->key())
     {
-        case Qt::Key_Delete:
-            key_delete();
-            break;
-
         default:
             break;
     }

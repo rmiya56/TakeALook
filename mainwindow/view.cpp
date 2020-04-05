@@ -1,5 +1,4 @@
 #include "view.h"
-//#include "scene.h"
 #include <QWheelEvent>
 #include <QDebug>
 #include <QScrollBar>

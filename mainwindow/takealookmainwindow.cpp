@@ -295,6 +295,7 @@ void TakeALookMainWindow::on_action_open_image_triggered()
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void TakeALookMainWindow::on_action_save_image_triggered() { imageHandler->saveFile(scene->areaRect()); }
-
-
+void TakeALookMainWindow::on_action_save_image_triggered()
+{
+    imageHandler->saveFile(scene->areaRect());
+}

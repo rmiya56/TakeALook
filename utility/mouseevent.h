@@ -9,7 +9,7 @@ class MouseEvent
 {
 public:
     MouseEvent();
-    static bool verifyDragMove(QPointF start_pos, QPointF end_pos);
+    static bool isValidDragMove(QPointF start_pos, QPointF end_pos);
 
 private:
     static const int MIN_DISTANCE = 3;

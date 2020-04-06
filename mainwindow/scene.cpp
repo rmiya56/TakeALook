@@ -59,7 +59,7 @@ QRect Scene::areaRect()
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "press (scene)";
+    //qDebug() << "press (scene)";
     QGraphicsScene::mousePressEvent(event);
 
     if (!area_selection_is_active) return;
@@ -82,7 +82,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "release (scene)";
+    //qDebug() << "release (scene)";
     QGraphicsScene::mouseReleaseEvent(event);
 
     if(event->button() == Qt::LeftButton)

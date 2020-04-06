@@ -28,7 +28,8 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
     setAcceptDrops(true);
     view = ui->graphicsView;
     view->setScene(scene);
-    view->setAcceptDrops(false); qApp->installEventFilter(this);
+    view->setAcceptDrops(false);
+    qApp->installEventFilter(this);
 
     setupStatusBar();
     setupToolBar();
@@ -166,9 +167,11 @@ void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
 
 bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)
 {
+
     switch(event->key())
     {
         case Qt::Key_Left:
+            qDebug() << "left (window)";
             showPrev();
             image_changed();
             break;
@@ -209,7 +212,8 @@ void TakeALookMainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 
 bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
 {
-    Q_UNUSED(object)
+    //QMainWindow::eventFilter(object, event);
+    //Q_UNUSED(object)
 
     if(event->type() == QEvent::KeyPress)
     {

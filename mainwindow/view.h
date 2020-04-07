@@ -19,8 +19,8 @@ protected:
     virtual void keyPressEvent(QKeyEvent *event) override;
 
 private:
-    QPointF sceneMousePos;
-    QPointF initMousePos;
+    QPointF mousePos;
+    QPointF initPos;
     bool right_mouse_pressed = false;
     static constexpr qreal zoomFactor = 1.05;
 

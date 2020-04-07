@@ -3,7 +3,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
-#include "../utility/mouseevent.h"
+#include "../utility/mouseeventutil.h"
 
 
 
@@ -62,12 +62,12 @@ void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //qDebug() << "press (scene)";
     QGraphicsScene::mousePressEvent(event);
 
+    initPos = event->scenePos();
     if (!area_selection_is_active) return;
 
     if (event->button() == Qt::LeftButton)
     {
        if(areaItem) removeItem(areaItem);
-       initPos = event->scenePos();
        expandingRect = new ExpandingRectItem(QRectF(initPos, initPos));
        addItem(expandingRect);
     }
@@ -82,7 +82,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug() << "release (scene)";
+    qDebug() << "release (scene)";
     QGraphicsScene::mouseReleaseEvent(event);
 
     if(event->button() == Qt::LeftButton)
@@ -90,7 +90,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         if (!area_selection_is_active) return;
         if (expandingRect == nullptr) return;
 
-        if (MouseEvent::isValidDragMove(initPos, event->scenePos()))
+        if (MouseEventUtil::isValidDragMove(initPos, event->scenePos()))
         {
             areaItem = new AreaSelectionItem(expandingRect->rect());
             addItem(areaItem);
@@ -125,19 +125,14 @@ void Scene::clear_area_rect()
 
 void Scene::crop_area_rect()
 {
-    QPixmap original = pixmapItem->pixmap();
-    QRect cropRect0; // crop rect in scene coordinate
-    QRect cropRect1; // crop rect in pixmap coordinate
-    cropRect0 = areaItem->toQRect();
-    cropRect1 = QRect(	int(cropRect0.x()-pixmapItem->x()),
-                        int(cropRect0.y()-pixmapItem->y()),
-                        cropRect0.width(),
-                        cropRect0.height());
-
-    QPixmap cropped = original.copy(cropRect1);
+    QRect cropRect0 = areaItem->toQRect();
+    QRect cropRect1 = QRect(cropRect0);
+    cropRect1.translate(-pixmapItem->pos().toPoint());
+    QPixmap pixmap = pixmapItem->pixmap();
+    QPixmap cropped = pixmap.copy(cropRect1);
     pixmapItem->setPixmap(cropped);
     pixmapItem->setPos(cropRect0.topLeft());
-    removeItem(areaItem); // for cropping edge check (somewhat weird)
+    removeItem(areaItem);
 }
 
 void Scene::zoom_in_area()

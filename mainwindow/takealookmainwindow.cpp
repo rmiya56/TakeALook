@@ -153,7 +153,6 @@ void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
     if (qImg.valid(pix))
     {
         QColor c = qImg.pixel(pix);
-
         r = QString::number((c.red()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
         g = QString::number((c.green()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
         b = QString::number((c.blue()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');

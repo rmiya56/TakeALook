@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QKeyEvent>
 #include "../utility/mouseeventutil.h"
+#include "../utility/shapetojson.h"
 
 
 
@@ -22,7 +23,12 @@ Scene::Scene()
     actionClear = new QAction(tr("Clear"));
     connect(actionClear , SIGNAL(triggered()), this, SLOT(clear_area_rect()));
     menuArea.addAction(actionClear);
+
+    actionSaveROI = new QAction(tr("Save ROI"));
+    connect(actionSaveROI, SIGNAL(triggered()), this, SLOT(save_roi()));
+    menuArea.addAction(actionSaveROI);
 }
+
 
 QPixmap Scene::pixmap()
 {
@@ -139,6 +145,11 @@ void Scene::zoom_in_area()
 {
     zoom_in_area(areaItem->toQRect());
     clear_area_rect();
+}
+
+void Scene::save_roi()
+{
+    ShapeToJson::saveRect(areaItem->toQRect(), file_path);
 }
 
 

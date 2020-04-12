@@ -42,6 +42,8 @@ private:
     QAction *actionClear;
     QAction *actionCrop;
     QAction *actionZoom;
+    QAction *actionSaveROI;
+
 
 signals: // to MainWindow
     void done_selection(bool);
@@ -51,6 +53,7 @@ private slots:
     void clear_area_rect();
     void crop_area_rect();
     void zoom_in_area();
+    void save_roi();
 
 };
 

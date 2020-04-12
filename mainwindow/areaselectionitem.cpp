@@ -9,7 +9,8 @@
 AreaSelectionItem::AreaSelectionItem(qreal x, qreal y, qreal width, qreal height)
     : QGraphicsItem()
 {
-    setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    //setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemIsSelectable);
     setAcceptHoverEvents(true);
     setRect(x, y, width, height);
 }
@@ -75,6 +76,9 @@ void AreaSelectionItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     QPen pen(color);
     pen.setCosmetic(true);
     painter->setPen(pen);
+
+    if (isSelected()) painter->setBrush(QBrush(QColor(0,255,0,100)));
+
     painter->drawRect(*areaRect);
 
     if (show_margin)
@@ -170,7 +174,7 @@ void AreaSelectionItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void AreaSelectionItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "release (item)";
+    //qDebug() << "release (item)";
     drag_moving = false;
     for (auto &flag : drag_resizing) flag = false;
     Q_UNUSED(event)

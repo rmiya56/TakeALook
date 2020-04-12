@@ -1,9 +1,9 @@
 #include "scene.h"
 #include "areaselectionitem.h"
-#include "../baloontip/pixbaloontip.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
+#include "../utility/mouseeventutil.h"
 
 
 
@@ -11,15 +11,6 @@ Scene::Scene()
     : QGraphicsScene()
 {
 
-    baloonTip = new PixBaloonTip();
-
-    // pen & brush
-    penArea.setColor(Qt::green);
-    penArea.setWidth(2);
-    penArea.setCosmetic(true);
-    brushArea = QBrush(QColor(0,255,0,32));
-
-    // context menu in roi
     actionCrop = new QAction(tr("Crop"));
     connect(actionCrop, SIGNAL(triggered()), this, SLOT(crop_area_rect()));
     menuArea.addAction(actionCrop);
@@ -68,18 +59,17 @@ QRect Scene::areaRect()
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    qDebug() << "press (scene)";
+    //qDebug() << "press (scene)";
     QGraphicsScene::mousePressEvent(event);
 
+    initPos = event->scenePos();
     if (!area_selection_is_active) return;
 
     if (event->button() == Qt::LeftButton)
     {
        if(areaItem) removeItem(areaItem);
-       mousePos = event->scenePos();
-       tempRect = addRect(QRectF(mousePos, mousePos));
-       tempRect->setPen(penArea);
-       tempRect->setBrush(brushArea);
+       expandingRect = new ExpandingRectItem(QRectF(initPos, initPos));
+       addItem(expandingRect);
     }
 }
 
@@ -87,8 +77,7 @@ void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
     if (!area_selection_is_active) return;
-    if(tempRect)
-        tempRect->setRect(QRectF(mousePos, event->scenePos()));
+    if(expandingRect) expandingRect->setRect(QRectF(initPos, event->scenePos()));
 }
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -99,24 +88,20 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(event->button() == Qt::LeftButton)
     {
         if (!area_selection_is_active) return;
-        if (tempRect == nullptr) return;
+        if (expandingRect == nullptr) return;
 
-        qreal area_of_tempRect = tempRect->rect().width() * tempRect->rect().height();
-
-        if(area_of_tempRect > 2)
+        if (MouseEventUtil::isValidDragMove(initPos, event->scenePos()))
         {
-            areaItem = new AreaSelectionItem(tempRect->rect());
+            areaItem = new AreaSelectionItem(expandingRect->rect());
             addItem(areaItem);
             done_selection(true);
         }
-        removeItem(tempRect);
-        tempRect = nullptr;
+        removeItem(expandingRect);
+        expandingRect = nullptr;
         return;
     }
     else if(event->button() == Qt::RightButton)
     {
-        //if(event->isAccepted()) return;
-
         QGraphicsItem *item = this->itemAt(event->scenePos(), QTransform());
         if (item && item->type() == QGraphicsItem::UserType + 1)
         {
@@ -140,19 +125,14 @@ void Scene::clear_area_rect()
 
 void Scene::crop_area_rect()
 {
-    QPixmap original = pixmapItem->pixmap();
-    QRect cropRect0; // crop rect in scene coordinate
-    QRect cropRect1; // crop rect in pixmap coordinate
-    cropRect0 = areaItem->toQRect();
-    cropRect1 = QRect(	int(cropRect0.x()-pixmapItem->x()),
-                        int(cropRect0.y()-pixmapItem->y()),
-                        cropRect0.width(),
-                        cropRect0.height());
-
-    QPixmap cropped = original.copy(cropRect1);
+    QRect cropRect0 = areaItem->toQRect();
+    QRect cropRect1 = QRect(cropRect0);
+    cropRect1.translate(-pixmapItem->pos().toPoint());
+    QPixmap pixmap = pixmapItem->pixmap();
+    QPixmap cropped = pixmap.copy(cropRect1);
     pixmapItem->setPixmap(cropped);
     pixmapItem->setPos(cropRect0.topLeft());
-    removeItem(areaItem); // for cropping edge check (somewhat weird)
+    removeItem(areaItem);
 }
 
 void Scene::zoom_in_area()
@@ -164,12 +144,9 @@ void Scene::zoom_in_area()
 
 void Scene::keyPressEvent(QKeyEvent *event)
 {
+    QGraphicsScene::keyPressEvent(event);
     switch(event->key())
     {
-        case Qt::Key_Delete:
-            key_delete();
-            break;
-
         default:
             break;
     }

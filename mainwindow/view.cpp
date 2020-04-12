@@ -1,8 +1,8 @@
 #include "view.h"
-//#include "scene.h"
 #include <QWheelEvent>
 #include <QDebug>
 #include <QScrollBar>
+#include "../utility/mouseeventutil.h"
 
 
 
@@ -29,7 +29,8 @@ void View::mousePressEvent(QMouseEvent *event)
    if (event->button() == Qt::RightButton)
    {
        right_mouse_pressed = true;
-       sceneMousePos = event->pos();
+       mousePos = event->pos();
+       initPos = mousePos;
        return;
    }
 }
@@ -41,23 +42,31 @@ void View::mouseMoveEvent(QMouseEvent *event)
 
     if (right_mouse_pressed)
     {
-        int dx = horizontalScrollBar()->value() - (event->x() - sceneMousePos.x());
-        int dy = verticalScrollBar()->value() - (event->y() - sceneMousePos.y());
+        int dx = horizontalScrollBar()->value() - (event->x() - mousePos.x());
+        int dy = verticalScrollBar()->value() - (event->y() - mousePos.y());
         horizontalScrollBar()->setValue(dx);
         verticalScrollBar()->setValue(dy);
-        sceneMousePos = event->pos();
-        event->accept();
+        mousePos = event->pos();
+        //event->accept();
         return;
     }
 }
 
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
-    //qDebug() << "release (view)";
-    QGraphicsView::mouseReleaseEvent(event);
+    qDebug() << "release (view)";
 
     if(event->button() == Qt::RightButton)
     {
         right_mouse_pressed = false;
+        if (MouseEventUtil::isValidDragMove(initPos, event->pos()))
+            return;
     }
+    QGraphicsView::mouseReleaseEvent(event);
+}
+
+
+void View::keyPressEvent(QKeyEvent *event)
+{
+    QGraphicsView::keyPressEvent(event);
 }

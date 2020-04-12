@@ -3,6 +3,7 @@
 #include "scene.h"
 #include "imagehandler.h"
 #include "../utility/icons.h"
+#include "../baloontip/pixbaloontip.h"
 #include <QKeyEvent>
 #include <QDragEnterEvent>
 #include <QFileInfo>
@@ -22,19 +23,17 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
       statusbarRight(new QLabel()),
       imageHandler(new ImageHandler(this))
 {
+
     ui->setupUi(this);
     setAcceptDrops(true);
     view = ui->graphicsView;
     view->setScene(scene);
-    view->setAcceptDrops(false); qApp->installEventFilter(this);
+    view->setAcceptDrops(false);
+    qApp->installEventFilter(this);
 
     setupStatusBar();
     setupToolBar();
     setupFileToolBar();
-
-    //OverlayPixmapToolBar *optionToolbar = new OverlayPixmapToolBar(scene, imageHandler);
-    //addToolBar(Qt::RightToolBarArea, optionToolbar);
-    //connect(this, &MainWindow::image_changed, optionToolbar, &OverlayPixmapToolBar::image_changed);
 
     if (filepath)
     {
@@ -74,6 +73,7 @@ void TakeALookMainWindow::setupToolBar()
     actionBaloonTip = new ToggleAction(QIcon(":/icons/white/message [#1576].png"), QIcon(":/icons/green/message [#1576].png"), tr("BaloonTip"), this);
     connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
     ui->toolBar->addAction(actionBaloonTip);
+    baloonTip = new PixBaloonTip();
 
 }
 
@@ -162,15 +162,16 @@ void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
     }
 
     statusbarRight->setText(pix_color + " " + pix_location);
-
-    if (scene->baloonTip) scene->baloonTip->setPixProperties(pos, r, g, b);
+    baloonTip->setPixProperties(pos, r, g, b);
 }
 
 bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)
 {
+
     switch(event->key())
     {
         case Qt::Key_Left:
+            qDebug() << "left (window)";
             showPrev();
             image_changed();
             break;
@@ -211,7 +212,8 @@ void TakeALookMainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 
 bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
 {
-    Q_UNUSED(object)
+    //QMainWindow::eventFilter(object, event);
+    //Q_UNUSED(object)
 
     if(event->type() == QEvent::KeyPress)
     {
@@ -280,11 +282,11 @@ void TakeALookMainWindow::on_action_baloontip_toggled(bool toggled)
 {
     if (toggled)
     {
-        scene->addItem(scene->baloonTip);
+        scene->addItem(baloonTip);
     }
     else
     {
-        scene->removeItem(scene->baloonTip);
+        scene->removeItem(baloonTip);
     }
 }
 void TakeALookMainWindow::on_action_next_image_triggered() { showNext(); }
@@ -297,6 +299,7 @@ void TakeALookMainWindow::on_action_open_image_triggered()
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void TakeALookMainWindow::on_action_save_image_triggered() { imageHandler->saveFile(scene->areaRect()); }
-
-
+void TakeALookMainWindow::on_action_save_image_triggered()
+{
+    imageHandler->saveFile(scene->areaRect());
+}

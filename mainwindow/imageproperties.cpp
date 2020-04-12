@@ -64,9 +64,9 @@ ImageProperties::ImageProperties(QString suffix, cv::Mat mat)
     }
 
 
-    qDebug()	<< ""
-                << "format:" << name
-                << "type:" <<  type
-                << "channels:" << channels
-                << QString("size:%1x%2").arg(QString::number(width), QString::number(height));
+//    qDebug()	<< ""
+//                << "format:" << name
+//                << "type:" <<  type
+//                << "channels:" << channels
+//                << QString("size:%1x%2").arg(QString::number(width), QString::number(height));
 }

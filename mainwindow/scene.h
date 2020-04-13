@@ -2,6 +2,7 @@
 #define SCENE_H
 
 #include "../pixmap/pixmapitem.h"
+#include "imagehandler.h"
 #include <QGraphicsScene>
 #include <QMenu>
 
@@ -12,7 +13,7 @@ class Scene : public QGraphicsScene
     Q_OBJECT
 
 public:
-    Scene();
+    Scene(ImageHandler *image_handler);
     QPixmap pixmap();
     QRect areaRect();
     QRect pixmapRect();
@@ -20,6 +21,7 @@ public:
 
     PixmapItem *pixmapItem = nullptr;
     //bool area_selection_is_active = false;
+    ImageHandler *imageHandler;
 
 
 protected:

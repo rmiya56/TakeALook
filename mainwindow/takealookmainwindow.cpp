@@ -18,10 +18,10 @@
 TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
     : QMainWindow(parent),
       ui(new Ui::TakeALookMainWindow),
-      scene(new Scene()),
+      imageHandler(new ImageHandler(this)),
+      scene(new Scene(imageHandler)),
       statusbarLeft(new QLabel()),
-      statusbarRight(new QLabel()),
-      imageHandler(new ImageHandler(this))
+      statusbarRight(new QLabel())
 {
 
     ui->setupUi(this);

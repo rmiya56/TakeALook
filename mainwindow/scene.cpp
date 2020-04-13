@@ -4,12 +4,14 @@
 #include <QKeyEvent>
 #include "../utility/mouseeventutil.h"
 #include "../utility/shapetojson.h"
+#include "../utility/pathutilities.h"
 #include "../pixmap/pixmapitem.h"
 
 
 
-Scene::Scene()
-    : QGraphicsScene()
+Scene::Scene(ImageHandler *image_handler)
+    : QGraphicsScene(),
+      imageHandler(image_handler)
 {
 
     actionCrop = new QAction(tr("Crop"));
@@ -34,6 +36,7 @@ void Scene::setImage(QImage image)
     pixmapItem = new PixmapItem(image);
     addItem(pixmapItem);
 }
+
 
 QPixmap Scene::pixmap()
 {
@@ -104,8 +107,8 @@ void Scene::zoom_in_area()
 
 void Scene::save_roi()
 {
-    qDebug() << pixmapItem->areaRect();
-    //ShapeToJson::saveRect(areaItem->toQRect(), file_path);
+    QString file_path = PathUtilities::replaceSuffix(imageHandler->currentFileInfo(), "roi.json");
+    ShapeToJson::saveRect(areaRect(), file_path);
 }
 
 void Scene::keyPressEvent(QKeyEvent *event)

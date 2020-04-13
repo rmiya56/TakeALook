@@ -36,10 +36,10 @@ protected:
 protected:
     Ui::TakeALookMainWindow *ui;
     QGraphicsView *view;
+    ImageHandler *imageHandler;
     Scene *scene;
     QLabel *statusbarLeft;
     QLabel *statusbarRight;
-    ImageHandler *imageHandler;
     PixBaloonTip *baloonTip;
 
 

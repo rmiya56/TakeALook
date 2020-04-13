@@ -17,6 +17,7 @@ public:
     void setImage(QImage image);
     QRect areaRect();
     void clearAreaRect();
+    void cropAreaRect();
 
     // QGraphicsItem interface
 protected:

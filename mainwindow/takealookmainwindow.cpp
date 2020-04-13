@@ -250,7 +250,7 @@ void TakeALookMainWindow::on_action_pointer_mode_toggled(bool toggled)
     if (toggled)
     {
         actionPointerMode->setChecked(true);
-        scene->area_selection_is_active = false;
+        //scene->area_selection_is_active = false;
         on_action_area_selection_mode_toggled(false);
         setCursor(Qt::ArrowCursor);
     }
@@ -265,7 +265,7 @@ void TakeALookMainWindow::on_action_area_selection_mode_toggled(bool toggled)
     if (toggled)
     {
         actionAreaSelectionMode->setChecked(true);
-        scene->area_selection_is_active = true;
+        //scene->area_selection_is_active = true;
         on_action_pointer_mode_toggled(false);
         setCursor(Qt::CrossCursor);
     }

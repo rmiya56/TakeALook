@@ -1,5 +1,4 @@
 #include "scene.h"
-//#include "../pixmap/areaselectitem.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
@@ -89,37 +88,25 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void Scene::clear_area_rect()
 {
-    for (auto &item : items())
-    {
-        if(item->type() == QGraphicsItem::UserType + 1)
-            removeItem(item);
-    }
+    pixmapItem->clearAreaRect();
 }
 
 void Scene::crop_area_rect()
 {
-    //QRect cropRect0 = areaItem->toQRect();
-    QRect cropRect0 = pixmapItem->areaRect();
-    QRect cropRect1 = QRect(cropRect0);
-    cropRect1.translate(-pixmapItem->pos().toPoint());
-    QPixmap pixmap = pixmapItem->pixmap();
-    QPixmap cropped = pixmap.copy(cropRect1);
-    pixmapItem->setPixmap(cropped);
-    pixmapItem->setPos(cropRect0.topLeft());
-    pixmapItem->clearAreaRect();
+    pixmapItem->cropAreaRect();
 }
 
 void Scene::zoom_in_area()
 {
     zoom_in_area(pixmapItem->areaRect());
-    clear_area_rect();
+    pixmapItem->cropAreaRect();
 }
 
 void Scene::save_roi()
 {
+    qDebug() << pixmapItem->areaRect();
     //ShapeToJson::saveRect(areaItem->toQRect(), file_path);
 }
-
 
 void Scene::keyPressEvent(QKeyEvent *event)
 {

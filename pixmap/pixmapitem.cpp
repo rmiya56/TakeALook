@@ -39,9 +39,17 @@ void PixmapItem::clearAreaRect()
     }
 }
 
+void PixmapItem::cropAreaRect()
+{
+    QPixmap cropped = pixmap().copy(areaRect());
+    setPixmap(cropped);
+    setPos(pos() + areaRect().topLeft());
+    clearAreaRect();
+}
+
 void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    initPos = event->scenePos();
+    initPos = event->pos();
     if (event->button() == Qt::LeftButton)
     {
         clearAreaRect();
@@ -52,7 +60,7 @@ void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 void PixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     if (expandingRect)
-        expandingRect->setRect(QRectF(initPos, event->scenePos()));
+        expandingRect->setRect(QRectF(initPos, event->pos()));
 }
 
 void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -60,13 +68,10 @@ void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(event->button() == Qt::LeftButton)
     {
         if (!expandingRect) return;
-        if (!MouseEventUtil::isValidDragMove(initPos, event->scenePos())) return;
+        if (!MouseEventUtil::isValidDragMove(initPos, event->pos())) return;
 
         areaSelectItem = new AreaSelectItem(expandingRect->rect(), this);
         delete expandingRect;
         expandingRect = nullptr;
-
-        //expandingRect->hide();
-        //done_selection(true);
     }
 }

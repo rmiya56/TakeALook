@@ -15,6 +15,8 @@ public:
     PixmapItem(QImage image);
 
     void setImage(QImage image);
+    QRect areaRect();
+    void clearAreaRect();
 
     // QGraphicsItem interface
 protected:
@@ -24,8 +26,8 @@ protected:
 
 private:
     QPointF initPos;
-    ExpandingRectItem *expandingRect;
-    AreaSelectItem *areaRect;
+    ExpandingRectItem *expandingRect = nullptr;
+    AreaSelectItem *areaSelectItem = nullptr;
 };
 
 #endif // PIXMAPITEM_H

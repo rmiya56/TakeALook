@@ -2,14 +2,13 @@
 
 #include <QGraphicsSceneMouseEvent>
 #include "../utility/mouseeventutil.h"
+#include <QDebug>
 
 
 
 PixmapItem::PixmapItem()
     : QGraphicsPixmapItem()
 {
-    expandingRect = new ExpandingRectItem(this);
-    areaRect = new AreaSelectItem(this);
 }
 
 PixmapItem::PixmapItem(QImage image)
@@ -18,38 +17,56 @@ PixmapItem::PixmapItem(QImage image)
    setImage(image);
 }
 
-
 void PixmapItem::setImage(QImage image)
 {
     this->setPixmap(QPixmap::fromImage(image));
 }
 
+QRect PixmapItem::areaRect()
+{
+    if (areaSelectItem)
+        return areaSelectItem->toQRect();
+    else
+        return pixmap().rect();
+}
+
+void PixmapItem::clearAreaRect()
+{
+    if (areaSelectItem)
+    {
+        delete areaSelectItem;
+        areaSelectItem = nullptr;
+    }
+}
 
 void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     initPos = event->scenePos();
     if (event->button() == Qt::LeftButton)
-       expandingRect->show();
+    {
+        clearAreaRect();
+        expandingRect = new ExpandingRectItem(QRectF(initPos, initPos), this);
+    }
 }
 
 void PixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (expandingRect->isVisible())
+    if (expandingRect)
         expandingRect->setRect(QRectF(initPos, event->scenePos()));
 }
 
 void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-
     if(event->button() == Qt::LeftButton)
     {
-        if (!expandingRect->isVisible()) return;
+        if (!expandingRect) return;
         if (!MouseEventUtil::isValidDragMove(initPos, event->scenePos())) return;
 
-        delete areaRect;
-        areaRect = new AreaSelectItem(expandingRect->rect(), this);
-        expandingRect->hide();
+        areaSelectItem = new AreaSelectItem(expandingRect->rect(), this);
+        delete expandingRect;
+        expandingRect = nullptr;
+
+        //expandingRect->hide();
         //done_selection(true);
     }
-
 }

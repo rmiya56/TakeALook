@@ -1,8 +1,8 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "../pixmap/areaselectitem.h"
-#include "../pixmap/expandingrectitem.h"
+//#include "../pixmap/areaselectitem.h"
+//#include "../pixmap/expandingrectitem.h"
 #include "../pixmap/pixmapitem.h"
 #include <QGraphicsScene>
 #include <QMenu>
@@ -33,9 +33,9 @@ protected:
 
 
 private:
-    QPointF initPos;
-    ExpandingRectItem *expandingRect = nullptr;
-    AreaSelectItem *areaItem = nullptr;
+    //QPointF initPos;
+    //ExpandingRectItem *expandingRect = nullptr;
+    //AreaSelectItem *areaItem = nullptr;
 
     QMenu menuArea;
     QAction *actionSelectArea;

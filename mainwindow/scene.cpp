@@ -1,5 +1,5 @@
 #include "scene.h"
-#include "../pixmap/areaselectitem.h"
+//#include "../pixmap/areaselectitem.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
@@ -34,15 +34,7 @@ void Scene::setImage(QImage image)
 {
     pixmapItem = new PixmapItem(image);
     addItem(pixmapItem);
-
-//    QPixmap pixmap;
-//    pixmap.convertFromImage(image);
-//    pixmapItem = new QGraphicsPixmapItem(pixmap);
-//    clear();
-//    addItem(pixmapItem);
 }
-
-
 
 QPixmap Scene::pixmap()
 {
@@ -62,33 +54,18 @@ QRect Scene::pixmapRect()
 
 QRect Scene::areaRect()
 {
-   if(areaItem)
-       return areaItem->toQRect();
-   else
-       return pixmap().rect();
+    return pixmapItem->areaRect();
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << "press (scene)";
     QGraphicsScene::mousePressEvent(event);
-
-    initPos = event->scenePos();
-    if (!area_selection_is_active) return;
-
-    if (event->button() == Qt::LeftButton)
-    {
-       if(areaItem) removeItem(areaItem);
-       expandingRect = new ExpandingRectItem(QRectF(initPos, initPos));
-       addItem(expandingRect);
-    }
 }
 
 void Scene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     QGraphicsScene::mouseMoveEvent(event);
-    if (!area_selection_is_active) return;
-    if(expandingRect) expandingRect->setRect(QRectF(initPos, event->scenePos()));
 }
 
 void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -96,22 +73,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     qDebug() << "release (scene)";
     QGraphicsScene::mouseReleaseEvent(event);
 
-    if(event->button() == Qt::LeftButton)
-    {
-        if (!area_selection_is_active) return;
-        if (expandingRect == nullptr) return;
-
-        if (MouseEventUtil::isValidDragMove(initPos, event->scenePos()))
-        {
-            areaItem = new AreaSelectItem(expandingRect->rect());
-            addItem(areaItem);
-            done_selection(true);
-        }
-        removeItem(expandingRect);
-        expandingRect = nullptr;
-        return;
-    }
-    else if(event->button() == Qt::RightButton)
+    if(event->button() == Qt::RightButton)
     {
         QGraphicsItem *item = this->itemAt(event->scenePos(), QTransform());
         if (item && item->type() == QGraphicsItem::UserType + 1)
@@ -136,19 +98,20 @@ void Scene::clear_area_rect()
 
 void Scene::crop_area_rect()
 {
-    QRect cropRect0 = areaItem->toQRect();
+    //QRect cropRect0 = areaItem->toQRect();
+    QRect cropRect0 = pixmapItem->areaRect();
     QRect cropRect1 = QRect(cropRect0);
     cropRect1.translate(-pixmapItem->pos().toPoint());
     QPixmap pixmap = pixmapItem->pixmap();
     QPixmap cropped = pixmap.copy(cropRect1);
     pixmapItem->setPixmap(cropped);
     pixmapItem->setPos(cropRect0.topLeft());
-    removeItem(areaItem);
+    pixmapItem->clearAreaRect();
 }
 
 void Scene::zoom_in_area()
 {
-    zoom_in_area(areaItem->toQRect());
+    zoom_in_area(pixmapItem->areaRect());
     clear_area_rect();
 }
 

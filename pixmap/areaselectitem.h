@@ -10,6 +10,9 @@ public:
     AreaSelectItem(QGraphicsItem *parent=nullptr);
     AreaSelectItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent=nullptr);
     AreaSelectItem(QRectF rect, QGraphicsItem *parent=nullptr);
+    ~AreaSelectItem();
+
+
 
     enum { Type = UserType + 1 };
     int type() const override { return Type; }

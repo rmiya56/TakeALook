@@ -24,6 +24,10 @@ AreaSelectItem::AreaSelectItem(QRectF rect, QGraphicsItem *parent)
 {
 }
 
+AreaSelectItem::~AreaSelectItem()
+{
+}
+
 qreal AreaSelectItem::calcMargin() const
 {
     qreal margin = qMin(areaRect->width(), areaRect->height()) * (marginPercentage/100.0);

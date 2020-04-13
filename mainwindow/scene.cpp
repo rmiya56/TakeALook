@@ -1,10 +1,11 @@
 #include "scene.h"
-#include "areaselectitem.h"
+#include "../pixmap/areaselectitem.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
 #include "../utility/mouseeventutil.h"
 #include "../utility/shapetojson.h"
+#include "../pixmap/pixmapitem.h"
 
 
 
@@ -29,6 +30,19 @@ Scene::Scene()
     menuArea.addAction(actionSaveROI);
 }
 
+void Scene::setImage(QImage image)
+{
+    pixmapItem = new PixmapItem(image);
+    addItem(pixmapItem);
+
+//    QPixmap pixmap;
+//    pixmap.convertFromImage(image);
+//    pixmapItem = new QGraphicsPixmapItem(pixmap);
+//    clear();
+//    addItem(pixmapItem);
+}
+
+
 
 QPixmap Scene::pixmap()
 {
@@ -44,15 +58,6 @@ QRect Scene::pixmapRect()
         return pixmapItem->pixmap().rect();
     else
         return QRect();
-}
-
-void Scene::setImage(QImage image)
-{
-    QPixmap pixmap;
-    pixmap.convertFromImage(image);
-    pixmapItem = new QGraphicsPixmapItem(pixmap);
-    clear();
-    addItem(pixmapItem);
 }
 
 QRect Scene::areaRect()
@@ -156,9 +161,4 @@ void Scene::save_roi()
 void Scene::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsScene::keyPressEvent(event);
-    switch(event->key())
-    {
-        default:
-            break;
-    }
 }

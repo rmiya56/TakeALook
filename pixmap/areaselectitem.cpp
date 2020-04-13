@@ -6,17 +6,21 @@
 #include <QDebug>
 
 
-AreaSelectItem::AreaSelectItem(qreal x, qreal y, qreal width, qreal height)
-    : QGraphicsItem()
+AreaSelectItem::AreaSelectItem(QGraphicsItem *parent)
+    : QGraphicsItem(parent)
 {
-    //setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsSelectable);
     setAcceptHoverEvents(true);
+}
+
+AreaSelectItem::AreaSelectItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent)
+    : AreaSelectItem::AreaSelectItem(parent)
+{
     setRect(x, y, width, height);
 }
 
-AreaSelectItem::AreaSelectItem(QRectF rect)
-    : AreaSelectItem(rect.x(), rect.y(), rect.width(), rect.height())
+AreaSelectItem::AreaSelectItem(QRectF rect, QGraphicsItem *parent)
+    : AreaSelectItem(rect.x(), rect.y(), rect.width(), rect.height(), parent)
 {
 }
 
@@ -29,6 +33,7 @@ qreal AreaSelectItem::calcMargin() const
 
 QRectF AreaSelectItem::boundingRect() const
 {
+    if(!areaRect) return QRectF();
     qreal margin = calcMargin();
     return areaRect->marginsAdded(QMarginsF(margin, margin, margin, margin));
 }
@@ -73,6 +78,8 @@ void AreaSelectItem::updateMargins()
 
 void AreaSelectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    if(!areaRect) return;
+
     QPen pen(color);
     pen.setCosmetic(true);
     painter->setPen(pen);

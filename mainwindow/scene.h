@@ -1,8 +1,9 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "areaselectitem.h"
-#include "expandingrectitem.h"
+#include "../pixmap/areaselectitem.h"
+#include "../pixmap/expandingrectitem.h"
+#include "../pixmap/pixmapitem.h"
 #include <QGraphicsScene>
 #include <QMenu>
 
@@ -19,7 +20,8 @@ public:
     QRect pixmapRect();
     void setImage(QImage image);
 
-    QGraphicsPixmapItem *pixmapItem = nullptr;
+    //QGraphicsPixmapItem *pixmapItem = nullptr;
+    PixmapItem *pixmapItem = nullptr;
     bool area_selection_is_active = false;
 
 

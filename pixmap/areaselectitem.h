@@ -7,8 +7,9 @@
 class AreaSelectItem : public QGraphicsItem
 {
 public:
-    AreaSelectItem(qreal x, qreal y, qreal width, qreal height);
-    AreaSelectItem(QRectF rect);
+    AreaSelectItem(QGraphicsItem *parent=nullptr);
+    AreaSelectItem(qreal x, qreal y, qreal width, qreal height, QGraphicsItem *parent=nullptr);
+    AreaSelectItem(QRectF rect, QGraphicsItem *parent=nullptr);
 
     enum { Type = UserType + 1 };
     int type() const override { return Type; }

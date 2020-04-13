@@ -8,7 +8,8 @@
 class ExpandingRectItem : public QGraphicsRectItem
 {
 public:
-    ExpandingRectItem(QRectF rect);
+    ExpandingRectItem(QGraphicsItem *parent=nullptr);
+    ExpandingRectItem(QRectF rect, QGraphicsItem *parent=nullptr);
 
 private:
 };

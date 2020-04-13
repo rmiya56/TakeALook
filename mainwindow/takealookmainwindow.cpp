@@ -211,8 +211,6 @@ void TakeALookMainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 
 bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
 {
-    //QMainWindow::eventFilter(object, event);
-    //Q_UNUSED(object)
 
     if(event->type() == QEvent::KeyPress)
     {
@@ -223,6 +221,8 @@ bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
         _mouseMoveEvent(static_cast<QMouseEvent*>(event));
     }
     return false;
+
+    Q_UNUSED(object)
 }
 
 void TakeALookMainWindow::showNext()

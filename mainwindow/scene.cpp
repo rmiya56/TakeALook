@@ -1,5 +1,5 @@
 #include "scene.h"
-#include "areaselectionitem.h"
+#include "areaselectitem.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 #include <QKeyEvent>
@@ -98,7 +98,7 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
         if (MouseEventUtil::isValidDragMove(initPos, event->scenePos()))
         {
-            areaItem = new AreaSelectionItem(expandingRect->rect());
+            areaItem = new AreaSelectItem(expandingRect->rect());
             addItem(areaItem);
             done_selection(true);
         }
@@ -149,7 +149,7 @@ void Scene::zoom_in_area()
 
 void Scene::save_roi()
 {
-    ShapeToJson::saveRect(areaItem->toQRect(), file_path);
+    //ShapeToJson::saveRect(areaItem->toQRect(), file_path);
 }
 
 

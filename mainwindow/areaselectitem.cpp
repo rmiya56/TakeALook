@@ -1,4 +1,4 @@
-#include "areaselectionitem.h"
+#include "areaselectitem.h"
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QCursor>
@@ -6,7 +6,7 @@
 #include <QDebug>
 
 
-AreaSelectionItem::AreaSelectionItem(qreal x, qreal y, qreal width, qreal height)
+AreaSelectItem::AreaSelectItem(qreal x, qreal y, qreal width, qreal height)
     : QGraphicsItem()
 {
     //setFlags(QGraphicsItem::ItemIsMovable | QGraphicsItem::ItemIsSelectable);
@@ -15,42 +15,42 @@ AreaSelectionItem::AreaSelectionItem(qreal x, qreal y, qreal width, qreal height
     setRect(x, y, width, height);
 }
 
-AreaSelectionItem::AreaSelectionItem(QRectF rect)
-    : AreaSelectionItem(rect.x(), rect.y(), rect.width(), rect.height())
+AreaSelectItem::AreaSelectItem(QRectF rect)
+    : AreaSelectItem(rect.x(), rect.y(), rect.width(), rect.height())
 {
 }
 
-qreal AreaSelectionItem::calcMargin() const
+qreal AreaSelectItem::calcMargin() const
 {
     qreal margin = qMin(areaRect->width(), areaRect->height()) * (marginPercentage/100.0);
     return margin;
     //return qMin(5.0, margin);
 }
 
-QRectF AreaSelectionItem::boundingRect() const
+QRectF AreaSelectItem::boundingRect() const
 {
     qreal margin = calcMargin();
     return areaRect->marginsAdded(QMarginsF(margin, margin, margin, margin));
 }
 
-void AreaSelectionItem::setRect(QRectF &rectangle)
+void AreaSelectItem::setRect(QRectF &rectangle)
 {
     areaRect = &rectangle;
     updateMargins();
 }
 
-void AreaSelectionItem::setRect(qreal x, qreal y, qreal width, qreal height)
+void AreaSelectItem::setRect(qreal x, qreal y, qreal width, qreal height)
 {
     areaRect = new QRectF(x, y, width, height);
     updateMargins();
 }
 
-QRectF AreaSelectionItem::rect()
+QRectF AreaSelectItem::rect()
 {
     return *areaRect;
 }
 
-void AreaSelectionItem::updateMargins()
+void AreaSelectItem::updateMargins()
 {
     qreal width = areaRect->width();
     qreal height = areaRect->height();
@@ -71,7 +71,7 @@ void AreaSelectionItem::updateMargins()
     right->translate(width, 0);
 }
 
-void AreaSelectionItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void AreaSelectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     QPen pen(color);
     pen.setCosmetic(true);
@@ -94,7 +94,7 @@ void AreaSelectionItem::paint(QPainter *painter, const QStyleOptionGraphicsItem 
     Q_UNUSED(widget)
 }
 
-QRect AreaSelectionItem::toQRect()
+QRect AreaSelectItem::toQRect()
 {
     QRectF r = *areaRect;
     int x0 = qCeil(r.x());
@@ -104,7 +104,7 @@ QRect AreaSelectionItem::toQRect()
     return QRect(QPoint(x0, y0), QPoint(x1, y1));
 }
 
-void AreaSelectionItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void AreaSelectItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //QGraphicsItem::mousePressEvent(event);
     //qDebug() << "press (item)";
@@ -148,7 +148,7 @@ void AreaSelectionItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-void AreaSelectionItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void AreaSelectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << "move (item)";
     QPointF p = event->pos();
@@ -172,7 +172,7 @@ void AreaSelectionItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
     update();
 }
 
-void AreaSelectionItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void AreaSelectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     //qDebug() << "release (item)";
     drag_moving = false;
@@ -180,7 +180,7 @@ void AreaSelectionItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     Q_UNUSED(event)
 }
 
-void AreaSelectionItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
+void AreaSelectItem::hoverMoveEvent(QGraphicsSceneHoverEvent *event)
 {
     QPointF p = event->pos();
 

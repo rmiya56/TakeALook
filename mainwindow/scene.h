@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "areaselectionitem.h"
+#include "areaselectitem.h"
 #include "expandingrectitem.h"
 #include <QGraphicsScene>
 #include <QMenu>
@@ -33,7 +33,7 @@ protected:
 private:
     QPointF initPos;
     ExpandingRectItem *expandingRect = nullptr;
-    AreaSelectionItem *areaItem = nullptr;
+    AreaSelectItem *areaItem = nullptr;
 
     QMenu menuArea;
     QAction *actionSelectArea;

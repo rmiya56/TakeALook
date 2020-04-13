@@ -1,14 +1,14 @@
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef AREASELECTITEM_H
+#define AREASELECTITEM_H
 
 #include <QGraphicsRectItem>
 
 
-class AreaSelectionItem : public QGraphicsItem
+class AreaSelectItem : public QGraphicsItem
 {
 public:
-    AreaSelectionItem(qreal x, qreal y, qreal width, qreal height);
-    AreaSelectionItem(QRectF rect);
+    AreaSelectItem(qreal x, qreal y, qreal width, qreal height);
+    AreaSelectItem(QRectF rect);
 
     enum { Type = UserType + 1 };
     int type() const override { return Type; }
@@ -47,4 +47,4 @@ private:
 
 };
 
-#endif // ITEM_H
+#endif // AREASELECTITEM_H

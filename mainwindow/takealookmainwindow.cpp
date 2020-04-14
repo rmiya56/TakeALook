@@ -135,33 +135,44 @@ void TakeALookMainWindow::displayImage(QImage qimage, QString file_path)
 
 void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
 {
-    QString pix_location, pix_color;
+    //pix_location, pix_color;
     ImageProperties prop = imageHandler->currentProperties(); // reading almost static all the time..
 
     QPointF pos = view->mapToScene(event->pos());
-    QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
-    QString x = QString::number(pix.x()).rightJustified(prop.digitsX, ' ');
-    QString y = QString::number(pix.y()).rightJustified(prop.digitsY, ' ');
-    pix_location = QString("[%1, %2]").arg(x, y);
+    QString pix_location = prop.formatPixelLocation(pos);
+
+//    QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
+//    QString x = QString::number(pix.x()).rightJustified(prop.digitsX, ' ');
+//    QString y = QString::number(pix.y()).rightJustified(prop.digitsY, ' ');
+//    pix_location = QString("[%1, %2]").arg(x, y);
 
     QImage qImg;
     if (!scene->pixmap().isNull()) qImg = scene->pixmap().toImage();
-
     QPoint offset = scene->areaRect().topLeft();
-    pix = pix - offset;
-    QString r, g, b;
-    if (qImg.valid(pix))
-    {
-        QColor c = qImg.pixel(pix);
-        r = QString::number((c.red()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
-        g = QString::number((c.green()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
-        b = QString::number((c.blue()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
-        if (prop.channels == 3)         pix_color = QString("(%1,%2,%3)").arg(r,g,b);
-        else if (prop.channels == 1)    pix_color = QString("(%1)").arg(r);
-    }
+    QStringList color = prop.formatPixelColor(qImg, pos, offset);
+
+//    pix = pix - offset;
+//    QString r, g, b;
+//    if (qImg.valid(pix))
+//    {
+//        QColor c = qImg.pixel(pix);
+//        r = QString::number((c.red()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
+//        g = QString::number((c.green()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
+//        b = QString::number((c.blue()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
+//        if (prop.channels == 3)         pix_color = QString("(%1,%2,%3)").arg(r,g,b);
+//        else if (prop.channels == 1)    pix_color = QString("(%1)").arg(r);
+//    }
+
+    QString pix_color;
+    if (color.isEmpty())
+        pix_color = "";
+    else if (color.size() == 1)
+        pix_color = QString("(%1)").arg(color[0]);
+    else if (color.size() == 3)
+        pix_color = QString("(%1,%2,%3)").arg(color[0], color[1], color[2]);
 
     statusbarRight->setText(pix_color + " " + pix_location);
-    baloonTip->setPixProperties(pos, r, g, b);
+    baloonTip->setPixProperties(pos, color);
 }
 
 bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)

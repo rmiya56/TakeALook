@@ -1,6 +1,8 @@
 #ifndef IMAGEFORMAT_H
 #define IMAGEFORMAT_H
 
+#include <QImage>
+#include <QPointF>
 #include <QString>
 #include "opencv2/opencv.hpp"
 
@@ -10,6 +12,9 @@ class ImageProperties
 public:
     ImageProperties();
     ImageProperties(QString suffix, cv::Mat mat);
+    QString formatPixelLocation(QPointF pos);
+    QStringList formatPixelColor(QImage &q_image, QPointF pos, QPoint offset);
+
     QString name;
     QString type;
     int channels;

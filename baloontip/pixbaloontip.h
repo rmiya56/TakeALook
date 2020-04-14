@@ -8,7 +8,7 @@ class PixBaloonTip : public BaloonTip
 {
 public:
     PixBaloonTip();
-    void setPixProperties(QPointF pos, QString r, QString g, QString b);
+    void setPixProperties(QPointF pos, QStringList color);
 
 private:
     static const int offsetX = 10;

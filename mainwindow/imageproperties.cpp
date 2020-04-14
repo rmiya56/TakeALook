@@ -2,6 +2,8 @@
 #include <QtMath>
 #include <QDebug>
 
+
+
 ImageProperties::ImageProperties()
 {
 }
@@ -62,11 +64,32 @@ ImageProperties::ImageProperties(QString suffix, cv::Mat mat)
         beta = 0;
         break;
     }
+}
 
+QString ImageProperties::formatPixelLocation(QPointF pos)
+{
+    QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
+    QString x = QString::number(pix.x()).rightJustified(digitsX, ' ');
+    QString y = QString::number(pix.y()).rightJustified(digitsY, ' ');
+    return QString("[%1, %2]").arg(x, y);
+}
 
-//    qDebug()	<< ""
-//                << "format:" << name
-//                << "type:" <<  type
-//                << "channels:" << channels
-//                << QString("size:%1x%2").arg(QString::number(width), QString::number(height));
+QStringList ImageProperties::formatPixelColor(QImage &q_image, QPointF pos, QPoint offset)
+{
+    QPoint pix = QPoint(qFloor(pos.x()), qFloor(pos.y())) - offset;
+    QStringList color;
+
+    if (q_image.valid(pix))
+    {
+        QColor c = q_image.pixel(pix);
+        QString r = QString::number((c.red()-beta)/alpha).rightJustified(digitsD, ' ');
+        QString g = QString::number((c.green()-beta)/alpha).rightJustified(digitsD, ' ');
+        QString b = QString::number((c.blue()-beta)/alpha).rightJustified(digitsD, ' ');
+
+        if (channels == 3)
+            color << r << g << b;
+        else if (channels == 1)
+            color << r;
+    }
+    return color;
 }

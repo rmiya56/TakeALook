@@ -31,7 +31,6 @@ void View::mousePressEvent(QMouseEvent *event)
        right_mouse_pressed = true;
        mousePos = event->pos();
        initPos = mousePos;
-       return;
    }
 }
 
@@ -47,8 +46,6 @@ void View::mouseMoveEvent(QMouseEvent *event)
         horizontalScrollBar()->setValue(dx);
         verticalScrollBar()->setValue(dy);
         mousePos = event->pos();
-        //event->accept();
-        return;
     }
 }
 

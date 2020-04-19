@@ -10,7 +10,6 @@
 #include <QMimeData>
 #include <QLabel>
 #include <QClipboard>
-#include <QtMath>
 #include <QDebug>
 
 
@@ -135,33 +134,14 @@ void TakeALookMainWindow::displayImage(QImage qimage, QString file_path)
 
 void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
 {
-    //pix_location, pix_color;
     ImageProperties prop = imageHandler->currentProperties(); // reading almost static all the time..
-
     QPointF pos = view->mapToScene(event->pos());
     QString pix_location = prop.formatPixelLocation(pos);
-
-//    QPoint pix(qFloor(pos.x()), qFloor(pos.y()));
-//    QString x = QString::number(pix.x()).rightJustified(prop.digitsX, ' ');
-//    QString y = QString::number(pix.y()).rightJustified(prop.digitsY, ' ');
-//    pix_location = QString("[%1, %2]").arg(x, y);
 
     QImage qImg;
     if (!scene->pixmap().isNull()) qImg = scene->pixmap().toImage();
     QPoint offset = scene->areaRect().topLeft();
     QStringList color = prop.formatPixelColor(qImg, pos, offset);
-
-//    pix = pix - offset;
-//    QString r, g, b;
-//    if (qImg.valid(pix))
-//    {
-//        QColor c = qImg.pixel(pix);
-//        r = QString::number((c.red()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
-//        g = QString::number((c.green()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
-//        b = QString::number((c.blue()-prop.beta)/prop.alpha).rightJustified(prop.digitsD, ' ');
-//        if (prop.channels == 3)         pix_color = QString("(%1,%2,%3)").arg(r,g,b);
-//        else if (prop.channels == 1)    pix_color = QString("(%1)").arg(r);
-//    }
 
     QString pix_color;
     if (color.isEmpty())
@@ -253,7 +233,6 @@ void TakeALookMainWindow::fit_to_rect(QRect rect)
     if (rect.isNull()) return;
     view->setSceneRect(scene->itemsBoundingRect()); // shrink viewport
     view->fitInView(rect, Qt::KeepAspectRatio);
-    qDebug() << view->viewport()->size();
 }
 
 void TakeALookMainWindow::on_action_pointer_mode_toggled(bool toggled)

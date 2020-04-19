@@ -33,7 +33,6 @@ void ImageHandler::openFile()
 
     QFileInfo file_info(fileName);
     loadFile(file_info);
-    //displayImage(currentImage(), imageHandler->currentFilePath());
 
     QSettings settings("settings.ini", QSettings::IniFormat, parent);
     settings.beginGroup("ImageFiles");

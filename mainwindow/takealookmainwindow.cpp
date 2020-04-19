@@ -1,5 +1,5 @@
 #include "takealookmainwindow.h"
-#include "ui_mainwindow.h"
+#include "ui_takealookmainwindow.h"
 #include "scene.h"
 #include "imagehandler.h"
 #include "../utility/icons.h"

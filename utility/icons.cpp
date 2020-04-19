@@ -13,7 +13,7 @@ const QString Icons::folder = QString(":/icons/white/folder [#1792].png");
 
 const QString Icons::pen = QString(":/icons/white/pen [#1319].png");
 const QString Icons::pen_toggled = QString(":/icons/green/pen [#1319].png");
-const QString Icons::undo = QString(":/icons/white/arrow_repeat [#235].png");
 const QString Icons::redo = QString(":/icons/white/arrow_repeat [#235].png");
+const QString Icons::undo = QString(":/icons/white/arrow_undo [#23-].png");
 
 const QString Icons::trashbox = QString(":/icons/white/delete [#1487].png");

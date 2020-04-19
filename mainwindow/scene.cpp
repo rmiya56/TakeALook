@@ -56,7 +56,10 @@ QRect Scene::pixmapRect()
 
 QRect Scene::areaRect()
 {
-    return pixmapItem->areaRect();
+    if (pixmapItem)
+        return pixmapItem->areaRect();
+    else
+        return QRect();
 }
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)

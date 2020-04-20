@@ -14,7 +14,7 @@ PixmapItem::PixmapItem()
 PixmapItem::PixmapItem(QImage image)
     :  PixmapItem::PixmapItem()
 {
-   setImage(image);
+    setImage(image);
 }
 
 void PixmapItem::setImage(QImage image)
@@ -49,18 +49,23 @@ void PixmapItem::cropAreaRect()
 
 void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    initPos = event->pos();
+    clearAreaRect();
+
     if (event->button() == Qt::LeftButton)
     {
-        clearAreaRect();
-        expandingRect = new ExpandingRectItem(QRectF(initPos, initPos), this);
+        initLeftButtonPos = event->pos();
+        expandingRect = new ExpandingRectItem(QRectF(initLeftButtonPos, initLeftButtonPos), this);
+    }
+    else // Right button
+    {
+        initLeftButtonPos = QPointF();
     }
 }
 
 void PixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-    if (expandingRect)
-        expandingRect->setRect(QRectF(initPos, event->pos()));
+    if (!initLeftButtonPos.isNull())
+        expandingRect->setRect(QRectF(initLeftButtonPos, event->pos()));
 }
 
 void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
@@ -68,7 +73,7 @@ void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     if(event->button() == Qt::LeftButton)
     {
         if (!expandingRect) return;
-        if (!MouseEventUtil::isValidDragMove(initPos, event->pos())) return;
+        if (!MouseEventUtil::isValidDragMove(initLeftButtonPos, event->pos())) return;
 
         areaSelectItem = new AreaSelectItem(expandingRect->rect(), this);
         delete expandingRect;

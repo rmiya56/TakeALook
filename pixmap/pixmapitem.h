@@ -26,7 +26,7 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-    QPointF initPos;
+    QPointF initLeftButtonPos;
     ExpandingRectItem *expandingRect = nullptr;
     AreaSelectItem *areaSelectItem = nullptr;
 };

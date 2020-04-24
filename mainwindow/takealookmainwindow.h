@@ -5,6 +5,7 @@
 #include <QGraphicsScene>
 #include <QList>
 #include <QLabel>
+#include <QStateMachine>
 #include "imagehandler.h"
 #include "toggleaction.h"
 #include "scene.h"
@@ -42,6 +43,7 @@ protected:
     QLabel *statusbarRight;
     PixBaloonTip *baloonTip;
 
+    QStateMachine machine;
 
     void displayImage(QImage qimage, QString file_path);
     void showNext();
@@ -52,6 +54,7 @@ protected:
 
 signals:
     void image_changed();
+    void double_clicked();
 
 
     // Toolbar
@@ -62,11 +65,14 @@ protected:
     ToggleAction *actionBaloonTip;
 
 protected slots:
-    void on_action_pointer_mode_toggled(bool toggled);
-    void on_action_area_selection_mode_toggled(bool toggled);
     void on_action_fit_to_window_triggered();
     void on_action_baloontip_toggled(bool toggled);
     void fit_to_rect(QRect rect);
+
+    void enter_pointer_mode();
+    void exit_pointer_mode();
+    void enter_area_select_mode();
+    void exit_area_select_mode();
 
     // Toolbar (File)
 protected:

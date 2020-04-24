@@ -44,6 +44,22 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
 
     connect(scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     connect(scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
+
+
+    QState *pointer_mode = new QState();
+    QState *area_select_mode = new QState();
+    pointer_mode ->addTransition(this, SIGNAL(double_clicked()), area_select_mode);
+    area_select_mode->addTransition(this, SIGNAL(double_clicked()), pointer_mode);
+
+    connect(pointer_mode , SIGNAL(entered()), this, SLOT(enter_pointer_mode()));
+    connect(pointer_mode , SIGNAL(exited()), this, SLOT(exit_pointer_mode()));
+    connect(area_select_mode, SIGNAL(entered()), this, SLOT(enter_area_select_mode()));
+    connect(area_select_mode, SIGNAL(exited()), this, SLOT(exit_area_select_mode()));
+
+    machine.addState(pointer_mode);
+    machine.addState(area_select_mode);
+    machine.setInitialState(pointer_mode);
+    machine.start();
 }
 
 TakeALookMainWindow::~TakeALookMainWindow()
@@ -53,7 +69,6 @@ TakeALookMainWindow::~TakeALookMainWindow()
 
 void TakeALookMainWindow::setupToolBar()
 {
-
     actionPointerMode = new ToggleAction(QIcon(Icons::pointer), QIcon(Icons::pointer_toggled), tr("Pointer"), this);
     connect(actionPointerMode, SIGNAL(toggled(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     ui->toolBar->addAction(actionPointerMode);
@@ -189,15 +204,7 @@ bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)
 void TakeALookMainWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
-
-    if (actionPointerMode->isChecked())
-    {
-        on_action_area_selection_mode_toggled(true);
-    }
-    else
-    {
-        on_action_pointer_mode_toggled(true);
-    }
+    double_clicked();
 }
 
 bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
@@ -235,37 +242,32 @@ void TakeALookMainWindow::fit_to_rect(QRect rect)
     view->fitInView(rect, Qt::KeepAspectRatio);
 }
 
-void TakeALookMainWindow::on_action_pointer_mode_toggled(bool toggled)
+void TakeALookMainWindow::enter_pointer_mode()
 {
-    if (toggled)
-    {
-        actionPointerMode->setChecked(true);
-        //scene->area_selection_is_active = false;
-        on_action_area_selection_mode_toggled(false);
-        setCursor(Qt::ArrowCursor);
-    }
-    else
-    {
-        actionPointerMode->setChecked(false);
-    }
+    actionPointerMode->setChecked(true);
+    setCursor(Qt::ArrowCursor);
 }
 
-void TakeALookMainWindow::on_action_area_selection_mode_toggled(bool toggled)
+void TakeALookMainWindow::exit_pointer_mode()
 {
-    if (toggled)
-    {
-        actionAreaSelectionMode->setChecked(true);
-        //scene->area_selection_is_active = true;
-        on_action_pointer_mode_toggled(false);
-        setCursor(Qt::CrossCursor);
-    }
-    else
-    {
-        actionAreaSelectionMode->setChecked(false);
-    }
+    actionPointerMode->setChecked(false);
 }
 
-void TakeALookMainWindow::on_action_fit_to_window_triggered() { fit_to_rect(scene->pixmapRect()); }
+void TakeALookMainWindow::enter_area_select_mode()
+{
+    actionAreaSelectionMode->setChecked(true);
+    setCursor(Qt::CrossCursor);
+}
+
+void TakeALookMainWindow::exit_area_select_mode()
+{
+    actionAreaSelectionMode->setChecked(false);
+}
+
+void TakeALookMainWindow::on_action_fit_to_window_triggered()
+{
+    fit_to_rect(scene->pixmapRect());
+}
 
 void TakeALookMainWindow::on_action_baloontip_toggled(bool toggled)
 {

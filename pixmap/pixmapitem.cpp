@@ -60,6 +60,7 @@ void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     {
         initLeftButtonPos = QPointF();
     }
+    QGraphicsPixmapItem::mousePressEvent(event);
 }
 
 void PixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
@@ -79,4 +80,5 @@ void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
         delete expandingRect;
         expandingRect = nullptr;
     }
+    QGraphicsPixmapItem::mouseReleaseEvent(event);
 }

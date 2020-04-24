@@ -26,15 +26,13 @@ public:
     ~TakeALookMainWindow();
 
 protected:
-    virtual void dragEnterEvent(QDragEnterEvent *event);
-    virtual void dropEvent(QDropEvent *event);
-    virtual void resizeEvent(QResizeEvent *event);
-    virtual bool eventFilter(QObject *object, QEvent *event);
-    virtual void mouseDoubleClickEvent(QMouseEvent *event);
-    void _mouseMoveEvent(QMouseEvent *event);
-    bool _keyPressEvent(QKeyEvent *event);
+    void displayImage(QImage qimage, QString file_path);
+    void showNext();
+    void showPrev();
+    void setupToolBar();
+    void setupFileToolBar();
+    void setupStatusBar();
 
-protected:
     Ui::TakeALookMainWindow *ui;
     QGraphicsView *view;
     ImageHandler *imageHandler;
@@ -43,21 +41,32 @@ protected:
     QLabel *statusbarRight;
     PixBaloonTip *baloonTip;
 
-    QStateMachine machine;
 
-    void displayImage(QImage qimage, QString file_path);
-    void showNext();
-    void showPrev();
-    void setupToolBar();
-    void setupFileToolBar();
-    void setupStatusBar();
-
+// mouse & key event
+protected:
+    virtual void dragEnterEvent(QDragEnterEvent *event);
+    virtual void dropEvent(QDropEvent *event);
+    virtual void resizeEvent(QResizeEvent *event);
+    virtual bool eventFilter(QObject *object, QEvent *event);
+    virtual void mouseDoubleClickEvent(QMouseEvent *event);
+    void _mouseMoveEvent(QMouseEvent *event);
+    bool _keyPressEvent(QKeyEvent *event);
 signals:
     void image_changed();
     void double_clicked();
 
 
-    // Toolbar
+// State Machine
+protected:
+    QStateMachine machine;
+
+protected slots:
+    void enter_pointer_mode();
+    void exit_pointer_mode();
+    void enter_area_select_mode();
+    void exit_area_select_mode();
+
+// Toolbar
 protected:
     ToggleAction *actionPointerMode;
     ToggleAction *actionAreaSelectionMode;
@@ -69,12 +78,8 @@ protected slots:
     void on_action_baloontip_toggled(bool toggled);
     void fit_to_rect(QRect rect);
 
-    void enter_pointer_mode();
-    void exit_pointer_mode();
-    void enter_area_select_mode();
-    void exit_area_select_mode();
 
-    // Toolbar (File)
+// Toolbar (File)
 protected:
     QAction *actionNextImage;
     QAction *actionPrevImage;

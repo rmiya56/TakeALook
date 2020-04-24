@@ -46,20 +46,28 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
     connect(scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 
 
-    QState *pointer_mode = new QState();
-    QState *area_select_mode = new QState();
-    pointer_mode ->addTransition(this, SIGNAL(double_clicked()), area_select_mode);
-    area_select_mode->addTransition(this, SIGNAL(double_clicked()), pointer_mode);
+    QVector<QState*> mode;
+    mode.append(new QState); // pointer
+    mode.append(new QState); // area select
 
-    connect(pointer_mode , SIGNAL(entered()), this, SLOT(enter_pointer_mode()));
-    connect(pointer_mode , SIGNAL(exited()), this, SLOT(exit_pointer_mode()));
-    connect(area_select_mode, SIGNAL(entered()), this, SLOT(enter_area_select_mode()));
-    connect(area_select_mode, SIGNAL(exited()), this, SLOT(exit_area_select_mode()));
+    QVector<void (TakeALookMainWindow::*)()> enter_events;
+    QVector<void (TakeALookMainWindow::*)()> exit_events;
+    enter_events.append(&TakeALookMainWindow::enter_pointer_mode);
+    enter_events.append(&TakeALookMainWindow::enter_area_select_mode);
+    exit_events.append(&TakeALookMainWindow::exit_pointer_mode);
+    exit_events.append(&TakeALookMainWindow::exit_area_select_mode);
 
-    machine.addState(pointer_mode);
-    machine.addState(area_select_mode);
-    machine.setInitialState(pointer_mode);
+    for (int i=0; i<mode.size(); i++)
+    {
+        mode[i]->addTransition(this, SIGNAL(double_clicked()), mode[(i+1)%mode.size()]);
+        connect(mode[i],  &QState::entered, this, enter_events[i]);
+        connect(mode[i],  &QState::exited, this, exit_events[i]);
+        machine.addState(mode[0]);
+    }
+    machine.addState(mode[1]);
+    machine.setInitialState(mode[0]);
     machine.start();
+
 }
 
 TakeALookMainWindow::~TakeALookMainWindow()

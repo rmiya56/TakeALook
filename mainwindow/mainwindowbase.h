@@ -47,13 +47,14 @@ protected:
     virtual void dropEvent(QDropEvent *event);
     virtual void resizeEvent(QResizeEvent *event);
     virtual bool eventFilter(QObject *object, QEvent *event);
-    virtual void mouseDoubleClickEvent(QMouseEvent *event);
+    //virtual void mouseDoubleClickEvent(QMouseEvent *event);
     bool _mouseMoveEvent(QMouseEvent *event);
     bool _keyPressEvent(QKeyEvent *event);
 signals:
     void image_changed();
     void double_clicked();
-
+    void to_pointer_mode();
+    void to_area_select_mode();
 
 // State Machine
 protected:
@@ -91,5 +92,7 @@ protected slots:
     void on_action_open_image_triggered();
     void on_action_save_image_triggered();
 
+    //void on_action_pointer_mode_toggled(bool toggled);
+    //void on_action_area_select_mode_toggled(bool toggled);
 };
 #endif // TAKEALOOKMAINWINDOW_H

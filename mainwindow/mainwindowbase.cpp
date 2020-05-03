@@ -42,7 +42,7 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
         displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
     }
 
-    connect(scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
+    //connect(scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     connect(scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 
 
@@ -57,6 +57,9 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     mode.append(new QState); // area select
     enter_events.append(&MainWindowBase::enter_area_select_mode);
     exit_events.append(&MainWindowBase::exit_area_select_mode);
+
+    mode[1]->addTransition(this, &MainWindowBase::to_pointer_mode, mode[0]);
+    mode[0]->addTransition(this, &MainWindowBase::to_area_select_mode, mode[1]);
 
     for (int i=0; i<mode.size(); i++)
     {
@@ -78,22 +81,25 @@ MainWindowBase::~MainWindowBase()
 
 void MainWindowBase::setupToolBar()
 {
-    actionPointerMode = new ToggleAction(QIcon(Icons::pointer), QIcon(Icons::pointer_toggled), tr("Pointer"), this);
-    connect(actionPointerMode, SIGNAL(toggled(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
+    actionPointerMode = new ToggleAction(	QIcon(Icons::pointer),
+                                            QIcon(Icons::pointer_toggled),
+                                            tr("Pointer"), this);
+    connect(actionPointerMode, &QAction::triggered, this, &MainWindowBase::to_pointer_mode);
     ui->toolBar->addAction(actionPointerMode);
 
-    actionAreaSelectionMode = new ToggleAction(QIcon(Icons::area), QIcon(Icons::area_toggled),tr("Area Select"), this);
-    connect(actionAreaSelectionMode, SIGNAL(toggled(bool)), this, SLOT(on_action_area_selection_mode_toggled(bool)));
+    actionAreaSelectionMode = new ToggleAction( QIcon(Icons::area),
+                                                QIcon(Icons::area_toggled),
+                                                tr("Area Select"), this);
+    connect(actionAreaSelectionMode, &QAction::triggered, this, &MainWindowBase::to_area_select_mode);
     ui->toolBar->addAction(actionAreaSelectionMode);
-
-    actionPointerMode->setChecked(true);
-    actionAreaSelectionMode->setChecked(false);
 
     actionFitToWindow = new QAction(QIcon(":/icons/white/arrow_all_fill [#383].png"), tr("Fit to Window"), this);
     connect(actionFitToWindow, SIGNAL(triggered()), this, SLOT(on_action_fit_to_window_triggered()));
     ui->toolBar->addAction(actionFitToWindow);
 
-    actionBaloonTip = new ToggleAction(QIcon(":/icons/white/message [#1576].png"), QIcon(":/icons/green/message [#1576].png"), tr("BaloonTip"), this);
+    actionBaloonTip = new ToggleAction(	QIcon(":/icons/white/message [#1576].png"),
+                                        QIcon(":/icons/green/message [#1576].png"),
+                                        tr("BaloonTip"), this);
     connect(actionBaloonTip , SIGNAL(toggled(bool)), this, SLOT(on_action_baloontip_toggled(bool)));
     ui->toolBar->addAction(actionBaloonTip);
     baloonTip = new PixBaloonTip();
@@ -187,7 +193,6 @@ bool MainWindowBase::_keyPressEvent(QKeyEvent *event)
     switch(event->key())
     {
         case Qt::Key_Left:
-            qDebug() << "left (window)";
             showPrev();
             image_changed();
             break;
@@ -212,13 +217,6 @@ bool MainWindowBase::_keyPressEvent(QKeyEvent *event)
      return false;
 }
 
-void MainWindowBase::mouseDoubleClickEvent(QMouseEvent *event)
-{
-    Q_UNUSED(event)
-    //QMainWindow::mouseDoubleClickEvent(event);
-    double_clicked();
-}
-
 bool MainWindowBase::eventFilter(QObject *object, QEvent *event)
 {
 
@@ -232,7 +230,6 @@ bool MainWindowBase::eventFilter(QObject *object, QEvent *event)
     }
     else if(event->type() == QEvent::MouseButtonDblClick)
     {
-        qDebug() << "dbl";
         double_clicked();
         return true;
     }
@@ -262,27 +259,37 @@ void MainWindowBase::fit_to_rect(QRect rect)
 
 void MainWindowBase::enter_pointer_mode()
 {
-    actionPointerMode->setChecked(true);
+    actionPointerMode->activate();
     setCursor(Qt::ArrowCursor);
     ((View*)view)->setDragScroll(true);
 }
 
 void MainWindowBase::exit_pointer_mode()
 {
-    actionPointerMode->setChecked(false);
+    actionPointerMode->deactivate();
     ((View*)view)->setDragScroll(false);
 }
 
 void MainWindowBase::enter_area_select_mode()
 {
-    actionAreaSelectionMode->setChecked(true);
+    actionAreaSelectionMode->activate();
     setCursor(Qt::CrossCursor);
 }
 
 void MainWindowBase::exit_area_select_mode()
 {
-    actionAreaSelectionMode->setChecked(false);
+    actionAreaSelectionMode->deactivate();
 }
+
+//void MainWindowBase::on_action_pointer_mode_toggled(bool toggled)
+//{
+//    if (toggled) to_pointer_mode();
+//}
+
+//void MainWindowBase::on_action_area_select_mode_toggled(bool toggled)
+//{
+//   if (toggled) to_area_select_mode();
+//}
 
 void MainWindowBase::on_action_fit_to_window_triggered()
 {
@@ -300,9 +307,16 @@ void MainWindowBase::on_action_baloontip_toggled(bool toggled)
         scene->removeItem(baloonTip);
     }
 }
-void MainWindowBase::on_action_next_image_triggered() { showNext(); }
 
-void MainWindowBase::on_action_prev_image_triggered() { showPrev(); }
+void MainWindowBase::on_action_next_image_triggered()
+{
+    showNext();
+}
+
+void MainWindowBase::on_action_prev_image_triggered()
+{
+    showPrev();
+}
 
 void MainWindowBase::on_action_open_image_triggered()
 {
@@ -314,3 +328,4 @@ void MainWindowBase::on_action_save_image_triggered()
 {
     imageHandler->saveFile(scene->areaRect());
 }
+

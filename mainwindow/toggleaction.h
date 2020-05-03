@@ -8,14 +8,13 @@
 class ToggleAction : public QAction
 {
 public:
-    ToggleAction(const QIcon &icon, const QIcon &icon_toggled, const QString &text, QObject *parent);
+    ToggleAction(const QIcon &normal, const QIcon &active, const QString &text, QObject *parent);
+    void activate();
+    void deactivate();
+
 private:
     QIcon iconNormal;
-    QIcon iconChecked;
-
-
-private slots:
-    void toggle_switch(bool checked);
+    QIcon iconActive;
 
 };
 

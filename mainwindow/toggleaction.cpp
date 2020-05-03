@@ -2,25 +2,21 @@
 #include <QDebug>
 
 
-ToggleAction::ToggleAction(const QIcon &icon, const QIcon &icon_toggled, const QString &text, QObject *parent)
-    : QAction(icon, text, parent)
-{
-    iconNormal = icon;
-    iconChecked = icon_toggled;
-    setCheckable(true);
-    setChecked(false);
 
-    connect(this, &ToggleAction::toggled, this, &ToggleAction::toggle_switch);
+ToggleAction::ToggleAction(const QIcon &normal, const QIcon &active, const QString &text, QObject *parent)
+    : QAction(normal, text, parent)
+{
+    iconNormal = normal;
+    iconActive = active;
+    deactivate();
 }
 
-void ToggleAction::toggle_switch(bool checked)
+void ToggleAction::activate()
 {
-    if (checked)
-    {
-        setIcon(iconChecked);
-    }
-    else
-    {
-        setIcon(iconNormal);
-    }
+    setIcon(iconActive);
+}
+
+void ToggleAction::deactivate()
+{
+    setIcon(iconNormal);
 }

@@ -118,7 +118,7 @@ QRect AreaSelectItem::toQRect()
 void AreaSelectItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     //QGraphicsItem::mousePressEvent(event);
-    //qDebug() << "press (item)";
+    qDebug() << "press (item)";
 
     if (event->button() != Qt::LeftButton) return;
 
@@ -185,7 +185,7 @@ void AreaSelectItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 
 void AreaSelectItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug() << "release (item)";
+    qDebug() << "release (item)";
     drag_moving = false;
     for (auto &flag : drag_resizing) flag = false;
     Q_UNUSED(event)

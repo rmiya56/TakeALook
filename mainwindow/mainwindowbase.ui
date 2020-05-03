@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TakeALookMainWindow</class>
- <widget class="QMainWindow" name="TakeALookMainWindow">
+ <class>MainWindowBase</class>
+ <widget class="QMainWindow" name="MainWindowBase">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -64,7 +64,7 @@ QToolTip {background: lightgray;}</string>
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
   </widget>

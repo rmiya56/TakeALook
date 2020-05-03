@@ -64,7 +64,7 @@ QRect Scene::areaRect()
 
 void Scene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-    //qDebug() << "press (scene)";
+    qDebug() << "press (scene)";
     QGraphicsScene::mousePressEvent(event);
 }
 
@@ -118,3 +118,9 @@ void Scene::keyPressEvent(QKeyEvent *event)
 {
     QGraphicsScene::keyPressEvent(event);
 }
+
+//void Scene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
+//{
+//    qDebug() << "dbl click (scene)";
+//    QGraphicsScene::mouseDoubleClickEvent(event);
+//}

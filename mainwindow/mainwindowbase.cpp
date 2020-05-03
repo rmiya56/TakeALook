@@ -1,7 +1,7 @@
-#include "takealookmainwindow.h"
-#include "ui_takealookmainwindow.h"
+#include "mainwindowbase.h"
+#include "ui_mainwindowbase.h"
 #include "scene.h"
-#include "imagehandler.h"
+#include "../image/imagehandler.h"
 #include "../utility/icons.h"
 #include "../baloontip/pixbaloontip.h"
 #include <QKeyEvent>
@@ -14,9 +14,9 @@
 
 
 
-TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
+MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     : QMainWindow(parent),
-      ui(new Ui::TakeALookMainWindow),
+      ui(new Ui::MainWindowBase),
       imageHandler(new ImageHandler(this)),
       scene(new Scene(imageHandler)),
       statusbarLeft(new QLabel()),
@@ -47,15 +47,16 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
 
 
     QVector<QState*> mode;
-    mode.append(new QState); // pointer
-    mode.append(new QState); // area select
+    QVector<void (MainWindowBase::*)()> enter_events;
+    QVector<void (MainWindowBase::*)()> exit_events;
 
-    QVector<void (TakeALookMainWindow::*)()> enter_events;
-    QVector<void (TakeALookMainWindow::*)()> exit_events;
-    enter_events.append(&TakeALookMainWindow::enter_pointer_mode);
-    enter_events.append(&TakeALookMainWindow::enter_area_select_mode);
-    exit_events.append(&TakeALookMainWindow::exit_pointer_mode);
-    exit_events.append(&TakeALookMainWindow::exit_area_select_mode);
+    mode.append(new QState); // pointer
+    enter_events.append(&MainWindowBase::enter_pointer_mode);
+    exit_events.append(&MainWindowBase::exit_pointer_mode);
+
+    mode.append(new QState); // area select
+    enter_events.append(&MainWindowBase::enter_area_select_mode);
+    exit_events.append(&MainWindowBase::exit_area_select_mode);
 
     for (int i=0; i<mode.size(); i++)
     {
@@ -70,12 +71,12 @@ TakeALookMainWindow::TakeALookMainWindow(QWidget *parent, const char* filepath)
 
 }
 
-TakeALookMainWindow::~TakeALookMainWindow()
+MainWindowBase::~MainWindowBase()
 {
     delete ui;
 }
 
-void TakeALookMainWindow::setupToolBar()
+void MainWindowBase::setupToolBar()
 {
     actionPointerMode = new ToggleAction(QIcon(Icons::pointer), QIcon(Icons::pointer_toggled), tr("Pointer"), this);
     connect(actionPointerMode, SIGNAL(toggled(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
@@ -99,26 +100,26 @@ void TakeALookMainWindow::setupToolBar()
 
 }
 
-void TakeALookMainWindow::setupFileToolBar()
+void MainWindowBase::setupFileToolBar()
 {
     actionNextImage = new QAction(QIcon(Icons::next), tr("Next"), this);
-    connect(actionNextImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_next_image_triggered);
+    connect(actionNextImage, &QAction::triggered, this, &MainWindowBase::on_action_next_image_triggered);
     ui->toolBar->addAction(actionNextImage);
 
     actionPrevImage = new QAction(QIcon(Icons::prev), tr("Prev"), this);
-    connect(actionPrevImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_prev_image_triggered);
+    connect(actionPrevImage, &QAction::triggered, this, &MainWindowBase::on_action_prev_image_triggered);
     ui->toolBar->addAction(actionPrevImage);
 
     actionOpenImage = new QAction(QIcon(Icons::folder), tr("Open Image"), this);
-    connect(actionOpenImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_open_image_triggered);
+    connect(actionOpenImage, &QAction::triggered, this, &MainWindowBase::on_action_open_image_triggered);
     ui->toolBar->addAction(actionOpenImage);
 
     actionSaveImage = new QAction(QIcon(Icons::save), tr("Save Image"), this);
-    connect(actionSaveImage, &QAction::triggered, this, &TakeALookMainWindow::on_action_save_image_triggered);
+    connect(actionSaveImage, &QAction::triggered, this, &MainWindowBase::on_action_save_image_triggered);
     ui->toolBar->addAction(actionSaveImage);
 }
 
-void TakeALookMainWindow::setupStatusBar()
+void MainWindowBase::setupStatusBar()
 {
     statusbarRight->setFont(QFont("Courier"));
     statusbarRight->setStyleSheet("color:white");
@@ -128,26 +129,26 @@ void TakeALookMainWindow::setupStatusBar()
     ui->statusbar->addWidget(statusbarRight, 0);
 }
 
-void TakeALookMainWindow::resizeEvent(QResizeEvent *event)
+void MainWindowBase::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     fit_to_rect(scene->pixmapRect());
 }
 
-void TakeALookMainWindow::dragEnterEvent(QDragEnterEvent *event)
+void MainWindowBase::dragEnterEvent(QDragEnterEvent *event)
 {
     if(event->mimeData()->hasUrls() && event->mimeData()->urls().count()==1)
         event->acceptProposedAction();
 }
 
-void TakeALookMainWindow::dropEvent(QDropEvent *event)
+void MainWindowBase::dropEvent(QDropEvent *event)
 {
     QFileInfo file_info(event->mimeData()->urls().at(0).toLocalFile());
     imageHandler->loadFile(file_info);
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void TakeALookMainWindow::displayImage(QImage qimage, QString file_path)
+void MainWindowBase::displayImage(QImage qimage, QString file_path)
 {
     scene->setImage(qimage);
     fit_to_rect(scene->pixmapRect());
@@ -155,7 +156,7 @@ void TakeALookMainWindow::displayImage(QImage qimage, QString file_path)
     statusbarLeft->setText(file_path + " " + image_property);
 }
 
-void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
+bool MainWindowBase::_mouseMoveEvent(QMouseEvent *event)
 {
     ImageProperties prop = imageHandler->currentProperties(); // reading almost static all the time..
     QPointF pos = view->mapToScene(event->pos());
@@ -176,9 +177,11 @@ void TakeALookMainWindow::_mouseMoveEvent(QMouseEvent *event)
 
     statusbarRight->setText(pix_color + " " + pix_location);
     baloonTip->setPixProperties(pos, color);
+
+    return false;
 }
 
-bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)
+bool MainWindowBase::_keyPressEvent(QKeyEvent *event)
 {
 
     switch(event->key())
@@ -209,13 +212,14 @@ bool TakeALookMainWindow::_keyPressEvent(QKeyEvent *event)
      return false;
 }
 
-void TakeALookMainWindow::mouseDoubleClickEvent(QMouseEvent *event)
+void MainWindowBase::mouseDoubleClickEvent(QMouseEvent *event)
 {
     Q_UNUSED(event)
+    //QMainWindow::mouseDoubleClickEvent(event);
     double_clicked();
 }
 
-bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
+bool MainWindowBase::eventFilter(QObject *object, QEvent *event)
 {
 
     if(event->type() == QEvent::KeyPress)
@@ -224,60 +228,68 @@ bool TakeALookMainWindow::eventFilter(QObject *object, QEvent *event)
     }
     else if(event->type() == QEvent::MouseMove)
     {
-        _mouseMoveEvent(static_cast<QMouseEvent*>(event));
+        return _mouseMoveEvent(static_cast<QMouseEvent*>(event));
+    }
+    else if(event->type() == QEvent::MouseButtonDblClick)
+    {
+        qDebug() << "dbl";
+        double_clicked();
+        return true;
     }
     return false;
 
     Q_UNUSED(object)
 }
 
-void TakeALookMainWindow::showNext()
+void MainWindowBase::showNext()
 {
     imageHandler->loadNext();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void TakeALookMainWindow::showPrev()
+void MainWindowBase::showPrev()
 {
     imageHandler->loadPrev();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void TakeALookMainWindow::fit_to_rect(QRect rect)
+void MainWindowBase::fit_to_rect(QRect rect)
 {
     if (rect.isNull()) return;
     view->setSceneRect(scene->itemsBoundingRect()); // shrink viewport
     view->fitInView(rect, Qt::KeepAspectRatio);
 }
 
-void TakeALookMainWindow::enter_pointer_mode()
+void MainWindowBase::enter_pointer_mode()
 {
     actionPointerMode->setChecked(true);
     setCursor(Qt::ArrowCursor);
+    ((View*)view)->setDragScroll(true);
 }
 
-void TakeALookMainWindow::exit_pointer_mode()
+void MainWindowBase::exit_pointer_mode()
 {
     actionPointerMode->setChecked(false);
+    ((View*)view)->setDragScroll(false);
 }
 
-void TakeALookMainWindow::enter_area_select_mode()
+void MainWindowBase::enter_area_select_mode()
 {
     actionAreaSelectionMode->setChecked(true);
     setCursor(Qt::CrossCursor);
 }
 
-void TakeALookMainWindow::exit_area_select_mode()
+void MainWindowBase::exit_area_select_mode()
 {
     actionAreaSelectionMode->setChecked(false);
 }
 
-void TakeALookMainWindow::on_action_fit_to_window_triggered()
+void MainWindowBase::on_action_fit_to_window_triggered()
 {
     fit_to_rect(scene->pixmapRect());
 }
 
-void TakeALookMainWindow::on_action_baloontip_toggled(bool toggled)
+void MainWindowBase::on_action_baloontip_toggled(bool toggled)
 {
     if (toggled)
     {
@@ -288,17 +300,17 @@ void TakeALookMainWindow::on_action_baloontip_toggled(bool toggled)
         scene->removeItem(baloonTip);
     }
 }
-void TakeALookMainWindow::on_action_next_image_triggered() { showNext(); }
+void MainWindowBase::on_action_next_image_triggered() { showNext(); }
 
-void TakeALookMainWindow::on_action_prev_image_triggered() { showPrev(); }
+void MainWindowBase::on_action_prev_image_triggered() { showPrev(); }
 
-void TakeALookMainWindow::on_action_open_image_triggered()
+void MainWindowBase::on_action_open_image_triggered()
 {
     imageHandler->openFile();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void TakeALookMainWindow::on_action_save_image_triggered()
+void MainWindowBase::on_action_save_image_triggered()
 {
     imageHandler->saveFile(scene->areaRect());
 }

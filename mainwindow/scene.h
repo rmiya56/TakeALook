@@ -2,7 +2,7 @@
 #define SCENE_H
 
 #include "../pixmap/pixmapitem.h"
-#include "imagehandler.h"
+#include "../image/imagehandler.h"
 #include <QGraphicsScene>
 #include <QMenu>
 
@@ -29,6 +29,7 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void keyPressEvent(QKeyEvent *event) override;
+    //virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 
 private:

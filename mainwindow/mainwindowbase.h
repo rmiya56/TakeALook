@@ -6,24 +6,24 @@
 #include <QList>
 #include <QLabel>
 #include <QStateMachine>
-#include "imagehandler.h"
 #include "toggleaction.h"
 #include "scene.h"
+#include "../image/imagehandler.h"
 #include "../baloontip/pixbaloontip.h"
 
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class TakeALookMainWindow; }
+namespace Ui { class MainWindowBase; }
 QT_END_NAMESPACE
 
-class TakeALookMainWindow : public QMainWindow
+class MainWindowBase : public QMainWindow
 
 {
     Q_OBJECT
 
 public:
-    TakeALookMainWindow(QWidget *parent = nullptr, const char* filepath="");
-    ~TakeALookMainWindow();
+    MainWindowBase(QWidget *parent = nullptr, const char* filepath="");
+    ~MainWindowBase();
 
 protected:
     void displayImage(QImage qimage, QString file_path);
@@ -33,7 +33,7 @@ protected:
     void setupFileToolBar();
     void setupStatusBar();
 
-    Ui::TakeALookMainWindow *ui;
+    Ui::MainWindowBase *ui;
     QGraphicsView *view;
     ImageHandler *imageHandler;
     Scene *scene;
@@ -42,14 +42,13 @@ protected:
     PixBaloonTip *baloonTip;
 
 
-// mouse & key event
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent *event);
     virtual void resizeEvent(QResizeEvent *event);
     virtual bool eventFilter(QObject *object, QEvent *event);
     virtual void mouseDoubleClickEvent(QMouseEvent *event);
-    void _mouseMoveEvent(QMouseEvent *event);
+    bool _mouseMoveEvent(QMouseEvent *event);
     bool _keyPressEvent(QKeyEvent *event);
 signals:
     void image_changed();

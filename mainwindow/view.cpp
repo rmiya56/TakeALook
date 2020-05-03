@@ -1,8 +1,8 @@
 #include "view.h"
+#include "../utility/mouseeventutil.h"
 #include <QWheelEvent>
 #include <QDebug>
 #include <QScrollBar>
-#include "../utility/mouseeventutil.h"
 
 
 
@@ -11,6 +11,11 @@ View::View(QWidget *parent)
 {
     setBackgroundBrush(Qt::gray);
     setAlignment(Qt::AlignCenter);
+}
+
+void View::setDragScroll(bool is_active)
+{
+    drag_scroll_is_active = is_active;
 }
 
 void View::wheelEvent(QWheelEvent *event)
@@ -23,12 +28,13 @@ void View::wheelEvent(QWheelEvent *event)
 
 void View::mousePressEvent(QMouseEvent *event)
 {
-   //qDebug() << "press (view)";
+   qDebug() << "press (view)";
    QGraphicsView::mousePressEvent(event);
+   if (!drag_scroll_is_active) return;
 
-   if (event->button() == Qt::RightButton)
+   if (event->button() == Qt::LeftButton)
    {
-       right_mouse_pressed = true;
+       mousePressed = true;
        mousePos = event->pos();
        initPos = mousePos;
    }
@@ -38,8 +44,9 @@ void View::mouseMoveEvent(QMouseEvent *event)
 {
     //qDebug() << "move (view)";
     QGraphicsView::mouseMoveEvent(event);
+   if (!drag_scroll_is_active) return;
 
-    if (right_mouse_pressed)
+    if (mousePressed)
     {
         int dx = horizontalScrollBar()->value() - (event->x() - mousePos.x());
         int dy = verticalScrollBar()->value() - (event->y() - mousePos.y());
@@ -52,18 +59,19 @@ void View::mouseMoveEvent(QMouseEvent *event)
 void View::mouseReleaseEvent(QMouseEvent *event)
 {
     qDebug() << "release (view)";
+    QGraphicsView::mouseReleaseEvent(event);
+   if (!drag_scroll_is_active) return;
 
-    if(event->button() == Qt::RightButton)
+    if(event->button() == Qt::LeftButton)
     {
-        right_mouse_pressed = false;
+        mousePressed = false;
         if (MouseEventUtil::isValidDragMove(initPos, event->pos()))
             return;
     }
-    QGraphicsView::mouseReleaseEvent(event);
 }
 
-
-void View::keyPressEvent(QKeyEvent *event)
-{
-    QGraphicsView::keyPressEvent(event);
-}
+//void View::mouseDoubleClickEvent(QMouseEvent *event)
+//{
+//    qDebug() << "dbl click (view)";
+//    QGraphicsView::mouseDoubleClickEvent(event);
+//}

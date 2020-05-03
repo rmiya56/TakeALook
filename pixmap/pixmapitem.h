@@ -29,6 +29,10 @@ private:
     QPointF initLeftButtonPos;
     ExpandingRectItem *expandingRect = nullptr;
     AreaSelectItem *areaSelectItem = nullptr;
+
+    // QGraphicsItem interface
+protected:
+    //virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
 #endif // PIXMAPITEM_H

@@ -10,20 +10,22 @@ class View : public QGraphicsView
 
 public:
     View(QWidget *parent = nullptr);
+    void setDragScroll(bool is_active);
+
 
 protected:
-    void wheelEvent(QWheelEvent *event);
-    virtual void mousePressEvent(QMouseEvent *event);
-    virtual void mouseMoveEvent(QMouseEvent *event);
-    virtual void mouseReleaseEvent(QMouseEvent *event);
-    virtual void keyPressEvent(QKeyEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
+    virtual void mousePressEvent(QMouseEvent *event) override;
+    virtual void mouseMoveEvent(QMouseEvent *event) override;
+    virtual void mouseReleaseEvent(QMouseEvent *event) override;
+    //virtual void mouseDoubleClickEvent(QMouseEvent *event) override;
 
 private:
     QPointF mousePos;
     QPointF initPos;
-    bool right_mouse_pressed = false;
+    bool drag_scroll_is_active;
+    bool mousePressed = false;
     static constexpr qreal zoomFactor = 1.05;
-
 
 };
 #endif // VIEW_H

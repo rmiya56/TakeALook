@@ -50,25 +50,32 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     QVector<void (MainWindowBase::*)()> enter_events;
     QVector<void (MainWindowBase::*)()> exit_events;
 
-    mode.append(new QState); // pointer
+    // pointer
+    mode.append(new QState);
     enter_events.append(&MainWindowBase::enter_pointer_mode);
     exit_events.append(&MainWindowBase::exit_pointer_mode);
 
-    mode.append(new QState); // area select
+    // area select
+    mode.append(new QState);
     enter_events.append(&MainWindowBase::enter_area_select_mode);
     exit_events.append(&MainWindowBase::exit_area_select_mode);
 
-    mode[1]->addTransition(this, &MainWindowBase::to_pointer_mode, mode[0]);
-    mode[0]->addTransition(this, &MainWindowBase::to_area_select_mode, mode[1]);
+    // brush
+    //mode.append(new QState);
+    //enter_events.append(&BrushAnnotator::enter_brush_mode);
+    //exit_events.append(&BrushAnnotator::exit_brush_mode);
+
+    mode[1]->addTransition(this, &MainWindowBase::enter_pointer_mode, mode[0]);
+    mode[0]->addTransition(this, &MainWindowBase::enter_area_select_mode, mode[1]);
 
     for (int i=0; i<mode.size(); i++)
     {
         mode[i]->addTransition(this, SIGNAL(double_clicked()), mode[(i+1)%mode.size()]);
+
         connect(mode[i],  &QState::entered, this, enter_events[i]);
         connect(mode[i],  &QState::exited, this, exit_events[i]);
-        machine.addState(mode[0]);
+        machine.addState(mode[i]);
     }
-    machine.addState(mode[1]);
     machine.setInitialState(mode[0]);
     machine.start();
 
@@ -84,16 +91,17 @@ void MainWindowBase::setupToolBar()
     actionPointerMode = new ToggleAction(	QIcon(Icons::pointer),
                                             QIcon(Icons::pointer_toggled),
                                             tr("Pointer"), this);
-    connect(actionPointerMode, &QAction::triggered, this, &MainWindowBase::to_pointer_mode);
+    connect(actionPointerMode, &QAction::triggered, this, &MainWindowBase::enter_pointer_mode);
     ui->toolBar->addAction(actionPointerMode);
 
     actionAreaSelectionMode = new ToggleAction( QIcon(Icons::area),
                                                 QIcon(Icons::area_toggled),
                                                 tr("Area Select"), this);
-    connect(actionAreaSelectionMode, &QAction::triggered, this, &MainWindowBase::to_area_select_mode);
+    connect(actionAreaSelectionMode, &QAction::triggered, this, &MainWindowBase::enter_area_select_mode);
     ui->toolBar->addAction(actionAreaSelectionMode);
 
-    actionFitToWindow = new QAction(QIcon(":/icons/white/arrow_all_fill [#383].png"), tr("Fit to Window"), this);
+    actionFitToWindow = new QAction(	QIcon(":/icons/white/arrow_all_fill [#383].png"),
+                                        tr("Fit to Window"), this);
     connect(actionFitToWindow, SIGNAL(triggered()), this, SLOT(on_action_fit_to_window_triggered()));
     ui->toolBar->addAction(actionFitToWindow);
 
@@ -280,16 +288,6 @@ void MainWindowBase::exit_area_select_mode()
 {
     actionAreaSelectionMode->deactivate();
 }
-
-//void MainWindowBase::on_action_pointer_mode_toggled(bool toggled)
-//{
-//    if (toggled) to_pointer_mode();
-//}
-
-//void MainWindowBase::on_action_area_select_mode_toggled(bool toggled)
-//{
-//   if (toggled) to_area_select_mode();
-//}
 
 void MainWindowBase::on_action_fit_to_window_triggered()
 {

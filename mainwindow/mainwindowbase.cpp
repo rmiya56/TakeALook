@@ -46,11 +46,6 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     connect(scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 
 
-    QVector<QState*> mode;
-    QVector<void (MainWindowBase::*)()> enter_events;
-    QVector<void (MainWindowBase::*)()> exit_events;
-    QVector<void (MainWindowBase::*)()> enter_signals;
-
     // pointer
     mode.append(new QState);
     enter_events.append(&MainWindowBase::enter_pointer_mode);
@@ -63,12 +58,17 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     exit_events.append(&MainWindowBase::exit_area_select_mode);
     enter_signals.append(&MainWindowBase::area_select_mode);
 
+    //initStateMachine();
+}
+
+void MainWindowBase::initStateMachine()
+{
+
     // brush
     //mode.append(new QState);
     //enter_events.append(&BrushAnnotator::enter_brush_mode);
     //exit_events.append(&BrushAnnotator::exit_brush_mode);
     //enter_events.append(&BrushAnnotator::);
-
 
     for (int i=0; i<mode.size(); i++)
     {
@@ -82,7 +82,6 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     }
     machine.setInitialState(mode[0]);
     machine.start();
-
 }
 
 MainWindowBase::~MainWindowBase()
@@ -227,8 +226,9 @@ bool MainWindowBase::_keyPressEvent(QKeyEvent *event)
             qDebug("keypress %x", event->key());
             break;
      }
-     return false;
+    return false;
 }
+
 
 bool MainWindowBase::eventFilter(QObject *object, QEvent *event)
 {
@@ -304,13 +304,9 @@ void MainWindowBase::on_action_fit_to_window_triggered()
 void MainWindowBase::on_action_baloontip_toggled(bool toggled)
 {
     if (toggled)
-    {
         scene->addItem(baloonTip);
-    }
     else
-    {
         scene->removeItem(baloonTip);
-    }
 }
 
 void MainWindowBase::on_action_next_image_triggered()

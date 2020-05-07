@@ -60,6 +60,14 @@ signals:
 protected:
     QStateMachine machine;
 
+    QVector<QState*> mode;
+    QVector<void (MainWindowBase::*)()> enter_events;
+    QVector<void (MainWindowBase::*)()> exit_events;
+    QVector<void (MainWindowBase::*)()> enter_signals;
+
+public:
+    void initStateMachine();
+
 protected slots:
     void enter_pointer_mode();
     void exit_pointer_mode();

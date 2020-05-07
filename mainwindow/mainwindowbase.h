@@ -53,6 +53,8 @@ protected:
 signals:
     void image_changed();
     void double_clicked();
+    void pointer_mode();
+    void area_select_mode();
 
 // State Machine
 protected:

@@ -49,29 +49,33 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     QVector<QState*> mode;
     QVector<void (MainWindowBase::*)()> enter_events;
     QVector<void (MainWindowBase::*)()> exit_events;
+    QVector<void (MainWindowBase::*)()> enter_signals;
 
     // pointer
     mode.append(new QState);
     enter_events.append(&MainWindowBase::enter_pointer_mode);
     exit_events.append(&MainWindowBase::exit_pointer_mode);
+    enter_signals.append(&MainWindowBase::pointer_mode);
 
     // area select
     mode.append(new QState);
     enter_events.append(&MainWindowBase::enter_area_select_mode);
     exit_events.append(&MainWindowBase::exit_area_select_mode);
+    enter_signals.append(&MainWindowBase::area_select_mode);
 
     // brush
     //mode.append(new QState);
     //enter_events.append(&BrushAnnotator::enter_brush_mode);
     //exit_events.append(&BrushAnnotator::exit_brush_mode);
+    //enter_events.append(&BrushAnnotator::);
 
-    mode[1]->addTransition(this, &MainWindowBase::enter_pointer_mode, mode[0]);
-    mode[0]->addTransition(this, &MainWindowBase::enter_area_select_mode, mode[1]);
 
     for (int i=0; i<mode.size(); i++)
     {
-        mode[i]->addTransition(this, SIGNAL(double_clicked()), mode[(i+1)%mode.size()]);
+        for (int j=0; j<mode.size(); j++)
+            if (j!=i) mode[j]->addTransition(this, enter_signals[i], mode[i]);
 
+        mode[i]->addTransition(this, &MainWindowBase::double_clicked, mode[(i+1)%mode.size()]);
         connect(mode[i],  &QState::entered, this, enter_events[i]);
         connect(mode[i],  &QState::exited, this, exit_events[i]);
         machine.addState(mode[i]);
@@ -88,6 +92,7 @@ MainWindowBase::~MainWindowBase()
 
 void MainWindowBase::setupToolBar()
 {
+
     actionPointerMode = new ToggleAction(	QIcon(Icons::pointer),
                                             QIcon(Icons::pointer_toggled),
                                             tr("Pointer"), this);
@@ -270,6 +275,7 @@ void MainWindowBase::enter_pointer_mode()
     actionPointerMode->activate();
     setCursor(Qt::ArrowCursor);
     ((View*)view)->setDragScroll(true);
+    pointer_mode();
 }
 
 void MainWindowBase::exit_pointer_mode()
@@ -282,6 +288,7 @@ void MainWindowBase::enter_area_select_mode()
 {
     actionAreaSelectionMode->activate();
     setCursor(Qt::CrossCursor);
+    area_select_mode();
 }
 
 void MainWindowBase::exit_area_select_mode()

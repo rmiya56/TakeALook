@@ -1,27 +1,27 @@
-#include "pixmapitem.h"
+#include "areaselectpixmapitem.h"
 #include "../utility/mouseeventutil.h"
 #include <QGraphicsSceneMouseEvent>
 #include <QDebug>
 
 
 
-PixmapItem::PixmapItem()
+AreaSelectPixmapItem::AreaSelectPixmapItem()
     : QGraphicsPixmapItem()
 {
 }
 
-PixmapItem::PixmapItem(QImage image)
-    :  PixmapItem::PixmapItem()
+AreaSelectPixmapItem::AreaSelectPixmapItem(QImage image)
+    :  AreaSelectPixmapItem::AreaSelectPixmapItem()
 {
     setImage(image);
 }
 
-void PixmapItem::setImage(QImage image)
+void AreaSelectPixmapItem::setImage(QImage image)
 {
     setPixmap(QPixmap::fromImage(image));
 }
 
-QRect PixmapItem::areaRect()
+QRect AreaSelectPixmapItem::areaRect()
 {
     if (areaSelectItem)
         return areaSelectItem->toQRect();
@@ -29,7 +29,7 @@ QRect PixmapItem::areaRect()
         return pixmap().rect();
 }
 
-void PixmapItem::clearAreaRect()
+void AreaSelectPixmapItem::clearAreaRect()
 {
     if (areaSelectItem)
     {
@@ -38,7 +38,7 @@ void PixmapItem::clearAreaRect()
     }
 }
 
-void PixmapItem::cropAreaRect()
+void AreaSelectPixmapItem::cropAreaRect()
 {
     QPixmap cropped = pixmap().copy(areaRect());
     setPixmap(cropped);
@@ -46,10 +46,16 @@ void PixmapItem::cropAreaRect()
     clearAreaRect();
 }
 
-void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
+void AreaSelectPixmapItem::setDragSelect(bool is_active)
+{
+   area_selection_is_active = is_active;
+}
+
+void AreaSelectPixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
     qDebug() << "press (pixmap)";
     clearAreaRect();
+    if(!area_selection_is_active) return;
 
     if (event->button() == Qt::LeftButton)
     {
@@ -63,16 +69,19 @@ void PixmapItem::mousePressEvent(QGraphicsSceneMouseEvent *event)
     //QGraphicsPixmapItem::mousePressEvent(event);
 }
 
-void PixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+void AreaSelectPixmapItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
+    if(!area_selection_is_active) return;
+
     if (!initLeftButtonPos.isNull())
         expandingRect->setRect(QRectF(initLeftButtonPos, event->pos()));
 }
 
-void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
+void AreaSelectPixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
     qDebug() << "release (pixmap)";
     QGraphicsPixmapItem::mouseReleaseEvent(event);
+    if(!area_selection_is_active) return;
 
     if(event->button() == Qt::LeftButton)
     {
@@ -85,9 +94,3 @@ void PixmapItem::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
     }
 }
 
-
-//void PixmapItem::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
-//{
-//    qDebug() << "dbl click (pixmap)";
-//    QGraphicsPixmapItem::mouseDoubleClickEvent(event);
-//}

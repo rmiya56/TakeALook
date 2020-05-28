@@ -1,5 +1,5 @@
-#include "mainwindowbase.h"
-#include "ui_mainwindowbase.h"
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 #include "scene.h"
 #include "../image/imagehandler.h"
 #include "../utility/icons.h"
@@ -14,9 +14,9 @@
 
 
 
-MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
+MainWindow::MainWindow(QWidget *parent, const char* filepath)
     : QMainWindow(parent),
-      ui(new Ui::MainWindowBase),
+      ui(new Ui::MainWindow),
       imageHandler(new ImageHandler(this)),
       scene(new Scene(imageHandler)),
       statusbarLeft(new QLabel()),
@@ -45,37 +45,27 @@ MainWindowBase::MainWindowBase(QWidget *parent, const char* filepath)
     //connect(scene, SIGNAL(done_selection(bool)), this, SLOT(on_action_pointer_mode_toggled(bool)));
     connect(scene, SIGNAL(zoom_in_area(QRect)), this, SLOT(fit_to_rect(QRect)));
 
-
     // pointer
     mode.append(new QState);
-    enter_events.append(&MainWindowBase::enter_pointer_mode);
-    exit_events.append(&MainWindowBase::exit_pointer_mode);
-    enter_signals.append(&MainWindowBase::pointer_mode);
+    enter_events.append(&MainWindow::enter_pointer_mode);
+    exit_events.append(&MainWindow::exit_pointer_mode);
+    enter_signals.append(&MainWindow::pointer_mode);
 
     // area select
     mode.append(new QState);
-    enter_events.append(&MainWindowBase::enter_area_select_mode);
-    exit_events.append(&MainWindowBase::exit_area_select_mode);
-    enter_signals.append(&MainWindowBase::area_select_mode);
-
-    //initStateMachine();
+    enter_events.append(&MainWindow::enter_area_select_mode);
+    exit_events.append(&MainWindow::exit_area_select_mode);
+    enter_signals.append(&MainWindow::area_select_mode);
 }
 
-void MainWindowBase::initStateMachine()
+void MainWindow::initStateMachine()
 {
-
-    // brush
-    //mode.append(new QState);
-    //enter_events.append(&BrushAnnotator::enter_brush_mode);
-    //exit_events.append(&BrushAnnotator::exit_brush_mode);
-    //enter_events.append(&BrushAnnotator::);
-
     for (int i=0; i<mode.size(); i++)
     {
         for (int j=0; j<mode.size(); j++)
             if (j!=i) mode[j]->addTransition(this, enter_signals[i], mode[i]);
 
-        mode[i]->addTransition(this, &MainWindowBase::double_clicked, mode[(i+1)%mode.size()]);
+        mode[i]->addTransition(this, &MainWindow::double_clicked, mode[(i+1)%mode.size()]);
         connect(mode[i],  &QState::entered, this, enter_events[i]);
         connect(mode[i],  &QState::exited, this, exit_events[i]);
         machine.addState(mode[i]);
@@ -84,24 +74,24 @@ void MainWindowBase::initStateMachine()
     machine.start();
 }
 
-MainWindowBase::~MainWindowBase()
+MainWindow::~MainWindow()
 {
     delete ui;
 }
 
-void MainWindowBase::setupToolBar()
+void MainWindow::setupToolBar()
 {
 
     actionPointerMode = new ToggleAction(	QIcon(Icons::pointer),
                                             QIcon(Icons::pointer_toggled),
                                             tr("Pointer"), this);
-    connect(actionPointerMode, &QAction::triggered, this, &MainWindowBase::enter_pointer_mode);
+    connect(actionPointerMode, &QAction::triggered, this, &MainWindow::enter_pointer_mode);
     ui->toolBar->addAction(actionPointerMode);
 
     actionAreaSelectionMode = new ToggleAction( QIcon(Icons::area),
                                                 QIcon(Icons::area_toggled),
                                                 tr("Area Select"), this);
-    connect(actionAreaSelectionMode, &QAction::triggered, this, &MainWindowBase::enter_area_select_mode);
+    connect(actionAreaSelectionMode, &QAction::triggered, this, &MainWindow::enter_area_select_mode);
     ui->toolBar->addAction(actionAreaSelectionMode);
 
     actionFitToWindow = new QAction(	QIcon(":/icons/white/arrow_all_fill [#383].png"),
@@ -118,26 +108,26 @@ void MainWindowBase::setupToolBar()
 
 }
 
-void MainWindowBase::setupFileToolBar()
+void MainWindow::setupFileToolBar()
 {
     actionNextImage = new QAction(QIcon(Icons::next), tr("Next"), this);
-    connect(actionNextImage, &QAction::triggered, this, &MainWindowBase::on_action_next_image_triggered);
+    connect(actionNextImage, &QAction::triggered, this, &MainWindow::on_action_next_image_triggered);
     ui->toolBar->addAction(actionNextImage);
 
     actionPrevImage = new QAction(QIcon(Icons::prev), tr("Prev"), this);
-    connect(actionPrevImage, &QAction::triggered, this, &MainWindowBase::on_action_prev_image_triggered);
+    connect(actionPrevImage, &QAction::triggered, this, &MainWindow::on_action_prev_image_triggered);
     ui->toolBar->addAction(actionPrevImage);
 
     actionOpenImage = new QAction(QIcon(Icons::folder), tr("Open Image"), this);
-    connect(actionOpenImage, &QAction::triggered, this, &MainWindowBase::on_action_open_image_triggered);
+    connect(actionOpenImage, &QAction::triggered, this, &MainWindow::on_action_open_image_triggered);
     ui->toolBar->addAction(actionOpenImage);
 
     actionSaveImage = new QAction(QIcon(Icons::save), tr("Save Image"), this);
-    connect(actionSaveImage, &QAction::triggered, this, &MainWindowBase::on_action_save_image_triggered);
+    connect(actionSaveImage, &QAction::triggered, this, &MainWindow::on_action_save_image_triggered);
     ui->toolBar->addAction(actionSaveImage);
 }
 
-void MainWindowBase::setupStatusBar()
+void MainWindow::setupStatusBar()
 {
     statusbarRight->setFont(QFont("Courier"));
     statusbarRight->setStyleSheet("color:white");
@@ -147,26 +137,26 @@ void MainWindowBase::setupStatusBar()
     ui->statusbar->addWidget(statusbarRight, 0);
 }
 
-void MainWindowBase::resizeEvent(QResizeEvent *event)
+void MainWindow::resizeEvent(QResizeEvent *event)
 {
     Q_UNUSED(event);
     fit_to_rect(scene->pixmapRect());
 }
 
-void MainWindowBase::dragEnterEvent(QDragEnterEvent *event)
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
 {
     if(event->mimeData()->hasUrls() && event->mimeData()->urls().count()==1)
         event->acceptProposedAction();
 }
 
-void MainWindowBase::dropEvent(QDropEvent *event)
+void MainWindow::dropEvent(QDropEvent *event)
 {
     QFileInfo file_info(event->mimeData()->urls().at(0).toLocalFile());
     imageHandler->loadFile(file_info);
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindowBase::displayImage(QImage qimage, QString file_path)
+void MainWindow::displayImage(QImage qimage, QString file_path)
 {
     scene->setImage(qimage);
     fit_to_rect(scene->pixmapRect());
@@ -174,7 +164,7 @@ void MainWindowBase::displayImage(QImage qimage, QString file_path)
     statusbarLeft->setText(file_path + " " + image_property);
 }
 
-bool MainWindowBase::_mouseMoveEvent(QMouseEvent *event)
+bool MainWindow::_mouseMoveEvent(QMouseEvent *event)
 {
     ImageProperties prop = imageHandler->currentProperties(); // reading almost static all the time..
     QPointF pos = view->mapToScene(event->pos());
@@ -199,7 +189,7 @@ bool MainWindowBase::_mouseMoveEvent(QMouseEvent *event)
     return false;
 }
 
-bool MainWindowBase::_keyPressEvent(QKeyEvent *event)
+bool MainWindow::_keyPressEvent(QKeyEvent *event)
 {
 
     switch(event->key())
@@ -230,7 +220,7 @@ bool MainWindowBase::_keyPressEvent(QKeyEvent *event)
 }
 
 
-bool MainWindowBase::eventFilter(QObject *object, QEvent *event)
+bool MainWindow::eventFilter(QObject *object, QEvent *event)
 {
 
     if(event->type() == QEvent::KeyPress)
@@ -251,26 +241,26 @@ bool MainWindowBase::eventFilter(QObject *object, QEvent *event)
     Q_UNUSED(object)
 }
 
-void MainWindowBase::showNext()
+void MainWindow::showNext()
 {
     imageHandler->loadNext();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindowBase::showPrev()
+void MainWindow::showPrev()
 {
     imageHandler->loadPrev();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindowBase::fit_to_rect(QRect rect)
+void MainWindow::fit_to_rect(QRect rect)
 {
     if (rect.isNull()) return;
     view->setSceneRect(scene->itemsBoundingRect()); // shrink viewport
     view->fitInView(rect, Qt::KeepAspectRatio);
 }
 
-void MainWindowBase::enter_pointer_mode()
+void MainWindow::enter_pointer_mode()
 {
     actionPointerMode->activate();
     setCursor(Qt::ArrowCursor);
@@ -278,30 +268,31 @@ void MainWindowBase::enter_pointer_mode()
     pointer_mode();
 }
 
-void MainWindowBase::exit_pointer_mode()
+void MainWindow::exit_pointer_mode()
 {
     actionPointerMode->deactivate();
     ((View*)view)->setDragScroll(false);
 }
 
-void MainWindowBase::enter_area_select_mode()
+void MainWindow::enter_area_select_mode()
 {
     actionAreaSelectionMode->activate();
     setCursor(Qt::CrossCursor);
+
     area_select_mode();
 }
 
-void MainWindowBase::exit_area_select_mode()
+void MainWindow::exit_area_select_mode()
 {
     actionAreaSelectionMode->deactivate();
 }
 
-void MainWindowBase::on_action_fit_to_window_triggered()
+void MainWindow::on_action_fit_to_window_triggered()
 {
     fit_to_rect(scene->pixmapRect());
 }
 
-void MainWindowBase::on_action_baloontip_toggled(bool toggled)
+void MainWindow::on_action_baloontip_toggled(bool toggled)
 {
     if (toggled)
         scene->addItem(baloonTip);
@@ -309,23 +300,23 @@ void MainWindowBase::on_action_baloontip_toggled(bool toggled)
         scene->removeItem(baloonTip);
 }
 
-void MainWindowBase::on_action_next_image_triggered()
+void MainWindow::on_action_next_image_triggered()
 {
     showNext();
 }
 
-void MainWindowBase::on_action_prev_image_triggered()
+void MainWindow::on_action_prev_image_triggered()
 {
     showPrev();
 }
 
-void MainWindowBase::on_action_open_image_triggered()
+void MainWindow::on_action_open_image_triggered()
 {
     imageHandler->openFile();
     displayImage(imageHandler->currentImage(), imageHandler->currentFilePath());
 }
 
-void MainWindowBase::on_action_save_image_triggered()
+void MainWindow::on_action_save_image_triggered()
 {
     imageHandler->saveFile(scene->areaRect());
 }

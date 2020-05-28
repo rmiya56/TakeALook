@@ -1,5 +1,5 @@
-#ifndef PIXMAPITEM_H
-#define PIXMAPITEM_H
+#ifndef AREARECTPIXMAPITEM_H
+#define AREARECTPIXMAPITEM_H
 
 #include "areaselectitem.h"
 #include "expandingrectitem.h"
@@ -8,16 +8,18 @@
 
 
 
-class PixmapItem : public QGraphicsPixmapItem
+class AreaSelectPixmapItem : public QGraphicsPixmapItem
 {
 public:
-    PixmapItem();
-    PixmapItem(QImage image);
+    AreaSelectPixmapItem();
+    AreaSelectPixmapItem(QImage image);
 
     void setImage(QImage image);
     QRect areaRect();
     void clearAreaRect();
     void cropAreaRect();
+    void setDragSelect(bool is_active);
+
 
     // QGraphicsItem interface
 protected:
@@ -29,10 +31,11 @@ private:
     QPointF initLeftButtonPos;
     ExpandingRectItem *expandingRect = nullptr;
     AreaSelectItem *areaSelectItem = nullptr;
+    bool area_selection_is_active = false;
 
     // QGraphicsItem interface
 protected:
     //virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 };
 
-#endif // PIXMAPITEM_H
+#endif // AREARECTPIXMAPITEM_H

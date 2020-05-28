@@ -5,7 +5,7 @@
 #include "../utility/mouseeventutil.h"
 #include "../utility/shapetojson.h"
 #include "../utility/pathutilities.h"
-#include "../pixmap/pixmapitem.h"
+#include "../areaselectpixmap/areaselectpixmapitem.h"
 
 
 
@@ -33,7 +33,7 @@ Scene::Scene(ImageHandler *image_handler)
 
 void Scene::setImage(QImage image)
 {
-    pixmapItem = new PixmapItem(image);
+    pixmapItem = new AreaSelectPixmapItem(image);
     addItem(pixmapItem);
 }
 
@@ -119,8 +119,3 @@ void Scene::keyPressEvent(QKeyEvent *event)
     QGraphicsScene::keyPressEvent(event);
 }
 
-//void Scene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
-//{
-//    qDebug() << "dbl click (scene)";
-//    QGraphicsScene::mouseDoubleClickEvent(event);
-//}

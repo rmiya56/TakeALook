@@ -6,7 +6,6 @@
 ExpandingRectItem::ExpandingRectItem(QGraphicsItem *parent)
     : QGraphicsRectItem(parent)
 {
-
     QPen pen;
     pen.setColor(Qt::green);
     pen.setWidth(2);

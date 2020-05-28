@@ -13,17 +13,17 @@
 
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class MainWindowBase; }
+namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
 
-class MainWindowBase : public QMainWindow
+class MainWindow : public QMainWindow
 
 {
     Q_OBJECT
 
 public:
-    MainWindowBase(QWidget *parent = nullptr, const char* filepath="");
-    ~MainWindowBase();
+    MainWindow(QWidget *parent = nullptr, const char* filepath="");
+    ~MainWindow();
 
 protected:
     void displayImage(QImage qimage, QString file_path);
@@ -33,7 +33,7 @@ protected:
     void setupFileToolBar();
     void setupStatusBar();
 
-    Ui::MainWindowBase *ui;
+    Ui::MainWindow *ui;
     QGraphicsView *view;
     ImageHandler *imageHandler;
     Scene *scene;
@@ -61,9 +61,9 @@ protected:
     QStateMachine machine;
 
     QVector<QState*> mode;
-    QVector<void (MainWindowBase::*)()> enter_events;
-    QVector<void (MainWindowBase::*)()> exit_events;
-    QVector<void (MainWindowBase::*)()> enter_signals;
+    QVector<void (MainWindow::*)()> enter_events;
+    QVector<void (MainWindow::*)()> exit_events;
+    QVector<void (MainWindow::*)()> enter_signals;
 
 public:
     void initStateMachine();

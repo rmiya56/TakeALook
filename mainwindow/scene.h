@@ -1,7 +1,7 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "../pixmap/pixmapitem.h"
+#include "../areaselectpixmap/areaselectpixmapitem.h"
 #include "../image/imagehandler.h"
 #include <QGraphicsScene>
 #include <QMenu>
@@ -19,7 +19,7 @@ public:
     QRect pixmapRect();
     void setImage(QImage image);
 
-    PixmapItem *pixmapItem = nullptr;
+    AreaSelectPixmapItem *pixmapItem = nullptr;
     //bool area_selection_is_active = false;
     ImageHandler *imageHandler;
 
@@ -29,7 +29,6 @@ protected:
     virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
     virtual void keyPressEvent(QKeyEvent *event) override;
-    //virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 
 private:

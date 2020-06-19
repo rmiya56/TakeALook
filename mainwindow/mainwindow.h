@@ -41,13 +41,14 @@ protected:
     QLabel *statusbarRight;
     PixBaloonTip *baloonTip;
 
+    AreaSelectPixmapItem *areaSelectPixmapItem;
+
 
 protected:
     virtual void dragEnterEvent(QDragEnterEvent *event);
     virtual void dropEvent(QDropEvent *event);
     virtual void resizeEvent(QResizeEvent *event);
     virtual bool eventFilter(QObject *object, QEvent *event);
-    //virtual void mouseDoubleClickEvent(QMouseEvent *event);
     bool _mouseMoveEvent(QMouseEvent *event);
     bool _keyPressEvent(QKeyEvent *event);
 signals:
@@ -77,9 +78,9 @@ protected slots:
 // Toolbar
 protected:
     ToggleAction *actionPointerMode;
-    ToggleAction *actionAreaSelectionMode;
     QAction *actionFitToWindow;
     ToggleAction *actionBaloonTip;
+    ToggleAction *actionAreaSelectionMode;
 
 protected slots:
     void on_action_fit_to_window_triggered();

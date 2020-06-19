@@ -33,7 +33,8 @@ Scene::Scene(ImageHandler *image_handler)
 
 void Scene::setImage(QImage image)
 {
-    pixmapItem = new AreaSelectPixmapItem(image);
+    pixmapItem = new QGraphicsPixmapItem();
+    pixmapItem->setPixmap(QPixmap::fromImage(image));
     addItem(pixmapItem);
 }
 
@@ -57,7 +58,8 @@ QRect Scene::pixmapRect()
 QRect Scene::areaRect()
 {
     if (pixmapItem)
-        return pixmapItem->areaRect();
+        return QRect();
+        //return pixmapItem->areaRect();
     else
         return QRect();
 }
@@ -94,18 +96,18 @@ void Scene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 
 void Scene::clear_area_rect()
 {
-    pixmapItem->clearAreaRect();
+    //pixmapItem->clearAreaRect();
 }
 
 void Scene::crop_area_rect()
 {
-    pixmapItem->cropAreaRect();
+    //pixmapItem->cropAreaRect();
 }
 
 void Scene::zoom_in_area()
 {
-    zoom_in_area(pixmapItem->areaRect());
-    pixmapItem->cropAreaRect();
+    //zoom_in_area(pixmapItem->areaRect());
+    //pixmapItem->cropAreaRect();
 }
 
 void Scene::save_roi()

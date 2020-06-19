@@ -82,9 +82,7 @@ MainWindow::~MainWindow()
 void MainWindow::setupToolBar()
 {
 
-    actionPointerMode = new ToggleAction(	QIcon(Icons::pointer),
-                                            QIcon(Icons::pointer_toggled),
-                                            tr("Pointer"), this);
+    actionPointerMode = new ToggleAction( QIcon(Icons::pointer), QIcon(Icons::pointer_toggled), tr("Pointer"), this);
     connect(actionPointerMode, &QAction::triggered, this, &MainWindow::enter_pointer_mode);
     ui->toolBar->addAction(actionPointerMode);
 

@@ -11,11 +11,12 @@ View::View(QWidget *parent)
 {
     setBackgroundBrush(Qt::gray);
     setAlignment(Qt::AlignCenter);
+    installEventFilter(this);
 }
 
 void View::setDragScroll(bool is_active)
 {
-    drag_scroll_is_active = is_active;
+    mouseEventIsActive = is_active;
 }
 
 void View::wheelEvent(QWheelEvent *event)
@@ -30,7 +31,7 @@ void View::mousePressEvent(QMouseEvent *event)
 {
    qDebug() << "press (view)";
    QGraphicsView::mousePressEvent(event);
-   if (!drag_scroll_is_active) return;
+   if (!mouseEventIsActive) return;
 
    if (event->button() == Qt::LeftButton)
    {
@@ -44,7 +45,7 @@ void View::mouseMoveEvent(QMouseEvent *event)
 {
     //qDebug() << "move (view)";
     QGraphicsView::mouseMoveEvent(event);
-   if (!drag_scroll_is_active) return;
+   if (!mouseEventIsActive) return;
 
     if (mousePressed)
     {
@@ -60,7 +61,7 @@ void View::mouseReleaseEvent(QMouseEvent *event)
 {
     qDebug() << "release (view)";
     QGraphicsView::mouseReleaseEvent(event);
-   if (!drag_scroll_is_active) return;
+   if (!mouseEventIsActive) return;
 
     if(event->button() == Qt::LeftButton)
     {

@@ -22,7 +22,7 @@ protected:
 private:
     QPointF mousePos;
     QPointF initPos;
-    bool drag_scroll_is_active;
+    bool mouseEventIsActive;
     bool mousePressed = false;
     static constexpr qreal zoomFactor = 1.05;
 

@@ -19,9 +19,11 @@ public:
     QRect pixmapRect();
     void setImage(QImage image);
 
-    AreaSelectPixmapItem *pixmapItem = nullptr;
-    //bool area_selection_is_active = false;
+    QGraphicsPixmapItem *pixmapItem = nullptr;
     ImageHandler *imageHandler;
+
+    //AreaSelectPixmapItem *pixmapItem = nullptr;
+    //bool area_selection_is_active = false;
 
 
 protected:
